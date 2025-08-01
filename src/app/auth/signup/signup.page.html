@@ -1,0 +1,52 @@
+<ion-content class="auth-wrapper">
+  <ion-card class="ion-text-center">
+    <ion-card-content>
+      <form [formGroup]="signUpForm">
+        <ion-grid>
+          <ion-row>
+            <ion-col size="12">
+              <div class="mobile-logo">
+                <ion-img class="logo-img" src="../../../assets/logo_mobile.png"></ion-img>
+              </div>
+            </ion-col>
+            <ion-col class="ion-text-left" size-xs="12" size-sm="12" size-md="6">
+              <ion-input type="text" formControlName="firstName" label="First Name" labelPlacement="floating"></ion-input>
+            </ion-col>
+            <ion-col class="ion-text-left" size-xs="12" size-sm="12" size-md="6">
+              <ion-input type="text" formControlName="lastName" label="Last Name" labelPlacement="floating"></ion-input>
+            </ion-col>
+            <ion-col class="ion-text-left" size-xs="12" size-sm="12" size-md="6">
+              <ion-input type="email" formControlName="email" label="Email" labelPlacement="floating"></ion-input>
+            </ion-col>
+            <ion-col class="ion-text-left" size-xs="12" size-sm="12" size-md="6">
+              <ion-select aria-label="Country" interface="action-sheet" placeholder="Select country">
+                <ion-select-option value="india">India</ion-select-option>
+              </ion-select>
+              <!-- <ion-input type="text" formControlName="country" label="Last Name" labelPlacement="floating"></ion-input> -->
+            </ion-col>
+            <ion-col class="ion-text-left" size-xs="12" size-sm="12" size-md="6">
+              <ion-input type="tel" formControlName="mobile" label="Mobile Number" labelPlacement="floating"></ion-input>
+            </ion-col>
+            <ion-col size="12">
+              <ion-input type="text" formControlName="password" label="Create Password" labelPlacement="floating"></ion-input>
+              <!-- <ion-button [disabled]="!signUpForm.get('username')!.value || !signUpForm.get('password')!.value" (click)="login()">Login</ion-button> -->
+            </ion-col>
+            <ion-col size="12">
+              <ion-button (click)="signUp()">SignUp</ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </form>
+    </ion-card-content>
+    
+  </ion-card>
+
+
+
+  <ion-alert
+  [isOpen]="signUpSuccessful"
+  header="SignUp"
+  message="Your account has been created successfully!"
+  [buttons]="['Login Now']" (didDismiss)="SignUpPopUpClosed()"
+></ion-alert>
+</ion-content>

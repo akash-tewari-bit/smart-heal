@@ -1,0 +1,40 @@
+<ion-content class="auth-wrapper">
+  <ion-card class="ion-text-center">
+    <ion-card-content>
+      <form [formGroup]="loginForm">
+        <ion-grid>
+          <ion-row>
+            <ion-col size="12">
+              <div class="mobile-logo">
+                <ion-img class="logo-img" src="../../../assets/logo_mobile.png"></ion-img>
+              </div>
+            </ion-col>
+            <ion-col class="ion-text-left" size-xs="12" size-sm="12" size-md="6">
+              <ion-input type="text" formControlName="username" label="Username" labelPlacement="floating"></ion-input>
+            </ion-col>
+            <ion-col class="ion-text-left" size-xs="12" size-sm="12" size-md="6">
+              <ion-input type="password" formControlName="password" label="Password" labelPlacement="floating"></ion-input>
+            </ion-col>
+            <ion-col size="12">
+              <ion-button [disabled]="!loginForm.get('username')!.value || !loginForm.get('password')!.value" (click)="login()">Login</ion-button>
+              <ion-button (click)="signUp()">SignUp</ion-button>
+            </ion-col>
+            <ion-col size="12">
+              <a (click)="forgot()">Forgot Password?</a>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </form>
+    </ion-card-content>
+    
+  </ion-card>
+
+
+
+  <ion-alert
+  [isOpen]="invalidUsername || invalidPassword"
+  header="Invalid Credentials"
+  message="Username/Password is incorrect"
+  [buttons]="['Ok']" (didDismiss)="errorPopUpClosed()"
+></ion-alert>
+</ion-content>

@@ -1,0 +1,18 @@
+.notification-icon {
+  font-size: 33px;
+}
+
+.notification-icon-wrapper {
+  position: relative;
+}
+
+.notification-icon-wrapper ion-badge {
+  position: absolute;
+  right: 0;
+  background-color: #007aff;
+  border-radius: 50%;
+  font-size: 10px;
+}
+.welcome-banner h2 {
+  font-family: 'Inter', sans-serif;
+}
