@@ -93,7 +93,7 @@ export class Patients {
   }
 
   showPatientDetails(item: any) {
-    this.router.navigate(['/patients', item.id])
+    this.router.navigate(['/patients', item.patient_id])
   }
 
   getPatientsList() {
