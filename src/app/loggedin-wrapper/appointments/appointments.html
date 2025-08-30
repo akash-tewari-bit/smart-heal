@@ -22,7 +22,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of appointmentsList">
-              <td>{{ item.scheduled_date_time | date:'MMM dd, yyyy' }} - {{ item.scheduled_date_time | date:'hh:mm a' }}</td>
+              <td>{{ item.scheduled_date | date:'MMM dd, yyyy' }} - {{ (item.scheduled_date.split('/').reverse().join('-') + 'T' + item.scheduled_time) | date:'hh:mm a' }}</td>
               <td>{{ item.firstName }} {{ item.lastName }}</td>
               <td>{{ item.type ? 'Follow-up' : 'New Patient' }}</td>
               <td>{{item?.mobile}}</td>
