@@ -1,0 +1,562 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <h3 class="mb-4">
+        {{ patientAppointmentData.firstName }}
+        {{ patientAppointmentData.lastName }}'s Appointment 
+        @if(!editAppointmentDetails) {
+          <a type="button" (click)="editBasicDetails()" class="fs-6">Edit <i class="bi bi-pencil-square"></i></a>
+        }
+      </h3>
+    </div>
+  </div>
+  <form [formGroup]="appointmentForm">
+    @if (!editAppointmentDetails) {
+      <ng-container>
+        <div class="row">
+          <div class="col-12 mb-3">
+            <table class="table border">
+              <tbody>
+                <tr>
+                  <td class="fw-bold">Patient Name</td>
+                  <td>
+                    {{ patientAppointmentData.firstName }}
+                    {{ patientAppointmentData.lastName }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="fw-bold">Age</td>
+                  <td>{{ patientAppointmentData.age }}</td>
+                </tr>
+                <tr>
+                  <td class="fw-bold">Mobile</td>
+                <td>{{ patientAppointmentData.mobile }}</td>
+              </tr>
+              <tr>
+                <td class="fw-bold">Gender</td>
+                <td>{{ patientAppointmentData.gender }}</td>
+              </tr>
+              <tr>
+                <td class="fw-bold">Address</td>
+                <td>{{ patientAppointmentData.address }}</td>
+              </tr>
+              <tr>
+                <td class="fw-bold">Current Visit</td>
+                <td>{{ patientAppointmentData.currentVisit ? patientAppointmentData.currentVisit : 'N/A' }} 
+                </td>
+              </tr>
+              <tr>
+                <td class="fw-bold">Last Visit</td>
+                <td>{{ patientAppointmentData.lastVisit ? patientAppointmentData.lastVisit : 'N/A' }} 
+                  @if(patientAppointmentData.lastVisit) {
+                    <span class="badge text-bg-info cursor-pointer">See History</span>
+                  }
+                </td>
+              </tr>
+              <tr>
+                <td class="fw-bold">Blood Group</td>
+                <td>{{ patientAppointmentData.bloodGroup }}</td>
+              </tr>
+              <tr>
+                <td class="fw-bold">Weight</td>
+                <td>{{ patientAppointmentData.weight }}</td>
+              </tr>
+              <tr>
+                <td class="fw-bold">Temperature</td>
+                <td>{{ patientAppointmentData.temperature }} &#176;C</td>
+              </tr>
+              <tr>
+                <td class="fw-bold">Blood Pressure</td>
+                <td>
+                  {{ patientAppointmentData.bloodPressureUpper }} /
+                  {{ patientAppointmentData.bloodPressureLower }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-md-4 mb-3">
+          <h4>Analysis/Disease/Problem</h4>
+          <textarea class="form-control" rows="5" placeholder="Enter here" formControlName="analysis"></textarea>
+        </div>
+        <div class="col-md-4 mb-3">
+          <h4>Advice</h4>
+          <textarea class="form-control" rows="5" placeholder="Enter here" formControlName="advice"></textarea>
+        </div>
+        <div class="col-md-4 mb-3">
+          <h4>Tests Prescribed</h4>
+          <textarea class="form-control" rows="5" placeholder="Enter here" formControlName="tests"></textarea>
+        </div>
+      </div>
+      <ng-container formArrayName="medicationDetails">
+        <div class="row">
+        <div class="col-md-12 mb-3">
+          <h4>Medication - <button class="btn btn-primary" type="button" (click)="addMedicine()"><i class="bi bi-plus-square"></i> Add Another</button></h4>
+        </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead class="table-light">
+                  <tr>
+                    <th>Medicine</th>
+                    <th>Type</th>
+                    <th>Count</th>
+                    <th>Dosage</th>
+                    <th>Timing</th>
+                    <th>Duration</th>
+                    <th>Notes</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of medicationDetails.controls; let i = index" [formGroupName]="i">
+                    <td><input type="text" class="form-control" placeholder="Medicine/Syrup" formControlName="medicine" /></td>
+                    <td>
+                      <select formControlName="type" class="form-select">
+                      <option value="tablet">Tablet</option>
+                      <option value="syrup">Syrup</option>
+                    </select>
+                    </td>
+                    <td>
+                      @if(item.get('type')?.value === 'tablet') {
+                        <select formControlName="count" class="form-select">
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                        </select>
+                      }
+                      @if(item.get('type')?.value === 'syrup') {
+                        <input type="text" class="form-control" placeholder="Quantity" formControlName="count" />
+                      }
+                    </td>
+                    <td>
+                      <div class="d-flex align-items-center gap-2">
+                    <input
+                    class="form-check-input fs-5"
+                    type="checkbox"
+                    id="inlineCheckbox1"
+                    formControlName="morning"
+                    />
+                    <label class="form-check-label" for="inlineCheckbox1"
+                    >Morning</label
+                    >
+                  </div>
+                  <div class="d-flex align-items-center gap-2">
+                    <input
+                    class="form-check-input fs-5"
+                    type="checkbox"
+                    id="inlineCheckbox2"
+                    formControlName="afternoon"
+                    />
+                    <label class="form-check-label" for="inlineCheckbox2"
+                    >Afternoon</label
+                    >
+                  </div>
+                  <div class="d-flex align-items-center gap-2">
+                    <input
+                    class="form-check-input fs-5"
+                    type="checkbox"
+                    id="inlineCheckbox3"
+                    formControlName="night"
+                    />
+                    <label class="form-check-label" for="inlineCheckbox3">Night</label>
+                  </div>
+                    </td>
+                    <td>
+                      <select formControlName="beforeMeal" class="form-select">
+                      <option value="true">Before food</option>
+                      <option value="false">After food</option>
+                    </select>
+                    </td>
+                    <td>
+                      <input type="text" class="form-control" placeholder="Duration" formControlName="duration" />
+                    </td>
+                    <td>
+                      <input type="text" class="form-control" placeholder="Notes" formControlName="notes" />
+                    </td>
+                    <td>
+                      <button class="btn btn-danger" type="button" (click)="removeMedicine(i)"><i class="bi bi-x-square"></i></button>
+                    </td>
+                  </tr>
+              </tbody>
+            </table>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+          </ng-container>
+          <div class="row">
+            <div class="col-md-4 d-flex align-items-center gap-2">
+              <h6 class="w-50">Follow Up Visit</h6>
+              <input type="text" class="form-control" placeholder="Follow up" formControlName="followUpVisit" />
+            </div>
+            <div class="col-md-12 mt-5 d-flex justify-content-between align-items-center">
+              <div class="d-flex gap-2">
+                <button type="button" class="btn btn-primary" (click)="submitAppointment()">Submit</button>
+                <button type="button" class="btn btn-outline-primary" (click)="cancel()">Cancel</button>
+                <button type="button" class="btn btn-primary" (click)="completePayment()">Complete Payment</button>
+              </div>
+              <button type="button" class="btn btn-primary" (click)="print()">Print</button>
+            </div>
+          </div>
+
+
+
+
+<!-- Button trigger modal -->
+<!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Launch demo modal
+</button> -->
+        </ng-container>
+      }
+    @if (editAppointmentDetails) {
+      <div class="row">
+      <div class="col-md-6 mb-4">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="First Name"
+          formControlName="firstName"
+        />
+      </div>
+      <div class="col-md-6 mb-4">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Last Name"
+          formControlName="lastName"
+        />
+      </div>
+      <div class="col-md-6 mb-4">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Age"
+          formControlName="age"
+        />
+      </div>
+      <div class="col-md-6 mb-4">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Mobile"
+          formControlName="mobile"
+        />
+      </div>
+      <div class="col-md-6 mb-4">
+        <select class="form-select" formControlName="gender">
+          <option value="" disabled selected>Gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </div>
+      <div class="col-md-6 mb-4">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Address"
+          formControlName="address"
+        />
+      </div>
+      <div class="col-md-6 mb-4">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Blood Group"
+          formControlName="bloodGroup"
+        />
+      </div>
+      <div class="col-md-6 mb-4">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Weight"
+            formControlName="weight"
+          />
+          <div class="btn-group input-group-text p-0" role="group">
+            <input
+              type="radio"
+              class="btn-check"
+              name="kgs"
+              id="kgs"
+              autocomplete="off"
+              checked
+            />
+            <label class="btn btn-outline-primary" for="kgs">Kgs</label>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mb-4">
+        <div class="d-flex justify-content-between align-items-center gap-2">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Blood Pressure - Upper"
+            formControlName="bloodPressureUpper"
+          />
+          <span>/</span>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Blood Pressure - Lower"
+            formControlName="bloodPressureLower"
+          />
+        </div>
+      </div>
+      <div class="col-md-6 mb-4">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Temperature"
+            formControlName="temperature"
+          />
+          <div class="btn-group input-group-text p-0" role="group">
+            <input
+              type="radio"
+              class="btn-check"
+              name="btnradio"
+              id="btnradio1"
+              autocomplete="off"
+              checked
+            />
+            <label class="btn btn-outline-primary" for="btnradio1"
+              >&#176;C</label
+            >
+
+            <input
+              type="radio"
+              class="btn-check"
+              name="btnradio"
+              id="btnradio2"
+              autocomplete="off"
+            />
+            <label class="btn btn-outline-primary" for="btnradio2"
+              >&#176;F</label
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-primary"(click)="submitAppointmentDetails()">
+            Submit
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            (click)="cancelAppointmentDetails()"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+    }
+      </form>
+    </div>
+    
+    <!-- <div class="container-fluid d-none">
+      <div class="row">
+        <div class="col-12 mb-4">
+      <h3>Schedule Appointment</h3>
+    </div>
+  </div>
+  <form [formGroup]="appointmentForm">
+    <div class="row">
+      <div class="col-md-6 mb-4">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="First Name"
+          formControlName="firstName"
+        />
+      </div>
+      <div class="col-md-6 mb-4">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Last Name"
+          formControlName="lastName"
+        />
+      </div>
+      <div class="col-md-6 mb-4">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Age"
+          formControlName="age"
+        />
+      </div>
+      <div class="col-md-6 mb-4">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Mobile"
+          formControlName="mobile"
+        />
+      </div>
+      <div class="col-md-6 mb-4">
+        <select class="form-select" formControlName="gender">
+          <option value="" disabled selected>Gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </div>
+      <div class="col-md-6 mb-4">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Address"
+          formControlName="address"
+        />
+      </div>
+      <div class="col-md-6 mb-4">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Blood Group"
+          formControlName="bloodGroup"
+        />
+      </div>
+      <div class="col-md-6 mb-4">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Weight"
+            formControlName="weight"
+          />
+          <div class="btn-group input-group-text p-0" role="group">
+            <input
+              type="radio"
+              class="btn-check"
+              name="kgs"
+              id="kgs"
+              autocomplete="off"
+              checked
+            />
+            <label class="btn btn-outline-primary" for="kgs">Kgs</label>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mb-4">
+        <div class="d-flex justify-content-between align-items-center gap-2">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Blood Pressure - Upper"
+            formControlName="bloodPressureUpper"
+          />
+          <span>/</span>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Blood Pressure - Lower"
+            formControlName="bloodPressureLower"
+          />
+        </div>
+      </div>
+      <div class="col-md-6 mb-4">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Temperature"
+            formControlName="temperature"
+          />
+          <div class="btn-group input-group-text p-0" role="group">
+            <input
+              type="radio"
+              class="btn-check"
+              name="btnradio"
+              id="btnradio1"
+              autocomplete="off"
+              checked
+            />
+            <label class="btn btn-outline-primary" for="btnradio1"
+              >&#176;C</label
+            >
+
+            <input
+              type="radio"
+              class="btn-check"
+              name="btnradio"
+              id="btnradio2"
+              autocomplete="off"
+            />
+            <label class="btn btn-outline-primary" for="btnradio2"
+              >&#176;F</label
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-primary" (click)="submit()">
+            Submit
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            (click)="cancel()"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div> -->
+
+
+
+
+<!-- Modal -->
+<app-modal [title]="'Complete Payment'" [showModal]="showModal" (closeModal)="closeModal($event)">
+  <div class="action-type-wrapper mb-4">
+  <div class="btn-group form-control p-0" role="group" aria-label="Basic radio toggle button group">
+<input type="radio" class="btn-check" [(ngModel)]="paymentType" id="btnradio1" autocomplete="off" [value]="'cash'">
+<label class="btn btn-outline-primary" for="btnradio1">Cash</label>
+
+<input type="radio" class="btn-check" [(ngModel)]="paymentType" id="btnradio2" autocomplete="off" [value]="'upi'">
+<label class="btn btn-outline-primary" for="btnradio2">UPI/QR</label>
+
+</div>
+</div>
+<div class="action-body">
+  @if(paymentType === 'cash') {
+    <input type="text" class="form-control mb-3" placeholder="Enter amount" [(ngModel)]="amount">
+  }
+  @if(paymentType === 'upi') {
+    @if(!showQR) {
+    <input type="text" class="form-control mb-3" placeholder="Enter amount" [(ngModel)]="amount">
+      <button class="btn btn-primary" (click)="generateQR()">Generate QR</button>
+    }
+    @if (showQR) {
+      <div class="qr-section text-center mb-4">
+          <qrcode
+          [qrdata]="qrData"
+          [width]="200"
+          [errorCorrectionLevel]="'M'">
+        </qrcode>
+      </div>
+    }
+  }
+</div>
+</app-modal>
+
+
+

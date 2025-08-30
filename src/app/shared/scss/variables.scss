@@ -1,0 +1,60 @@
+// $primary: #0043a8;
+// $secondary: #007aff;
+// $font-family-base: 'Arial, sans-serif';
+
+:root {
+    --bs-primary: #0043a8;
+    --bs-primary-bg-subtle: #007aff;
+    // --bs-btn-bg: #0043a8;
+    // --ion-color-secondary: #007aff;
+    // --leaf-color: #53a758;
+    --bs-primary-rgb: 0, 67, 168;
+    --bs-secondary-rgb: 76, 170, 88;
+
+  /* Hover color: slightly darker */
+  --bs-primary-hover: #4caa58;
+  --bs-btn-hover-bg: #4caa58;
+  --bs-btn-hover-border-color: #4caa58;
+  /* Focus ring color */
+  --bs-primary-focus: rgba(0, 67, 168, 0.5);
+}
+
+.btn-primary {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+}
+
+.btn-primary:hover {
+  background-color: var(--bs-primary-hover);
+  border-color: var(--bs-primary-hover);
+}
+
+.btn-primary:focus {
+  box-shadow: 0 0 0 0.25rem var(--bs-primary-focus);
+}
+
+.btn-outline-secondary {
+    border-color: var(--bs-secondary);
+}
+
+.btn-outline-secondary:hover {
+  background-color: var(--bs-primary-hover);
+  border-color: var(--bs-primary-hover);
+}
+
+.btn-outline-secondary:focus {
+  box-shadow: 0 0 0 0.25rem var(--bs-primary-focus);
+}
+
+.btn-outline-primary {
+    border-color: var(--bs-primary);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--bs-primary-hover);
+  border-color: var(--bs-primary-hover);
+}
+
+.btn-outline-primary:focus {
+  box-shadow: 0 0 0 0.25rem var(--bs-primary-focus);
+}

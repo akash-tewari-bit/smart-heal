@@ -1,0 +1,34 @@
+.search-wrapper {
+  width: 50%;
+  margin: auto;
+}
+.header-container i, .mobile-container i {
+  font-size: 26px;
+}
+.header-container {
+  height: 68px;
+  padding: 0 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.header-container .row {
+  height: 100%;
+  align-items: center;
+}
+.notificationCount {
+  color: white;
+  background-color: var(--bs-primary-hover);
+  border-radius: 50%;
+  position: absolute;
+  font-size: 10px;
+  top: 6px;
+  right: 3px;
+  width: 20px;
+    height: 20px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.header-container .btn:hover {
+  background-color: #fff;
+}

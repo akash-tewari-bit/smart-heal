@@ -1,1 +1,64 @@
-/* You can add global styles to this file, and also import other style files */
+@import url("app/shared/scss/variables.scss");
+// @import "bootstrap/scss/bootstrap";
+// @import "bootstrap/scss/bootstrap-grid";/* You can add global styles to this file, and also import other style files */
+html, body {
+    height: 100%;
+    width: 100%;
+}
+.cursor-pointer {
+    cursor: pointer;
+}
+.error-control {
+    border: 1px solid var(--bs-form-invalid-color);;
+}
+.error-text {
+    width: 100%;
+    margin-top: .25rem;
+    margin-bottom: 0;
+    font-size: .875em;
+    color: var(--bs-form-invalid-color);
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+
+
+
+
+
+// Custom CSS for angular matierial components
+
+.material-calendar {
+    width: 100%;
+}
+.material-calendar .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+}
+.material-calendar .mat-mdc-text-field-wrapper {
+    background-color: #fff !important;
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+    padding: 0;
+}
+.material-calendar .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix {
+    padding: .375rem .75rem;
+    min-height: auto;
+}
+.material-calendar .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix input {
+    color: #000;
+}
+.material-calendar .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix .mdc-floating-label {
+    opacity: 0.7;
+    top: 20px;
+    color: #000;
+}
+.mdc-line-ripple, .material-calendar .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix .mdc-floating-label mat-label {
+    display: none;
+}
+.material-calendar .mat-mdc-text-field-wrapper .mat-mdc-form-field-icon-suffix .mdc-icon-button {
+    padding: 0px;
+    min-height: auto;
+    height: auto;
+}

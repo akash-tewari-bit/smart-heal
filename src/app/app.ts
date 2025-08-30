@@ -1,4 +1,5 @@
 import { Component, signal } from '@angular/core';
+import { UtilityService } from './shared/services/utility.service';
 
 @Component({
   selector: 'app-root',
@@ -8,4 +9,10 @@ import { Component, signal } from '@angular/core';
 })
 export class App {
   protected readonly title = signal('smart-heal-web');
+  showSpinner: boolean = false;
+  constructor(public utilService: UtilityService) {
+    this.utilService.showSpinner.subscribe((e: any) => {
+      this.showSpinner = e;
+    })
+  }
 }

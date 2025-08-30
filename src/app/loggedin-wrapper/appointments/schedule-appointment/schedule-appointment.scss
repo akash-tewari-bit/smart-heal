@@ -1,0 +1,9 @@
+.appointment-date-wrapper {
+    position: relative;
+}
+.appointment-date-wrapper label {
+    position: absolute;
+    top: 9px;
+    z-index: 1;
+    left: 12px;
+}

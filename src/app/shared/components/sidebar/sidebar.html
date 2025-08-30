@@ -1,0 +1,86 @@
+<nav class="navbar navbar-dark bg-primary fixed-top d-md-none">
+  <div class="container-fluid">
+    <app-header class="w-100">
+      <button
+        class="navbar-toggler d-md-none"
+        type="button"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#sidebar"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </app-header>
+  </div>
+</nav>
+
+<div
+  class="sidebar-container offcanvas-md offcanvas-start bg-light sidebar"
+  tabindex="-1"
+  id="sidebar"
+>
+  <div class="d-md-none">
+    <a
+      href=""
+      class="logo-wrapper d-flex justify-content-center align-items-center"
+    >
+      <img src="assets/images/logo_mobile.png" class="logo-img" alt="Logo" />
+    </a>
+  </div>
+
+  <div class="offcanvas-body p-0 flex-column">
+    <a
+      href=""
+      class="logo-wrapper d-flex justify-content-center align-items-center d-md-flex d-none"
+    >
+      <img src="assets/images/logo_mobile.png" class="logo-img" alt="Logo" />
+    </a>
+    <ul class="nav nav-container d-block mb-auto pt-3 pb-3">
+      <li class="nav-item">
+        <a
+          href="#"
+          class="nav-link text-white p-3"
+          routerLink="/dashboard"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: false }" data-bs-toggle="offcanvas"
+        data-bs-target="#sidebar"
+        >
+          Dashboard
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          routerLink="/patients"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: false }" data-bs-toggle="offcanvas"
+        data-bs-target="#sidebar"
+          class="nav-link text-white p-3"
+        >
+          Patients
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          routerLink="/appointments"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: false }" data-bs-toggle="offcanvas"
+        data-bs-target="#sidebar"
+          class="nav-link text-white p-3"
+        >
+          Appointments
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link text-white p-3"> Notification </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link text-white p-3"> Staff Management </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link text-white p-3"> Billing </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link text-white p-3"> Reports </a>
+      </li>
+    </ul>
+  </div>
+</div>

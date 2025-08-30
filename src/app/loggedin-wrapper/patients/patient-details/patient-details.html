@@ -1,0 +1,116 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 d-flex justify-content-between align-items-center">
+            <h3 class="mb-4">Patient Details</h3>
+            <button type="button" class="btn btn-primary" (click)="cancel()">Back</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 mb-4">
+            <div class="table-responsive">
+                <table class="table border">
+                    <tbody>
+                        <tr>
+                            <td class="fw-bold">First Name</td>
+                            <td>{{patientDetail?.firstName}} {{patientDetail?.lastName}}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Age</td>
+                            <td>{{patientDetail?.age}}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Mobile</td>
+                            <td>{{patientDetail?.mobile}}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Gender</td>
+                            <td>{{patientDetail?.gender}}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Address</td>
+                            <td>{{patientDetail?.address}}</td>
+                        </tr>
+                        <!-- <tr>
+                            <td class="fw-bold">Last Visit</td>
+                            <td>{{patientDetail?.lastVisit}}</td>
+                        </tr> -->
+                        <tr>
+                            <td class="fw-bold">Blood Group</td>
+                            <td>{{patientDetail?.bloodGroup}}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Weight</td>
+                            <td>{{patientDetail?.weight}}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Temperature</td>
+                            <td>{{patientDetail?.temperature}} &#176;C</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Blood Pressure</td>
+                            <td>{{patientDetail?.bloodPressure}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 mb-4">
+            <h3>Previous Appointments</h3>
+        </div>
+        <div class="col-md-2 mb-3">
+            <button type="button" class="badge text-bg-info">Nov 10, 2024</button>
+        </div>
+        <div class="col-md-2 mb-3">
+            <button type="button" class="badge text-bg-info">Nov 10, 2024</button>
+        </div>
+        <div class="col-md-2 mb-3">
+            <button type="button" class="badge text-bg-info">Nov 10, 2024</button>
+        </div>
+        <div class="col-md-2 mb-3">
+            <button type="button" class="badge text-bg-info">Nov 10, 2024</button>
+        </div>
+        <div class="col-md-2 mb-3">
+            <button type="button" class="badge text-bg-info">Nov 10, 2024</button>
+        </div>
+        <div class="col-md-2 mb-3">
+            <button type="button" class="badge text-bg-info">Nov 10, 2024</button>
+        </div>
+        <div class="col-md-2 mb-3">
+            <button type="button" class="badge text-bg-info">Nov 10, 2024</button>
+        </div>
+        <div class="col-md-2 mb-3">
+            <button type="button" class="badge text-bg-info">Nov 10, 2024</button>
+        </div>
+        <div class="col-md-2 mb-3">
+            <button type="button" class="badge text-bg-info">Nov 10, 2024</button>
+        </div>
+    </div>
+    <!-- <div class="row">
+        <div class="col-md-6 mb-4">
+            <input type="text" class="form-control" placeholder="First Name">
+        </div>
+        <div class="col-md-6 mb-4">
+            <input type="text" class="form-control" placeholder="Last Name">
+        </div>
+        <div class="col-md-6 mb-4">
+            <input type="text" class="form-control" placeholder="Mobile">
+        </div>
+        <div class="col-md-6 mb-4">
+            <input type="text" class="form-control" placeholder="Last Visit">
+        </div>
+        <div class="col-md-6 mb-4">
+            <input type="text" class="form-control" placeholder="Age">
+        </div>
+        <div class="col-md-6 mb-4">
+            <input type="text" class="form-control" placeholder="Weight">
+        </div>
+        <div class="col-md-6 mb-4">
+            <input type="text" class="form-control" placeholder="Temperature in Celcius">
+        </div>
+        <div class="col-md-6 mb-4">
+            <input type="text" class="form-control" placeholder="Blood Pressure">
+        </div>
+    </div> -->
+</div>

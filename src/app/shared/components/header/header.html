@@ -1,0 +1,33 @@
+<div [ngClass]="{'pr-3 pl-3 header-container': !isMobile, 'mobile-container pe-0 ps-0': isMobile}">
+  <div [ngClass]="{'row': !isMobile, 'd-flex justify-content-between align-items-center': isMobile}">
+    <ng-content></ng-content>
+    <div [ngClass]="{'col-md-8': !isMobile}">
+      <div [ngClass]="{'search-wrapper': !isMobile}">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search Patient/Staff"
+        />
+      </div>
+    </div>
+    <div class="d-flex justify-content-end gap-4" [ngClass]="{'col-md-4': !isMobile}">
+      <div class="notofication-wrapper position-relative btn" [ngClass]="{'d-none': isMobile}">
+        <i class="bi bi-bell-fill" [ngClass]="{'text-primary': !isMobile, 'text-white': isMobile}"></i>
+        @if (notificationCount) {
+        <span class="notificationCount"
+          >{{ notificationCount > 9 ? 9 : notificationCount }}
+          @if(notificationCount > 9) {
+          <span>+</span>
+          }
+        </span>
+        }
+      </div>
+      <div class="profile-wrapper d-flex align-items-center gap-2 btn" [ngClass]="{'text-white ps-0 pe-0': isMobile}">
+        <span [ngClass]="{'d-none': isMobile}">
+          {{ userDetails?.firstName }} {{ userDetails?.lastName }}
+        </span>
+        <i class="bi bi-person-circle" [ngClass]="{'text-primary': !isMobile, 'text-white': isMobile}"></i>
+      </div>
+    </div>
+  </div>
+</div>

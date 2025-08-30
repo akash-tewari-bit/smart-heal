@@ -1,0 +1,31 @@
+<div class="row mb-3">
+    <div class="col-12">
+        <h6>Filter By:</h6>
+    </div>
+    <div class="col-md-2 mb-3">
+        <input type="text" class="form-control" placeholder="Name">
+    </div>
+    <div class="col-md-2 mb-3">
+        <select class="form-select">
+            <option value="" disabled selected>Month</option>
+            <option *ngFor="let item of months" value="{{item}}">{{item}}</option>
+        </select>
+    </div>
+    <div class="col-md-2 mb-3">
+        <select class="form-select">
+            <option value="" disabled selected>Age</option>
+            <option *ngFor="let item of age" value="{{item}}">{{item}}</option>
+        </select>
+    </div>
+    <div class="col-md-2 mb-3">
+        <button class="btn btn-primary" type="button">Update</button>
+    </div>
+    <div class="offset-md-2 col-md-2 mb-3">
+        <h6>Sort By:</h6>
+        <select class="form-select">
+            <option value="" disabled selected>Sort By</option>
+            <option value="Name">Name</option>
+            <option value="Age">Age</option>
+        </select>
+    </div>
+</div>

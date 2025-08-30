@@ -1,0 +1,34 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <h3 class="mb-4">Patients</h3>
+      <app-filter></app-filter>
+      <div class="card">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Age</th>
+              <th scope="col">Last Visit</th>
+              <th scope="col">Mobile</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of patientsList">
+              <td>{{ item.firstName }} {{ item.lastName }}</td>
+              <td>{{ item.age }}</td>
+              <td>{{ item.lastVisit }}</td>
+              <td>{{ item.mobile }}</td>
+              <td>
+                <a class="cursor-pointer" (click)="showPatientDetails(item)"
+                  >View</a
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

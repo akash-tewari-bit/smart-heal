@@ -1,0 +1,39 @@
+<div class="container-fluid">
+    <div class="row login-wrapper">
+        <div class="col-md-12 d-flex justify-content-center align-items-center">
+            <form class="login-form p-4" [formGroup]="loginForm">
+                <div class="app-logo mt-3 mb-3">
+                    <img src="assets/images/logo_mobile.png" alt="Logo">
+                </div>
+                <div class="row">
+                    <div class="col-md-12 mb-3 text-center">
+                        <h3>Sign In</h3>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <input type="text" [ngClass]="{'error-control': formSubmitted && loginForm.get('username')?.errors}" formControlName="username" placeholder="Username" class="form-control">
+                        @if (formSubmitted && loginForm.invalid && loginForm.touched) {
+                            @if (loginForm.get('username')?.errors?.['required']) {
+                                <p class="error-text">required</p>
+                            }
+                        }
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <input type="password" [ngClass]="{'error-control': formSubmitted && loginForm.get('password')?.errors}" formControlName="password" placeholder="Password" class="form-control">
+                        @if (formSubmitted && loginForm.invalid && loginForm.touched) {
+                            @if (loginForm.get('password')?.errors?.['required']) {
+                                <p class="error-text">required</p>
+                            }
+                        }
+                    </div>
+                    <div class="col-md-12 text-end">
+                        <div class="d-grid gap-3">
+                            <a class="cursor-pointer" (click)="forgot()">Forgot password?</a>
+                            <button class="btn btn-primary" (click)="login()">Login</button>
+                            <button class="btn btn-outline-secondary" (click)="signUp()">Signup</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

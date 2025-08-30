@@ -1,0 +1,148 @@
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { UtilityService } from '../../shared/services/utility.service';
+import { AppointmentService } from './appointment.service';
+
+@Component({
+  selector: 'app-appointments',
+  standalone: false,
+  templateUrl: './appointments.html',
+  styleUrl: './appointments.scss',
+})
+export class Appointments {
+  appointments: any = [
+    {
+      id: 1,
+      firstName: 'Paul',
+      lastName: 'Richard',
+      date: 'Nov 20, 2025',
+      time: '10:00 AM',
+      age: 20,
+      email: 'test@example.com',
+      mobile: '987654321',
+      reason: 'New Patient',
+      lastVisit: 'Nov 10, 2024',
+      weight: '58 kgs',
+      temperature: '98',
+      bloodPressure: '120 / 80',
+      gender: 'Male',
+      address: 'Gurugram, Haryana',
+      bloodGroup: 'B+',
+      status: 1,
+    },
+    {
+      id: 2,
+      firstName: 'Anil',
+      lastName: 'Agarwal',
+      date: 'Nov 20, 2025',
+      time: '01:00 PM',
+      age: 20,
+      email: 'test@example.com',
+      mobile: '987654321',
+      reason: 'Follow-up',
+      lastVisit: 'Nov 10, 2024',
+      weight: '58 kgs',
+      temperature: '98',
+      bloodPressure: '120 / 80',
+      gender: 'Male',
+      address: 'Gurugram, Haryana',
+      bloodGroup: 'B+',
+      status: 0,
+    },
+    {
+      id: 3,
+      firstName: 'Ravi',
+      lastName: 'Sahota',
+      date: 'Nov 20, 2025',
+      time: '10:00 AM',
+      age: 20,
+      email: 'test@example.com',
+      mobile: '987654321',
+      reason: 'New Patient',
+      lastVisit: 'Nov 10, 2024',
+      weight: '58 kgs',
+      temperature: '98',
+      bloodPressure: '120 / 80',
+      gender: 'Male',
+      address: 'Gurugram, Haryana',
+      bloodGroup: 'B+',
+      status: 1,
+    },
+    {
+      id: 4,
+      firstName: 'Anil',
+      lastName: 'Agarwal',
+      date: 'Nov 20, 2025',
+      time: '01:00 PM',
+      age: 20,
+      email: 'test@example.com',
+      mobile: '987654321',
+      reason: 'Follow-up',
+      lastVisit: 'Nov 10, 2024',
+      weight: '58 kgs',
+      temperature: '98',
+      bloodPressure: '120 / 80',
+      gender: 'Male',
+      address: 'Gurugram, Haryana',
+      bloodGroup: 'B+',
+      status: 0,
+    },
+  ];
+  appointmentsList: any = [];
+  userDetails: any = JSON.parse(localStorage.getItem('userDetails')!);
+
+  // patientAppointmentData = {
+  //   firstName: 'Akash',
+  //   lastName: 'Tewari',
+  //   age: '30',
+  //   mobile: '9899273448',
+  //   gender: 'male',
+  //   address: 'Kashipur',
+  //   bloodGroup: 'B+',
+  //   weight: '84',
+  //   bloodPressureUpper: '120',
+  //   bloodPressureLower: '80',
+  //   temperature: '98.3',
+  // };
+
+  constructor(
+    public router: Router,
+    public utilService: UtilityService,
+    public appointmentService: AppointmentService
+  ) {}
+
+  ngOnInit() {
+    setTimeout(() => { 
+      this.getAppointmentsList();
+    });
+  }
+
+  appointmentAction() {
+    this.router.navigate(['/appointments/take']);
+  }
+
+  getAppointmentsList() {
+    this.utilService.setSpinnerState(true);
+    this.appointmentService.getAppointmentsList().subscribe(
+      (res: any) => {
+        this.utilService.setSpinnerState(false);
+        if(res?.success) [
+          this.appointmentsList = res?.data
+        ]
+        else {
+          this.utilService.showToastMessage({
+            message: res?.message,
+            success: false,
+          });
+        }
+      },
+      (err: any) => {
+        this.utilService.setSpinnerState(false);
+        this.utilService.showToastMessage({
+          message: err?.error?.message,
+          success: false,
+        });
+      }
+    );
+  }
+}

@@ -1,0 +1,103 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <h2 class="mb-4">Dashboard</h2>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <div class="col-md-3 mb-3">
+      <div class="card bg-primary text-white">
+        <div class="card-body">
+          <p class="card-text fs-5">Today's Appointments</p>
+          <h2 class="card-title">12</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card bg-secondary text-white">
+        <div class="card-body">
+          <p class="card-text fs-5">New Patients</p>
+          <h2 class="card-title">9 This Week</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card bg-primary-subtle text-white">
+        <div class="card-body">
+          <p class="card-text fs-5">Unread Messages</p>
+          <h2 class="card-title">6</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card">
+        <div class="card-body">
+          <p class="card-text fs-5">Billing This Month</p>
+          <h2 class="card-title">$12,900</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-8 mb-4">
+      <div class="card">
+        <h3 class="border-bottom p-3">Upcoming Appointments</h3>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Time</th>
+              <th scope="col">Patient</th>
+              <th scope="col">Reason</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of upcomingAppointments">
+              <td>{{ item.time }}</td>
+              <td>{{ item.patientName }}</td>
+              <td>{{ item.reason }}</td>
+              <td>
+                <a href="">View</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+      <div class="card">
+        <h3 class="border-bottom p-3">Quick Access</h3>
+        <div class="card-body">
+          <div class="quick-access-links">
+            <div class="mb-2">
+              <a class="icon-link" routerLink="/appointments/schedule">
+                Schedule Appointment
+                <i class="bi bi-clock"></i>
+              </a>
+            </div>
+            <div class="mb-2">
+              <a class="icon-link" href="#">
+                Add Staff
+                <i class="bi bi-person-add"></i>
+              </a>
+            </div>
+            <div class="mb-2">
+              <a class="icon-link" href="#">
+                Unread Notifications
+                <i class="bi bi-menu-up"></i>
+              </a>
+            </div>
+            <div class="mb-2">
+              <a class="icon-link" routerLink="/patients">
+                Search Patient
+                <i class="bi bi-search"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
