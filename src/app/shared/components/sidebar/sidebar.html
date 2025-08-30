@@ -41,7 +41,7 @@
           class="nav-link text-white p-3"
           routerLink="/dashboard"
           routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: false }" data-bs-toggle="offcanvas"
+          [routerLinkActiveOptions]="{ exact: false }" [attr.data-bs-toggle]="isMobile ? 'offcanvas' : null"
         data-bs-target="#sidebar"
         >
           Dashboard
@@ -51,7 +51,7 @@
         <a
           routerLink="/patients"
           routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: false }" data-bs-toggle="offcanvas"
+          [routerLinkActiveOptions]="{ exact: false }" [attr.data-bs-toggle]="isMobile ? 'offcanvas' : null"
         data-bs-target="#sidebar"
           class="nav-link text-white p-3"
         >
@@ -62,7 +62,7 @@
         <a
           routerLink="/appointments"
           routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: false }" data-bs-toggle="offcanvas"
+          [routerLinkActiveOptions]="{ exact: false }" [attr.data-bs-toggle]="isMobile ? 'offcanvas' : null"
         data-bs-target="#sidebar"
           class="nav-link text-white p-3"
         >
