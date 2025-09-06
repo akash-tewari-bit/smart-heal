@@ -11,7 +11,9 @@
       </div>
     </div>
     <div class="d-flex justify-content-end gap-4" [ngClass]="{'col-md-4': !isMobile}">
-      <div class="notofication-wrapper position-relative btn" [ngClass]="{'d-none': isMobile}">
+      <div class="dropdown notofication-wrapper position-relative btn" [ngClass]="{'d-none': isMobile}" id="notificationDropdown"
+       data-bs-toggle="dropdown"
+       aria-expanded="false">
         <i class="bi bi-bell-fill" [ngClass]="{'text-primary': !isMobile, 'text-white': isMobile}"></i>
         @if (notificationCount) {
         <span class="notificationCount"
@@ -22,12 +24,31 @@
         </span>
         }
       </div>
-      <div class="profile-wrapper d-flex align-items-center gap-2 btn" [ngClass]="{'text-white ps-0 pe-0': isMobile}">
+      <div class="dropdown-menu notification-menu dropdown-menu-end" aria-labelledby="notificationDropdown">
+        <h3 class="ps-3 pe-3">Notifications</h3>
+        <ul class="notification-body">
+          <li class="dropdown-item" *ngFor="let item of notificationList">
+            {{item.title}}
+            <p class="fw-light">{{item.message}}</p>
+          </li>
+        </ul>
+        <div class="footer ps-3 pe-3">
+          <p>View all notifications</p>
+        </div>
+      </div>
+      <div class="dropdown profile-wrapper d-flex align-items-center gap-2 btn dropdown-toggle" [ngClass]="{'text-white ps-0 pe-0': isMobile}" id="dropdownMenuButton"
+       data-bs-toggle="dropdown"
+       aria-expanded="false">
         <span [ngClass]="{'d-none': isMobile}">
           {{ userDetails?.firstName }} {{ userDetails?.lastName }}
         </span>
         <i class="bi bi-person-circle" [ngClass]="{'text-primary': !isMobile, 'text-white': isMobile}"></i>
       </div>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+    <li class="dropdown-item-text">Hi {{ userDetails?.firstName }} {{ userDetails?.lastName }}</li>
+    <li><a class="dropdown-item cursor-pointer">Profile</a></li>
+    <li><a class="dropdown-item cursor-pointer" (click)="logout()">Logout</a></li>
+  </ul>
     </div>
   </div>
 </div>

@@ -8,7 +8,7 @@
     <div class="col-md-3 mb-3">
       <div class="card bg-primary text-white">
         <div class="card-body">
-          <p class="card-text fs-5">Today's Appointments</p>
+          <p class="card-text fs-6">Today's Appointments</p>
           <h2 class="card-title">12</h2>
         </div>
       </div>
@@ -16,7 +16,7 @@
     <div class="col-md-3 mb-3">
       <div class="card bg-secondary text-white">
         <div class="card-body">
-          <p class="card-text fs-5">New Patients</p>
+          <p class="card-text fs-6">New Patients</p>
           <h2 class="card-title">9 This Week</h2>
         </div>
       </div>
@@ -24,7 +24,7 @@
     <div class="col-md-3 mb-3">
       <div class="card bg-primary-subtle text-white">
         <div class="card-body">
-          <p class="card-text fs-5">Unread Messages</p>
+          <p class="card-text fs-6">Unread Messages</p>
           <h2 class="card-title">6</h2>
         </div>
       </div>
@@ -32,7 +32,7 @@
     <div class="col-md-3 mb-3">
       <div class="card">
         <div class="card-body">
-          <p class="card-text fs-5">Billing This Month</p>
+          <p class="card-text fs-6">Billing This Month</p>
           <h2 class="card-title">$12,900</h2>
         </div>
       </div>
@@ -43,26 +43,28 @@
     <div class="col-md-8 mb-4">
       <div class="card">
         <h3 class="border-bottom p-3">Upcoming Appointments</h3>
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">Time</th>
-              <th scope="col">Patient</th>
-              <th scope="col">Reason</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of upcomingAppointments">
-              <td>{{ item.time }}</td>
-              <td>{{ item.patientName }}</td>
-              <td>{{ item.reason }}</td>
-              <td>
-                <a href="">View</a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Time</th>
+                <th scope="col">Patient</th>
+                <th scope="col">Reason</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of upcomingAppointments">
+                <td>{{ item.time }}</td>
+                <td>{{ item.patientName }}</td>
+                <td>{{ item.reason }}</td>
+                <td>
+                  <a href="">View</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 

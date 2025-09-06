@@ -1,21 +1,23 @@
 <div class="row mb-3">
-    <div class="col-md-2 mb-3">
+    <div class="col-12">
         <h6>Filter By:</h6>
-        <input type="text" class="form-control" placeholder="Name" [(ngModel)]="text">
     </div>
-    <div class="col-md-2 mb-3 d-flex align-items-end">
+    <div class="col-md-2 mb-3">
+        <input type="text" class="form-control" placeholder="Name/Mobile" [(ngModel)]="text">
+    </div>
+    <div class="col-md-2 mb-3">
         <select class="form-select" [(ngModel)]="month">
             <option value="" disabled selected>Month</option>
             <option *ngFor="let item of months" value="{{item}}">{{item}}</option>
         </select>
     </div>
-    <div class="col-md-2 mb-3 d-flex align-items-end">
-        <select class="form-select" [(ngModel)]="age">
-            <option value="" disabled selected>Age</option>
-            <option *ngFor="let item of ageList" value="{{item}}">{{item}}</option>
+    <div class="col-md-2 mb-3">
+        <select class="form-select" [(ngModel)]="status">
+            <option value="" disabled selected>Status</option>
+            <option *ngFor="let item of statuses" value="{{item}}">{{item}}</option>
         </select>
     </div>
-    <div class="col-md-2 mb-3 d-flex align-items-end">
+    <div class="col-md-2 mb-3">
         <button class="btn btn-primary" type="button" (click)="updateRecords()">Update</button>
     </div>
     <div class="offset-md-2 col-md-2 mb-3">
@@ -23,7 +25,7 @@
         <select class="form-select">
             <option value="" disabled selected>Sort By</option>
             <option value="Name">Name</option>
-            <option value="Age">Age</option>
+            <option value="Age">Status</option>
         </select>
     </div>
 </div>

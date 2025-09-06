@@ -30,10 +30,6 @@
                             <td class="fw-bold">Address</td>
                             <td>{{patientDetail?.address}}</td>
                         </tr>
-                        <!-- <tr>
-                            <td class="fw-bold">Last Visit</td>
-                            <td>{{patientDetail?.lastVisit}}</td>
-                        </tr> -->
                         <tr>
                             <td class="fw-bold">Blood Group</td>
                             <td>{{patientDetail?.bloodGroup}}</td>
@@ -44,7 +40,11 @@
                         </tr>
                         <tr>
                             <td class="fw-bold">Temperature</td>
-                            <td>{{patientDetail?.temperature}} &#176;C</td>
+                            <td>
+                                @if(patientDetail?.temperature) {
+                                    {{patientDetail?.temperature}} &#176;<span>{{patientDetail?.temperatureType == 'celsius' ? 'C' : 'F'}}</span>
+                                }
+                            </td>
                         </tr>
                         <tr>
                             <td class="fw-bold">Blood Pressure</td>
@@ -59,32 +59,8 @@
         <div class="col-12 mb-4">
             <h3>Previous Appointments</h3>
         </div>
-        <div class="col-md-2 mb-3">
-            <button type="button" class="badge text-bg-info">Nov 10, 2024</button>
-        </div>
-        <div class="col-md-2 mb-3">
-            <button type="button" class="badge text-bg-info">Nov 10, 2024</button>
-        </div>
-        <div class="col-md-2 mb-3">
-            <button type="button" class="badge text-bg-info">Nov 10, 2024</button>
-        </div>
-        <div class="col-md-2 mb-3">
-            <button type="button" class="badge text-bg-info">Nov 10, 2024</button>
-        </div>
-        <div class="col-md-2 mb-3">
-            <button type="button" class="badge text-bg-info">Nov 10, 2024</button>
-        </div>
-        <div class="col-md-2 mb-3">
-            <button type="button" class="badge text-bg-info">Nov 10, 2024</button>
-        </div>
-        <div class="col-md-2 mb-3">
-            <button type="button" class="badge text-bg-info">Nov 10, 2024</button>
-        </div>
-        <div class="col-md-2 mb-3">
-            <button type="button" class="badge text-bg-info">Nov 10, 2024</button>
-        </div>
-        <div class="col-md-2 mb-3">
-            <button type="button" class="badge text-bg-info">Nov 10, 2024</button>
+        <div class="col-md-2 mb-3" *ngFor="let item of patientDetail?.list_of_appointments">
+            <button type="button" class="badge text-bg-info" (click)="getAppointmentData(item)">{{item | date : "MMM dd, yyyy"}}</button>
         </div>
     </div>
     <!-- <div class="row">
@@ -114,3 +90,153 @@
         </div>
     </div> -->
 </div>
+
+
+<div #captureElement id="capture-area" style="padding: 10px;"[ngStyle]="{ 
+    position: 'absolute',
+    top: '-9999px',
+    left: '-9999px'
+  }">
+  <!-- <pre *ngIf="selectedAppointmentData">{{ selectedAppointmentData | json }}</pre> -->
+   @if (selectedAppointmentData) {
+       <div class="row">
+        <div class="col-12 mb-3">
+                  <div class="table-responsive">
+                    <table class="table">
+                      <tbody>
+                        <tr>
+                          <td class="fw-bold">Patient Name</td>
+                          <td>
+                            {{ selectedAppointmentData.firstName }}
+                            {{ selectedAppointmentData.lastName }}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="fw-bold">Age</td>
+                          <td>{{ selectedAppointmentData.age ?? 'N/A' }}</td>
+                        </tr>
+                        <tr>
+                          <td class="fw-bold">Mobile</td>
+                        <td>{{ selectedAppointmentData.mobile }}</td>
+                      </tr>
+                      <tr>
+                        <td class="fw-bold">Gender</td>
+                        <td>{{ selectedAppointmentData.gender ?? 'N/A' }}</td>
+                      </tr>
+                      <tr>
+                        <td class="fw-bold">Address</td>
+                        <td>{{ selectedAppointmentData.address ?? 'N/A' }}</td>
+                      </tr>
+                      <tr>
+                        <td class="fw-bold">Blood Group</td>
+                        <td>{{ selectedAppointmentData.bloodGroup ?? 'N/A' }}</td>
+                      </tr>
+                      <tr>
+                        <td class="fw-bold">Weight</td>
+                        <td>{{ selectedAppointmentData.weight ?? 'N/A' }}</td>
+                      </tr>
+                      <tr>
+                        <td class="fw-bold">Temperature</td>
+                        <td>
+                        @if(selectedAppointmentData.temperature) {
+                          {{ selectedAppointmentData.temperature }} &#176;<span>{{selectedAppointmentData.temperatureType == 'celsius' ? 'C' : 'F'}}</span>
+                        } @else {
+                           N/A
+                        }
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="fw-bold">Blood Pressure</td>
+                        <td>
+                          @if(selectedAppointmentData.bloodPressureUpper && selectedAppointmentData.bloodPressureLower) {
+                            {{ selectedAppointmentData.bloodPressureUpper }} /
+                            {{ selectedAppointmentData.bloodPressureLower }}
+                          } @else {
+                            N/A
+                          }
+                        </td>
+                      </tr>
+                      @if (selectedAppointmentData.status == 1) {
+                        <tr>
+                        <td class="fw-bold">Analysis/Disease/Problem</td>
+                        <td>
+                          {{ selectedAppointmentData.analysis ?? 'N/A' }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="fw-bold">Advice</td>
+                        <td>
+                          {{ selectedAppointmentData.advice ?? 'N/A' }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="fw-bold">Tests Prescribed</td>
+                        <td>
+                          {{ selectedAppointmentData.tests ?? 'N/A' }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="fw-bold">Follow Up Visit</td>
+                        <td>
+                          {{ selectedAppointmentData.followUpVisit ?? 'N/A' }}
+                        </td>
+                      </tr>
+                      }
+                    </tbody>
+                  </table>
+                  </div>
+              </div>
+       </div>
+       <div class="row">
+            <div class="col-md-12 mb-3">
+                <h4>Medication</h4>
+            </div>
+        </div>
+        <div class="row">
+                  <div class="col-12">
+                    <div class="table-responsive">
+                      <table class="table table-bordered">
+                        <thead class="table-light">
+                          <tr>
+                            <th>Medicine</th>
+                            <th>Type</th>
+                            <th>Count</th>
+                            <th>Dosage</th>
+                            <th>Timing</th>
+                            <th>Duration</th>
+                            <th>Notes</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let item of selectedAppointmentData.medicationDetails">
+                            <td>{{item.medicine}}</td>
+                            <td>{{item.type}}</td>
+                            <td>{{item.count}}</td>
+                            <td>
+                              @if (item.morning) {
+                                <p class="mb-0">Morning</p>
+                              }
+                              @if (item.afternoon) {
+                                <p class="mb-0">Afternoon</p>
+                              }
+                              @if (item.night) {
+                                <p class="mb-0">Night</p>
+                              }
+                            </td>
+                            <td>{{item.beforeMeal ? 'Before Meal' : 'After Meal'}}</td>
+                            <td>{{item.duration}}</td>
+                            <td>{{item.notes}}</td>
+                          </tr>
+    
+                      </tbody>
+                    </table>
+                    </div>
+                  </div>
+                </div>
+   }
+</div>
+
+ <!-- Modal -->
+<app-modal [title]="selectedAppointmentDate | date : 'MMM dd, yyyy'" [showModal]="showModal" (closeModal)="closeModal()">
+  <img [src]="capturedImage" style="max-width: 100%;" />
+</app-modal>

@@ -15,14 +15,42 @@ export class AppointmentService {
     return this.http.post<any>(url, payload);
   }
 
-  getAppointmentsList() {
-    const url = `${environment.baseUrl}appointments`
+  getAppointmentsList(config: any, filter?: any) {
+    let queryString = '';
+    if(config?.page) {
+      queryString += `?page=${config?.page}`
+    }
+    if(config?.pageSize) {
+      queryString += `&page_size=${config?.pageSize}`
+    }
+    if(filter) {
+      if(filter?.text) {
+        queryString += `&text=${filter?.text}`
+      }
+      if(filter?.month) {
+        queryString += `&month=${filter?.month}`
+      }
+      if(filter?.status) {
+        queryString += `&status=${filter?.status}`
+      }
+    }
+    let url = `${environment.baseUrl}appointments${queryString}`
+    return this.http.get<any>(url);
+  }
+
+  getAppointmentsData(id: any) {
+    const url = `${environment.baseUrl}appointments/${id}`
     return this.http.get<any>(url);
   }
 
   submitAppointment(payload: any) {
     const url = `${environment.baseUrl}visits/add_visits`
     return this.http.post<any>(url, payload);
+  }
+
+  getBookedSlots(date: any) {
+    const url = `${environment.baseUrl}appointments/booked_slots/get_date_wise_booked_slots?appointment_date=${date}`
+    return this.http.get<any>(url);
   }
   
 }

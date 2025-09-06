@@ -2,32 +2,52 @@
   <div class="row">
     <div class="col-12">
       <h3 class="mb-4">Patients</h3>
-      <app-filter></app-filter>
-      <div class="card">
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">Name</th>
-              <th scope="col">Age</th>
-              <th scope="col">Last Visit</th>
-              <th scope="col">Mobile</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of patientsList">
-              <td>{{ item.firstName }} {{ item.lastName }}</td>
-              <td>{{ item.age }}</td>
-              <td>{{ item.lastVisit }}</td>
-              <td>{{ item.mobile }}</td>
-              <td>
-                <a class="cursor-pointer" (click)="showPatientDetails(item)"
+      <app-filter (filterData)="updateRecords($event)"></app-filter>
+      <div class="card border-0">
+        <div class="table-responsive" [ngClass]="{ 'no-record-structure': !patientsList.length }">
+          <table class="table border mb-0">
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Age</th>
+                <th scope="col">Last Visit</th>
+                <th scope="col">Mobile</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+          @if (patientsList.length) {
+            <tbody>
+              <tr *ngFor="let item of patientsList">
+                <td>{{ item.firstName }} {{ item.lastName }}</td>
+                <td>{{ item.age }}</td>
+                <td>{{ item.lastVisit }}</td>
+                <td>{{ item.mobile }}</td>
+                <td>
+                  <a class="cursor-pointer" (click)="showPatientDetails(item)"
                   >View</a
-                >
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                  >
+                </td>
+              </tr>
+            </tbody>
+          }
+          </table>
+          @if (patientsList.length) {
+            <mat-paginator
+            [length]="paginationConfig.totalRecords"
+            [pageSize]="paginationConfig.pageSize"
+            [pageSizeOptions]="paginationConfig.pageSizeOptions"
+            aria-label="Select page"
+            [hidePageSize]="paginationConfig.hidePageSizeOption"
+            (page)="handlePageEvent($event)"
+            >
+            </mat-paginator>
+          }
+          @if (!patientsList.length) {
+          <div class="no-record-wrapper border border-top-0">
+            <h6>No patients found. Please add one</h6>
+          </div>
+          }
+        </div>
       </div>
     </div>
   </div>

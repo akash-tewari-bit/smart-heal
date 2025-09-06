@@ -26,9 +26,9 @@ export class ScheduleAppointment {
     this.appointmentForm = this.fb.group({
       firstName: ['', [Validators.required]],
       lastName: [''],
-      age: ['', [Validators.required]],
+      age: [''],
       mobile: ['', [Validators.required]],
-      gender: ['', [Validators.required]],
+      gender: [''],
       address: [''],
       bloodGroup: [''],
       weight: [''],
@@ -107,7 +107,18 @@ export class ScheduleAppointment {
   }
 
   addEvent(data: any) {
-    // console.log(data);
-    
+    this.checkBookedSlots();
+  }
+
+  checkBookedSlots() {
+    const form = this.appointmentForm.getRawValue();
+    const date = this.datePipe.transform(form.date, 'yyyy-MM-dd')
+    this.appointmentService.getBookedSlots(date).subscribe((res: any) => {
+      console.log(res);
+      
+    },
+    err => {
+
+    })
   }
 }

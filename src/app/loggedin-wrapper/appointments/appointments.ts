@@ -90,6 +90,13 @@ export class Appointments {
   ];
   appointmentsList: any = [];
   userDetails: any = JSON.parse(localStorage.getItem('userDetails')!);
+  paginationConfig = {
+    page: 1,
+    pageSize: 10,
+    pageSizeOptions: [5, 10, 15, 20],
+    hidePageSizeOption: true,
+    totalRecords: 0
+  }
 
   // patientAppointmentData = {
   //   firstName: 'Akash',
@@ -117,18 +124,21 @@ export class Appointments {
     });
   }
 
-  appointmentAction() {
-    this.router.navigate(['/appointments/take']);
+  appointmentAction(item: any) {
+    this.router.navigate(['/appointments', item.appointment_id]);
   }
 
-  getAppointmentsList() {
+  getAppointmentsList(data?: any) {
     this.utilService.setSpinnerState(true);
-    this.appointmentService.getAppointmentsList().subscribe(
+    this.appointmentService.getAppointmentsList(this.paginationConfig, data).subscribe(
       (res: any) => {
         this.utilService.setSpinnerState(false);
-        if(res?.success) [
-          this.appointmentsList = res?.data
-        ]
+        if(res?.success) {
+          this.appointmentsList = res?.data?.appointment_list;
+          this.paginationConfig.page = res?.data?.page;
+          this.paginationConfig.pageSize = res?.data?.page_size;
+          this.paginationConfig.totalRecords = res?.data?.total_records;
+        }
         else {
           this.utilService.showToastMessage({
             message: res?.message,
@@ -144,5 +154,14 @@ export class Appointments {
         });
       }
     );
+  }
+
+  handlePageEvent(event: any) {
+    this.paginationConfig.page = event.pageIndex + 1;
+    this.getAppointmentsList();
+  }
+
+  updateRecords(data: any) {
+    this.getAppointmentsList(data);
   }
 }

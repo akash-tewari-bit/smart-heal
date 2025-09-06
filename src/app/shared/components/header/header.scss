@@ -32,3 +32,18 @@
 .header-container .btn:hover {
   background-color: #fff;
 }
+.profile-wrapper.dropdown-toggle::after {
+  display: none !important;
+}
+.notification-menu ul {
+  width: 325px;
+    height: 284px;
+    overflow: auto;
+    padding: 0;
+}
+.notification-menu li {
+  height: 50px;
+}
+.notification-body p {
+  font-size: 12px;
+}

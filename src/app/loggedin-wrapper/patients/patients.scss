@@ -1,0 +1,11 @@
+.no-record-structure {
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+}
+.no-record-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -18,15 +18,15 @@
         <input type="text" class="form-control" placeholder="Last Name" formControlName="lastName" />
       </div>
       <div class="col-md-6 mb-4">
-        <input type="text" class="form-control" placeholder="Age" formControlName="age" />
-      </div>
-      <div class="col-md-6 mb-4">
         <input type="text" class="form-control" [ngClass]="{'error-control': formSubmitted && appointmentForm.get('mobile')?.errors}" placeholder="Mobile" formControlName="mobile" />
         @if (formSubmitted && appointmentForm.invalid && appointmentForm.touched) {
             @if (appointmentForm.get('mobile')?.errors?.['required']) {
                 <p class="error-text">required</p>
             }
         }
+      </div>
+      <div class="col-md-6 mb-4">
+        <input type="text" class="form-control" placeholder="Age" formControlName="age" />
       </div>
       <div class="col-md-6 mb-4">
         <select class="form-select" formControlName="gender">
@@ -111,20 +111,22 @@
             }
         }
       </div>
-      <div class="col-md-6 mb-4">
-        <div class="appointment-date-wrapper rounded" [ngClass]="{'error-control': formSubmitted && appointmentForm.get('time')?.errors}">
-          <mat-form-field class="material-calendar">
-            <input matInput [matTimepicker]="picker" formControlName="time" readonly placeholder="Select Time">
-            <mat-timepicker-toggle matIconSuffix [for]="picker"/>
-            <mat-timepicker interval="15min" #picker />
-          </mat-form-field>
+      @if (appointmentForm.get('date')?.value) {
+        <div class="col-md-6 mb-4">
+          <div class="appointment-date-wrapper rounded" [ngClass]="{'error-control': formSubmitted && appointmentForm.get('time')?.errors}">
+            <mat-form-field class="material-calendar">
+              <input matInput [matTimepicker]="picker" formControlName="time" readonly placeholder="Select Time">
+              <mat-timepicker-toggle matIconSuffix [for]="picker"/>
+              <mat-timepicker interval="15min" #picker />
+            </mat-form-field>
+          </div>
+          @if (formSubmitted && appointmentForm.invalid && appointmentForm.touched) {
+              @if (appointmentForm.get('time')?.errors?.['required']) {
+                  <p class="error-text">required</p>
+              }
+          }
         </div>
-        @if (formSubmitted && appointmentForm.invalid && appointmentForm.touched) {
-            @if (appointmentForm.get('time')?.errors?.['required']) {
-                <p class="error-text">required</p>
-            }
-        }
-      </div>
+      }
 
       <div class="col-12">
         <div class="d-flex gap-2">

@@ -14,7 +14,7 @@ const routes: Routes = [
     component: ScheduleAppointment
   },
   {
-    path: 'take',
+    path: ':id',
     component: AppointmentAction
   }
 ];

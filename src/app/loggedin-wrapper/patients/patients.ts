@@ -81,6 +81,13 @@ export class Patients {
     }
   ]
   patientsList: any = [];
+  paginationConfig = {
+    page: 1,
+    pageSize: 10,
+    pageSizeOptions: [5, 10, 15, 20],
+    hidePageSizeOption: true,
+    totalRecords: 0
+  }
 
   constructor(public router: Router, public utilService: UtilityService, public patientService: PatientsService) {
 
@@ -96,14 +103,19 @@ export class Patients {
     this.router.navigate(['/patients', item.patient_id])
   }
 
-  getPatientsList() {
+  getPatientsList(data?: any) {
     this.utilService.setSpinnerState(true);
-    this.patientService.getPatientsList().subscribe(
+    this.patientService.getPatientsList(this.paginationConfig, data).subscribe(
       (res: any) => {
         this.utilService.setSpinnerState(false);
-        if(res?.success) [
-          this.patientsList = res?.data
-        ]
+        if(res?.success) {
+          this.patientsList = res?.data?.patient_list;
+          console.log(this.patientsList);
+          
+          this.paginationConfig.page = res?.data?.page;
+          this.paginationConfig.pageSize = res?.data?.page_size;
+          this.paginationConfig.totalRecords = res?.data?.total_records;
+        }
         else {
           this.utilService.showToastMessage({
             message: res?.message,
@@ -119,6 +131,15 @@ export class Patients {
         });
       }
     );
+  }
+
+  handlePageEvent(event: any) {
+    this.paginationConfig.page = event.pageIndex + 1;
+    this.getPatientsList();
+  }
+
+  updateRecords(data: any) {
+    this.getPatientsList(data);
   }
 
 }

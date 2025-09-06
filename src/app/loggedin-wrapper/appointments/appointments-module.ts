@@ -13,13 +13,16 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTimepickerModule } from '@angular/material/timepicker';
 import { QRCodeComponent } from 'angularx-qrcode';
 import { SharedModule } from '../../shared/shared-module';
+import { Filter } from './filter/filter';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 @NgModule({
   declarations: [
     Appointments,
     ScheduleAppointment,
-    AppointmentAction
+    AppointmentAction,
+    Filter
   ],
   imports: [
     CommonModule,
@@ -32,7 +35,8 @@ import { SharedModule } from '../../shared/shared-module';
     MatNativeDateModule,
     MatTimepickerModule,
     QRCodeComponent,
-    SharedModule
+    SharedModule,
+    MatPaginatorModule
   ],
   providers: [DatePipe]
 })

@@ -21,23 +21,21 @@ export class Filter {
     'November',
     'December',
   ];
-  ageList: any = [
-    'Below 20',
-    '20 to 30',
-    '30 to 40',
-    '40 to 50',
-    'Above 50',
-  ]
+  statuses: any = [
+    'Upcoming',
+    'Completed',
+    'No Show'
+  ];
   text: any = ''
   month: any = ''
-  age: any = ''
+  status: any = ''
   @Output() filterData = new EventEmitter<any>();
 
   updateRecords() {
     const obj = {
       text: this.text,
       month: this.month,
-      age: this.age
+      status: this.status
     }
     this.filterData.emit(obj);
   }
