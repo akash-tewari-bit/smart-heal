@@ -1,5 +1,7 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -7,8 +9,9 @@ import { BehaviorSubject } from 'rxjs';
 export class UtilityService {
   showSpinner = new BehaviorSubject<any>(false);
   showToast = new BehaviorSubject<any>(null);
+  environment = environment;
 
-  constructor() { }
+  constructor(public http: HttpClient) { }
 
   setSpinnerState(data: boolean) {
     return this.showSpinner.next(data);
@@ -23,10 +26,14 @@ export class UtilityService {
       if(data[item] && typeof data[item] == 'object') {
         this.transformObj(data[item])
       }
-      else if(!data[item]) {
+      else if(typeof data[item] != 'boolean' && !data[item]) {
         data[item] = null
       }
     }
     return data
   }
+
+  search(query: string): Observable<any[]> {
+  return this.http.get<any[]>(`${environment.baseUrl}dashboard/search?text=${query}`);
+}
 }

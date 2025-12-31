@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../shared/services/auth.service';
@@ -17,6 +17,13 @@ export class ForgotPassword {
   passwordChanged = false;
   formSubmitted = false;
   validOtp = false;
+  isMobile = window.innerWidth < 768;
+  forgotPasswordToken: any = '';
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event?: any) {
+    this.isMobile = window.innerWidth < 768; // Consider 768px as the breakpoint for mobile
+  }
 
   constructor(
     public router: Router,
@@ -55,6 +62,7 @@ export class ForgotPassword {
           (res: any) => {
             this.utilService.setSpinnerState(false);
             if (res.success) {
+              this.forgotPasswordToken = res?.data?.token;
               this.forgotPasswordForm.markAsUntouched();
               this.formSubmitted = false;
               this.validUsername = true;
@@ -84,8 +92,9 @@ export class ForgotPassword {
     this.forgotPasswordForm.markAllAsTouched();
     this.formSubmitted = true;
     const payload = {
-      email: this.forgotPasswordForm.get('email')?.value,
+      // email: this.forgotPasswordForm.get('email')?.value,
       otp: this.forgotPasswordForm.get('otp')?.value,
+      token: this.forgotPasswordToken
     };
     if (this.forgotPasswordForm.get('otp')?.value) {
       this.utilService.setSpinnerState(true);
@@ -126,8 +135,9 @@ export class ForgotPassword {
     this.forgotPasswordForm.markAllAsTouched();
     this.formSubmitted = true;
     const payload = {
-      email: this.forgotPasswordForm.get('email')?.value,
+      // email: this.forgotPasswordForm.get('email')?.value,
       new_password: this.forgotPasswordForm.get('newPassword')?.value,
+      token: this.forgotPasswordToken
     };
     if (
       this.forgotPasswordForm.get('newPassword')?.value &&
@@ -173,5 +183,9 @@ export class ForgotPassword {
 
   resetPasswordPopUpClosed() {
     // this.router.navigate(['/auth/login']);
+  }
+
+  cancel() {
+    this.router.navigate(['/auth/login']);
   }
 }

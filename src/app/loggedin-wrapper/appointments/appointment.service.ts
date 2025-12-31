@@ -33,6 +33,12 @@ export class AppointmentService {
       if(filter?.status) {
         queryString += `&status=${filter?.status}`
       }
+      if(filter?.startDate) {
+        queryString += `&startDate=${filter?.startDate}`
+      }
+      if(filter?.endDate) {
+        queryString += `&endDate=${filter?.endDate}`
+      }
     }
     let url = `${environment.baseUrl}appointments${queryString}`
     return this.http.get<any>(url);
@@ -51,6 +57,21 @@ export class AppointmentService {
   getBookedSlots(date: any) {
     const url = `${environment.baseUrl}appointments/booked_slots/get_date_wise_booked_slots?appointment_date=${date}`
     return this.http.get<any>(url);
+  }
+
+  getPatientsList(number: any) {
+    const url = `${environment.baseUrl}patients/get_patients_list_on_basis_of_mobile/${number}`
+    return this.http.get<any>(url);
+  }
+
+  makePayment(payload: any) {
+    const url = `${environment.baseUrl}billings/create_billing`
+    return this.http.post<any>(url, payload);
+  }
+
+  updateAppointment(id: any, payload: any) {
+    const url = `${environment.baseUrl}appointments/update_appointment/${id}`
+    return this.http.post<any>(url, payload);
   }
   
 }

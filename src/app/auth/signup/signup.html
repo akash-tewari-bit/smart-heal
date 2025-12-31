@@ -1,13 +1,20 @@
 <div class="container-fluid">
     <div class="row login-wrapper">
-        <div class="col-md-12 d-flex justify-content-center align-items-center">
-            <form class="login-form p-4" [formGroup]="signUpForm">
+        @if(!isMobile) {
+            <div class="col-md-7">
+                <div class="login-wrapper-img">
+                </div>
+            </div>
+        }
+        <div class="col-md-5 d-flex justify-content-center align-items-center" [ngClass]="{'login-wrapper-img': isMobile}">
+            <form [formGroup]="signUpForm">
+                <div class="login-form p-4">
                 <div class="app-logo mt-3 mb-3">
                     <img src="assets/images/logo_mobile.png" alt="Logo" />
                 </div>
                 <div class="row">
                     <div class="col-md-12 mb-3 text-center">
-                        <h3>Sign Up</h3>
+                        <h4>Sign Up</h4>
                     </div>
                     <div class="col-md-12 mb-3">
                         <input type="text" [ngClass]="{'error-control': formSubmitted && signUpForm.get('firstName')?.errors}" formControlName="firstName" placeholder="First Name" class="form-control" />
@@ -46,6 +53,14 @@
                             }
                             @if (signUpForm.get('email')?.errors?.['pattern']) {
                                 <p class="error-text">invalid email id</p>
+                            }
+                        }
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <input type="text" [ngClass]="{'error-control': formSubmitted && signUpForm.get('entityName')?.errors}" formControlName="entityName" placeholder="Hospital/Clinic Name" class="form-control" />
+                        @if (formSubmitted && signUpForm.invalid && signUpForm.touched) {
+                            @if (signUpForm.get('entityName')?.errors?.['required']) {
+                                <p class="error-text">required</p>
                             }
                         }
                     </div>
@@ -101,11 +116,13 @@
                     </div>
                     <div class="col-md-12 text-end">
                         <div class="d-grid gap-3">
-                            <button class="btn btn-primary" (click)="signUp()">Signup</button>
+                            <button class="btn btn-primary" (click)="signUp()">Create Account</button>
                             <button class="btn btn-outline-secondary" (click)="cancel()">Cancel</button>
                         </div>
                     </div>
                 </div>
+                </div>
+                <p class="create-account-wrapper">Already have an account? <a class="cursor-pointer" (click)="signIn()">Sign In</a></p>
             </form>
         </div>
     </div>

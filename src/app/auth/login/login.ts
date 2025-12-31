@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UtilityService } from '../../shared/services/utility.service';
@@ -13,6 +13,12 @@ import { AuthService } from '../../shared/services/auth.service';
 export class Login {
   loginForm!: FormGroup;
   formSubmitted = false;
+  isMobile = window.innerWidth < 768;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event?: any) {
+    this.isMobile = window.innerWidth < 768; // Consider 768px as the breakpoint for mobile
+  }
 
   constructor(public fb: FormBuilder, public router: Router, public utilService: UtilityService, public authService: AuthService) {
     this.loginForm = this.fb.group({

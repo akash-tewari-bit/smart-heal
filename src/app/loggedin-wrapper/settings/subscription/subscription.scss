@@ -1,0 +1,21 @@
+.no-record-structure {
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+}
+.no-record-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.plan-wrapper {
+    padding: 40px 20px;
+    min-height: 400px;
+    display: flex;
+    justify-content: space-between;
+}
+.plan-confirmation i {
+    font-size: 92px;
+    color: var(--bs-secondary);
+}

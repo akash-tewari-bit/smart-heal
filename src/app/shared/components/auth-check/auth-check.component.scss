@@ -1,0 +1,181 @@
+.all-in-one-platform-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+}
+.platform-heading {
+    font-size: 78px;
+}
+.primary-section {
+    padding: 60px 30px;
+}
+.primary-section-wrapper {
+    color: #fff;
+    background-color: var(--bs-primary);
+}
+.get-started-button-wrapper {
+    padding: 12px;
+    display: flex;
+    justify-content: center;
+    border-radius: 12px;
+}
+.welcome-wrapper .welcome-header {
+    padding: 15px 30px;
+}
+.header-wrapper {
+    padding: 12px 24px;
+}
+.header-wrapper .logo-wrapper {
+    height: 68px;
+    width: auto;
+    padding: 6px 0px;
+}
+.header-wrapper .logo-wrapper img {
+    height: 100%;
+    width: auto;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// .gradient-section {
+//   position: relative;
+//   width: 100%;
+//   height: 100vh;
+//   background-color: #ffffff; // your background color
+//   overflow: hidden;
+//   z-index: 1;
+// }
+
+// .gradient-section::before {
+//   content: '';
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   width: 100%;
+//   height: 100%;
+//   pointer-events: none;
+//   z-index: -1;
+
+//   background: linear-gradient(
+//     to bottom right,
+//     var(--bs-primary) 30%,         // top-right
+//     var(--bs-primary) 70%,        // down right side to 30%
+//     transparent 0%,              // down left side to 70%
+//     transparent 100%
+//   );
+// }
+
+
+
+.gradient-section {
+  position: relative;
+  width: 100%;
+//   height: 100vh;
+  background-color: #ffffff;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.gradient-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+
+  background: linear-gradient(
+    to bottom left,
+    var(--bs-primary) 0%,
+    var(--bs-primary) 30%,
+    transparent 100%,
+    transparent 100%
+  );
+}
+
+
+
+
+
+
+
+
+
+
+
+.modern-iphone-frame {
+  width: 296px; /* iPhone 14 width */
+  height: 564px; /* iPhone 14 height */
+  border-radius: 60px;
+  background: #000;
+  padding: 24px 16px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dynamic-island {
+  width: 140px;
+  height: 22px;
+  background: #111;
+  border-radius: 20px;
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.screen {
+  width: 100%;
+  flex: 1;
+  background: white;
+  border-radius: 40px;
+  overflow: hidden;
+  margin-top: -8px;
+  margin-bottom: -18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.screen img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 30px;
+}
+
+.home-indicator {
+  width: 135px;
+  height: 5px;
+  background: #000;
+  border-radius: 3px;
+  margin-bottom: 16px;
+}
+.welcome-header .all-in-one-platform-image {
+    position: absolute;
+    z-index: -1;
+    top: 0px;
+    left: 78px;
+    right: -221px;
+}

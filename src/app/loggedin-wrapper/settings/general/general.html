@@ -1,0 +1,98 @@
+<form [formGroup]="generalSettingsForm">
+<div class="row">
+  <div class="col-12 mb-3">
+    <div class="profile-picture-wrapper" [ngClass]="{'has-image': imageUrl}">
+      <input class="d-none"
+      type="file" 
+      #fileInput 
+      (change)="onFileSelected($event)" />
+      @if (!imageUrl) {
+        <div class="d-flex justify-content-center position-relative">
+          <i class="bi bi-person-circle text-primary cursor-pointer" (click)="uploadImage(fileInput)">
+            <i class="bi bi-pencil-square d-none"></i>
+          </i>
+        </div>
+      }
+      @if (imageUrl) {
+        <div (click)="uploadImage(fileInput)">
+          <img [src]="imageUrl" alt="profile_image">
+            <i class="bi bi-pencil-square d-none"></i>
+        </div>
+      }
+    </div>
+  </div>
+  <div class="col-12 mb-3">
+    <h5>Account</h5>
+  </div>
+  <div class="col-md-3 mb-3">
+    <label class="form-label">First Name</label>
+  </div>
+  <div class="col-md-6 mb-3">
+    {{ configurations?.general?.firstName }}
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-3 mb-3">
+    <label class="form-label">Last Name</label>
+  </div>
+  <div class="col-md-6 mb-3">
+    {{ configurations?.general?.lastName }}
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-3 mb-3">
+    <label class="form-label">Email</label>
+  </div>
+  <div class="col-md-6 mb-3">
+    {{ configurations?.general?.email }}
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-3 mb-3">
+    <label class="form-label">Country</label>
+  </div>
+  <div class="col-md-6 mb-3">
+    {{ configurations?.general?.country }}
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-3 mb-3">
+    <label class="form-label">Mobile</label>
+  </div>
+  <div class="col-md-3 mb-3">
+    <input type="text" class="form-control" formControlName="mobile" />
+  </div>
+</div>
+<div class="row">
+  <div class="col-12 mb-3">
+    <h5>Password</h5>
+  </div>
+  <div class="col-md-3 mb-3">
+    <label class="form-label">Current Password</label>
+  </div>
+  <div class="col-md-3 mb-3">
+    <input type="password" class="form-control" formControlName="currentPassword" />
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-3 mb-3">
+    <label class="form-label">New Password</label>
+  </div>
+  <div class="col-md-3 mb-3">
+    <input type="password" class="form-control" formControlName="newPassword" />
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-3 mb-3">
+    <label class="form-label">Confirm Password</label>
+  </div>
+  <div class="col-md-3 mb-3">
+    <input type="password" class="form-control" formControlName="confirmPassword" />
+  </div>
+</div>
+<div class="row">
+  <div class="col-12 mb-3">
+    <button class="btn-primary btn" (click)="saveChanges()">Save Changes</button>
+  </div>
+</div>
+</form>

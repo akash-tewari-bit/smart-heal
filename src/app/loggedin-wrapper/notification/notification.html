@@ -1,0 +1,70 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <h3 class="mb-4">Notifications</h3>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12 text-end mb-3">
+      <a class="cursor-pointer mark-all-read-notification" (click)="markAllAsRead(true)">Mark all as read</a>
+    </div>
+    <div class="col-12">
+        <div
+          class="table-responsive"
+          [ngClass]="{ 'no-record-structure': !notificationList.length }"
+        >
+          <table class="table border mb-0">
+            <thead>
+              <tr>
+                  <th scope="col">Date & Time</th>
+                  <th scope="col">Patient Name</th>
+                  <th scope="col">Message</th>
+                  <th scope="col">Action</th>
+              </tr>
+            </thead>
+          @if (notificationList.length) {
+            <tbody>
+              <tr *ngFor="let item of notificationList">
+                @if (item?.created_date && item?.created_time) {
+                  <td>
+                    {{ item?.created_date | date : "MMM dd, yyyy" }} -
+                    {{
+                      item?.created_date.split("/").reverse().join("-") +
+                      "T" +
+                      item?.created_time | date : "hh:mm a"
+                    }}
+                  </td>
+                }
+                  <td>{{item?.firstName}} {{item?.lastName}}</td>
+                <td>{{ item?.message }}
+                    <p class="fw-light fst-italic"><small>Updated by - {{item?.updated_by}}</small></p>
+                </td>
+                <td>
+                    <a class="cursor-pointer" (click)="viewNotification(item)"
+                    >View</a>
+                </td>
+              </tr>
+            </tbody>
+          }
+          </table>
+          @if (notificationList.length) {
+            <mat-paginator
+            [length]="paginationConfig.totalRecords"
+            [pageSize]="paginationConfig.pageSize"
+            [pageSizeOptions]="paginationConfig.pageSizeOptions"
+            aria-label="Select page"
+            [hidePageSize]="paginationConfig.hidePageSizeOption"
+            (page)="handlePageEvent($event)"
+            >
+            </mat-paginator>
+          }
+          @if (!notificationList.length) {
+          <div class="no-record-wrapper border border-top-0">
+            <h6>No notifications found.</h6>
+          </div>
+          }
+        </div>
+    </div>
+  </div>
+</div>

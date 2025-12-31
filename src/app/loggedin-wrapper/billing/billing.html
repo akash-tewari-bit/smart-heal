@@ -1,0 +1,111 @@
+<div class="container-fluid">
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <h3 class="mb-4">Billing</h3>
+    </div>
+    <div class="col-md-6 d-flex justify-content-end align-items-center gap-2">
+      <div>
+        <mat-form-field class="material-calendar">
+          <mat-label>Enter a date range</mat-label>
+          <mat-date-range-input [rangePicker]="picker">
+            <input
+              matStartDate
+              [(ngModel)]="startDate"
+              placeholder="Start date"
+            />
+            <input matEndDate (dateChange)="addEvent($event)" [(ngModel)]="endDate" placeholder="End date" />
+          </mat-date-range-input>
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+      </div>
+      <button class="btn btn-primary w-40">Download Report</button>
+    </div>
+  </div>
+  <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <div class="card shadow-sm p-3">
+        <h6>Total Earnings</h6>
+        <h4 class="fw-bold text-success">₹{{summaryData?.totalEarning}}</h4>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm p-3">
+        <h6>Pending Payments</h6>
+        <h4 class="fw-bold text-danger">{{summaryData?.pendingPayment}}</h4>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm p-3">
+        <h6>Completed Payments</h6>
+        <h4 class="fw-bold text-primary">{{summaryData?.completedPayment}}</h4>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Donut Chart -->
+    <div class="col-md-4">
+      <div class="card shadow-sm p-3 h-100">
+        <h6 class="mb-3">Payments Breakdown</h6>
+        <canvas id="billingDonutChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Transactions Table -->
+    <div class="col-md-8">
+      <div class="card shadow-sm p-3">
+        <div>
+          <app-filter (filterData)="updateRecords($event)"></app-filter>
+        </div>
+        <div class="card border-0">
+          <div
+            class="table-responsive"
+            [ngClass]="{ 'no-record-structure': !billingList.length }"
+          >
+            <table class="table border mb-0">
+              <thead>
+                <tr>
+                  <th scope="col">Patient Name</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">Payment Type</th>
+                  <th scope="col">Received By</th>
+                  <th scope="col">Amount</th>
+                </tr>
+              </thead>
+              @if (billingList.length) {
+              <tbody>
+                <tr *ngFor="let item of billingList">
+                  <td>{{ item.firstName }} {{ item.lastName }}</td>
+                  <td>{{ item.billingDate | date : "MMM dd, yyyy" }}</td>
+                  <td>{{ item.billingType }}</td>
+                  <td>{{ item?.receivedBy }}</td>
+                  <td>{{ item.amount }}</td>
+                </tr>
+              </tbody>
+              }
+            </table>
+            @if (billingList.length) {
+            <mat-paginator
+              [length]="paginationConfig.totalRecords"
+              [pageSize]="paginationConfig.pageSize"
+              [pageSizeOptions]="paginationConfig.pageSizeOptions"
+              aria-label="Select page"
+              [hidePageSize]="paginationConfig.hidePageSizeOption"
+              (page)="handlePageEvent($event)"
+            >
+            </mat-paginator>
+            } @if (!billingList.length) {
+            <div class="no-record-wrapper border border-top-0">
+              <h6>No billing found.</h6>
+            </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

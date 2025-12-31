@@ -1,0 +1,193 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12 mb-4">
+      <h3>{{staffId ? 'Edit' : 'Add'}} Staff</h3>
+    </div>
+  </div>
+  <form [formGroup]="staffForm">
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">First Name</label>
+        <input
+          type="text"
+          [ngClass]="{
+            'error-control': formSubmitted && staffForm.get('firstName')?.errors
+          }"
+          formControlName="firstName"
+          placeholder="First Name"
+          class="form-control"
+        />
+        @if (formSubmitted && staffForm.invalid && staffForm.touched) { @if
+        (staffForm.get('firstName')?.errors?.['required']) {
+        <p class="error-text">required</p>
+        } @if (staffForm.get('firstName')?.errors?.['minlength']) {
+        <p class="error-text">required minimum length is 3</p>
+        } @if (staffForm.get('firstName')?.errors?.['maxlength']) {
+        <p class="error-text">required maximum length is 15</p>
+        } }
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Last Name</label>
+        <input
+          type="text"
+          [ngClass]="{
+            'error-control': formSubmitted && staffForm.get('lastName')?.errors
+          }"
+          formControlName="lastName"
+          placeholder="Last Name"
+          class="form-control"
+        />
+        @if (formSubmitted && staffForm.invalid && staffForm.touched) { @if
+        (staffForm.get('lastName')?.errors?.['required']) {
+        <p class="error-text">required</p>
+        } @if (staffForm.get('lastName')?.errors?.['minlength']) {
+        <p class="error-text">required minimum length is 3</p>
+        } @if (staffForm.get('lastName')?.errors?.['maxlength']) {
+        <p class="error-text">required maximum length is 15</p>
+        } }
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Country</label>
+        <select
+          class="form-select"
+          [ngClass]="{
+            'error-control': formSubmitted && staffForm.get('country')?.errors
+          }"
+          formControlName="country"
+        >
+          <option value="" disabled>Country</option>
+          <option value="india">India</option>
+        </select>
+        @if (formSubmitted && staffForm.invalid && staffForm.touched) { @if
+        (staffForm.get('country')?.errors?.['required']) {
+        <p class="error-text">required</p>
+        } }
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Mobile</label>
+        <input
+          type="tel"
+          [ngClass]="{
+            'error-control': formSubmitted && staffForm.get('mobile')?.errors
+          }"
+          formControlName="mobile"
+          placeholder="Mobile"
+          class="form-control"
+        />
+        @if (formSubmitted && staffForm.invalid && staffForm.touched) { @if
+        (staffForm.get('mobile')?.errors?.['required']) {
+        <p class="error-text">required</p>
+        } @if (staffForm.get('mobile')?.errors?.['minlength']) {
+        <p class="error-text">required minimum length is 5</p>
+        } }
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Email</label>
+        <input
+          type="email"
+          [ngClass]="{
+            'error-control': formSubmitted && staffForm.get('email')?.errors
+          }"
+          formControlName="email"
+          placeholder="Email"
+          class="form-control"
+        />
+        @if (formSubmitted && staffForm.invalid && staffForm.touched) { @if
+        (staffForm.get('email')?.errors?.['required']) {
+        <p class="error-text">required</p>
+        } @if (staffForm.get('email')?.errors?.['pattern']) {
+        <p class="error-text">invalid email id</p>
+        } }
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Role</label>
+        <select
+          class="form-select"
+          [ngClass]="{
+            'error-control': formSubmitted && staffForm.get('role')?.errors
+          }"
+          formControlName="role"
+        >
+          <option value="" disabled>Role</option>
+          <option value="nurse">Nurse</option>
+          <option value="doctor">Doctor</option>
+          <option value="receptionist">Receptionist</option>
+        </select>
+        @if (formSubmitted && staffForm.invalid && staffForm.touched) { @if
+        (staffForm.get('role')?.errors?.['required']) {
+        <p class="error-text">required</p>
+        } }
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Username</label>
+        <input
+          type="text"
+          [ngClass]="{
+            'error-control': formSubmitted && staffForm.get('username')?.errors
+          }"
+          formControlName="username"
+          placeholder="Username"
+          class="form-control"
+        />
+        @if (formSubmitted && staffForm.invalid && staffForm.touched) { @if
+        (staffForm.get('username')?.errors?.['required']) {
+        <p class="error-text">required</p>
+        } @if (staffForm.get('username')?.errors?.['minlength']) {
+        <p class="error-text">required minimum length is 5</p>
+        } @if (staffForm.get('username')?.errors?.['maxlength']) {
+        <p class="error-text">required maximum length is 18</p>
+        } @if (staffForm.get('username')?.errors?.['pattern']) {
+        <p class="error-text">invalid username</p>
+        } }
+      </div>
+      @if (!staffId) {
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Password</label>
+          <input
+          type="password"
+          [ngClass]="{
+            'error-control': formSubmitted && staffForm.get('password')?.errors
+          }"
+          formControlName="password"
+          placeholder="Password"
+          class="form-control"
+          />
+          @if (formSubmitted && staffForm.invalid && staffForm.touched) { @if
+            (staffForm.get('password')?.errors?.['required']) {
+              <p class="error-text">required</p>
+            } @if (staffForm.get('password')?.errors?.['minlength']) {
+              <p class="error-text">required minimum length is 6</p>
+            } }
+          </div>
+        }
+      <div class="col-md-12 mb-3">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="checkChecked"
+            formControlName="sendToEmail"
+          />
+          <label class="form-check-label" for="checkChecked">
+            Send credentials to email
+          </label>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-primary" (click)="createStaff()">
+            Submit
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            (click)="cancel()"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

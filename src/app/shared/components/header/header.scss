@@ -47,3 +47,39 @@
 .notification-body p {
   font-size: 12px;
 }
+.search-content-wrapper {
+  background-color: #fff;
+}
+.mark-all-read-notification {
+  font-size: 12px;
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+}
+.header-profile-with-image {
+    width: 42px;
+    height: 42px;
+    border: 4px solid var(--bs-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.header-profile-with-image img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+.header-profile-image-wrapper {
+  width: 42px;
+  height: 42px;
+}
+.header-profile-image-wrapper i {
+  display: flex;
+  font-size: 42px;
+}
+@media (max-width: 767px) {
+  .header-profile-with-image {
+    border-color: #fff;
+  }
+}

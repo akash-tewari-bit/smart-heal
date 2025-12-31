@@ -39,4 +39,11 @@ export class Filter {
     }
     this.filterData.emit(obj);
   }
+
+  resetRecords() {
+    this.text = '';
+    this.month = '';
+    this.status = '';
+    this.updateRecords();
+  }
 }

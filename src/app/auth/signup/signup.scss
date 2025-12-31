@@ -1,9 +1,8 @@
 .container-fluid, .login-wrapper {
     height: 100%;
 }
-.login-form {
+form {
     border: 1px solid var(--bs-border-color);
-    width: 100%;
     border-radius: 12px;
 }
 .app-logo {
@@ -15,8 +14,28 @@
     height: 100%;
 }
 
+.create-account-wrapper {
+    padding: 1rem;
+    text-align: center;
+    background-color: #e3eeff;
+    margin: 0 !important;
+}
+
 @media (min-width: 1024px) {
     .login-form {
         width: 440px;
     }
+}
+.login-wrapper-img {
+  height: 100%;
+  background-image: url('../../../assets/images/login-wrapper-img.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  display: block;
+}
+
+.login-wrapper-img form {
+  background-color: #fff;
+  width: 80%;
 }

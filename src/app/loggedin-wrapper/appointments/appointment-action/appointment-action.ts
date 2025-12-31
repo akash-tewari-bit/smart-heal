@@ -3,6 +3,8 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UtilityService } from '../../../shared/services/utility.service';
 import { AppointmentService } from '../appointment.service';
+import { SettingsService } from '../../settings/settings.service';
+import { DatePipe } from '@angular/common';
 
 
 @Component({
@@ -13,7 +15,7 @@ import { AppointmentService } from '../appointment.service';
 })
 export class AppointmentAction {
   appointmentForm!: FormGroup;
-  patientAppointmentData: any = [];
+  patientAppointmentData: any = '';
   // patientAppointmentData = {
   //   firstName: 'Akash',
   //   lastName: 'Tewari',
@@ -33,8 +35,9 @@ export class AppointmentAction {
   //   currentVisit: 'Aug 23, 2025'
   // };
   editAppointmentDetails = false;
-  upiId = '9899273448@ptsbi';
-  name = 'Akash Deep Tewari';
+  upiId = '';
+  name = '';
+  currency = '';
   amount: any;
   qrData: any;
   showModal = false;
@@ -44,12 +47,18 @@ export class AppointmentAction {
   appointmentId: any;
   showPrintAndPaymentOption: any = false;
   @ViewChild('printData') printData!: ElementRef;
+  userDetails: any = JSON.parse(localStorage.getItem('userDetails')!);
+  timeOptions: any = [];
+  interval = 15;
+  bookedSlots: any = [];
+  todayDate = new Date();
 
-  constructor(public fb: FormBuilder, public router: Router, public utilService: UtilityService, public appointmentService: AppointmentService, public activatedRoute: ActivatedRoute) {
+  constructor(public fb: FormBuilder, public router: Router, public utilService: UtilityService, public appointmentService: AppointmentService, public activatedRoute: ActivatedRoute, public settingsService: SettingsService, public datePipe: DatePipe) {
     this.initiateForm();
   }
 
   ngOnInit() {
+    this.todayDate.setHours(0, 0, 0, 0);
     this.appointmentId = this.activatedRoute.snapshot.paramMap.get('id');
     if(this.appointmentId) {
       setTimeout(() => { 
@@ -87,6 +96,7 @@ export class AppointmentAction {
   }
 
   getAppointmentDetails() {
+    this.upiConfiguration();
     this.utilService.setSpinnerState(true);
     this.appointmentService.getAppointmentsData(this.appointmentId).subscribe(
       (res: any) => {
@@ -95,7 +105,23 @@ export class AppointmentAction {
         this.utilService.setSpinnerState(false);
         if(res?.success) {
           this.patientAppointmentData = res?.data;
-
+          if (this.patientAppointmentData?.paymentDetails?.length) {
+            this.patientAppointmentData['consolidatedPaymentDetails'] = [];
+            let obj: any = {};
+          this.patientAppointmentData?.paymentDetails?.forEach((ev: any) => {
+                if (obj[ev.type]) {
+                  obj[ev.type] += ev.amount;
+                } else {
+                  obj[ev.type] = ev.amount;
+                }
+              });
+              this.patientAppointmentData['consolidatedPaymentDetails'] = Object.entries(obj).map(
+                ([type, amount]) => ({
+                  type,
+                  amount,
+                })
+              );
+            }
           // this.patientAppointmentData['status'] = 2; //Mock status - to be removed after implementing from backend
           // this.patientAppointmentData['medicationDetails'] = [
           //   {
@@ -182,6 +208,7 @@ export class AppointmentAction {
               message: res.message,
               success: true,
             });
+            this.getAppointmentDetails();
             // this.router.navigate(['/appointments']);
           } else {
             this.formSubmitted = false;
@@ -217,22 +244,84 @@ export class AppointmentAction {
   }
 
   submitAppointmentDetails() {
-    this.editAppointmentDetails = false;
+    this.appointmentForm.markAllAsTouched();
+    this.formSubmitted = true;
+    if (this.appointmentForm.valid) {
+      const form = this.appointmentForm.getRawValue();
+      const [hours, minutes] = form.time.split(':').map(Number);
+      const date = this.datePipe.transform(form.date, 'MM/dd/yyyy')
+      const time = this.datePipe.transform((new Date()).setHours(hours, minutes, 0, 0), 'HH:mm:ss')
+      const payload: any = {
+        patient: {
+          firstName: form.firstName,
+          lastName: form.lastName,
+          age: form.age,
+          mobile: form.mobile,
+          gender: form.gender,
+          address: form.address,
+          bloodGroup: form.bloodGroup,
+          weight: form.weight,
+          bloodPressureUpper: form.bloodPressureUpper,
+          bloodPressureLower: form.bloodPressureLower,
+          temperature: form.temperature,
+          temperatureType: form.temperatureType,
+          patient_id: this.patientAppointmentData?.patient_id ?? null
+        },
+        scheduled_date: date,
+        scheduled_time: time
+      }
+      console.log(payload);
+      this.utilService.setSpinnerState(true);
+      this.appointmentService.updateAppointment(this.appointmentId, this.utilService.transformObj(payload)).subscribe(
+        (res: any) => {
+          if (res?.success) {
+            this.editAppointmentDetails = false;
+            this.formSubmitted = false;
+            this.utilService.setSpinnerState(false);
+            this.utilService.showToastMessage({
+              message: res.message,
+              success: true,
+            });
+            this.getAppointmentDetails();
+          } else {
+            this.formSubmitted = false;
+            this.utilService.setSpinnerState(false);
+            this.utilService.showToastMessage({
+              message: res.message,
+              success: false,
+            });
+          }
+        },
+        (err) => {
+          this.formSubmitted = false;
+          this.utilService.setSpinnerState(false);
+          this.utilService.showToastMessage({
+            message: err?.error?.message,
+            success: false,
+          });
+        }
+      );
+    }
   }
 
   completePayment() {
     this.showModal= true;
+    this.amount = '';
+    this.showQR = false;
+    this.paymentType = 'cash';
     // const modal = new bootstrap.Modal(this.modal.nativeElement)
     // this.modalComponent.open();
   }
 
   generateQR() {
-    this.qrData = `upi://pay?pa=${this.upiId}&pn=${this.name}` +
-      (this.amount && this.amount > 0 ? `&am=${this.amount}&cu=INR` : `&cu=INR`);
-    this.showQR = true;
+    if(this.amount) { 
+      this.qrData = `upi://pay?pa=${this.upiId}&pn=${this.name}` +
+      (this.amount && this.amount > 0 ? `&am=${this.amount}&cu=${this.currency}` : `&cu=${this.currency}`);
+      this.showQR = true;
+    }
   }
 
-  closeModal(data: any) {
+  closeModal(data?: any) {
     this.showModal = false;
   }
 
@@ -240,16 +329,18 @@ export class AppointmentAction {
     const popupWin = window.open('', '_blank', 'width=800,height=600');
 
   if (popupWin) {
+    const bootstrapLink = `<link rel="stylesheet" href="./styles.css">`;
     popupWin.document.open();
     popupWin.document.write(`
       <html>
         <head>
           <title>Print</title>
+          ${bootstrapLink}
           <style>
           .print-wrapper {
           margin-top: 30%;
           width: 100%;
-          border: 2px solid red;
+          padding-right: 80px;
           }
           </style>
         </head>
@@ -269,7 +360,7 @@ export class AppointmentAction {
       firstName: [data?.firstName ?? null, [Validators.required]],
       lastName: [data?.lastName ?? null],
       age: [data?.age ?? null],
-      mobile: [data?.mobile ?? null, [Validators.required]],
+      mobile: [data?.mobile ?? null, [Validators.required, Validators.minLength(5), Validators.pattern('^[0-9]*$')]],
       gender: [data?.gender ?? null],
       address: [data?.address ?? null],
       lastVisit: [data?.lastVisit ?? null],
@@ -278,16 +369,109 @@ export class AppointmentAction {
       bloodPressureUpper: [data?.bloodPressureUpper ?? null],
       bloodPressureLower: [data?.bloodPressureLower ?? null],
       temperature: [data?.temperature ?? null],
+      temperatureType: [data?.temperatureType ?? 'celsius'],
       analysis: [''],
       advice: [''],
       tests: [''],
       followUpVisit: [data?.followUpVisit ?? null],
-      medicationDetails: this.fb.array([this.createElements()])
+      medicationDetails: this.fb.array([this.createElements()]),
+      date: [{ value: data?.scheduled_date ?? '', disabled: false }, [Validators.required]],
+      time: [{ value: data?.scheduled_time ?? '', disabled: false }, [Validators.required]],
     })
+    if(data) {
+      this.checkBookedSlots(data);
+    }
   }
 
   seePatientHistory() {
     this.router.navigate(['patients', this.patientAppointmentData.patient_id])
+  }
+
+  successEvent(event: any) {
+    if(!this.paymentType || !this.amount) {
+      return
+    }
+    const payload = {
+      appointment_id: this.appointmentId,
+      type: this.paymentType,
+      amount: Number(this.amount)
+    }
+    this.utilService.setSpinnerState(true);
+    this.appointmentService.makePayment(payload).subscribe((res: any) => {
+      if(res?.success) {
+        this.closeModal();
+        this.utilService.setSpinnerState(false);
+        this.utilService.showToastMessage({
+          message: res?.message,
+          success: true,
+        });
+        setTimeout(() => { 
+          this.getAppointmentDetails();
+        });
+      }
+      else {
+        this.utilService.setSpinnerState(false);
+        this.utilService.showToastMessage({
+          message: res?.message,
+          success: false,
+        });
+      }
+    }, err => {
+      this.utilService.setSpinnerState(false);
+      this.utilService.showToastMessage({
+        message: err?.error?.message,
+        success: false,
+      });
+    })
+  }
+
+  upiConfiguration() {
+    this.settingsService.getConfiguration().subscribe(
+      (res: any) => {
+        if(res?.success) {
+          this.upiId = res?.data?.upi?.upi_id;
+          this.name = res?.data?.upi?.name;
+          this.currency = res?.data?.upi?.currency;
+        }
+      },
+      (err: any) => {
+      }
+    );
+  }
+
+  addEvent(data: any) {
+    this.checkBookedSlots();
+  }
+
+  checkBookedSlots(data?: any) {
+    const form = this.appointmentForm.getRawValue();
+    const date = this.datePipe.transform(form.date, 'yyyy-MM-dd')
+    this.appointmentService.getBookedSlots(date).subscribe((res: any) => {
+      console.log(res);
+      this.bookedSlots = res?.data;
+      this.generateTimeOptions(data);
+    },
+    err => {
+
+    })
+  }
+
+  generateTimeOptions(data?: any) {
+    this.timeOptions = [];
+    for (let hour = 0; hour < 24; hour++) {
+      for (let minute = 0; minute < 60; minute += this.interval) {
+        const time = this.formatTime(hour, minute);
+        const disabled = this.bookedSlots.includes(time);
+        this.timeOptions.push({ time, disabled });
+      }
+    }
+    if(data) this.appointmentForm?.get('time')?.setValue(data?.scheduled_time.split(':').slice(0, 2).join(':'));
+  }
+
+  formatTime(hour: number, minute: number): string {
+    const hh = hour.toString().padStart(2, '0');
+    const mm = minute.toString().padStart(2, '0');
+    return `${hh}:${mm}`;
   }
 
 }

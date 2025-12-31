@@ -10,84 +10,84 @@ import { AppointmentService } from './appointment.service';
   styleUrl: './appointments.scss',
 })
 export class Appointments {
-  appointments: any = [
-    {
-      id: 1,
-      firstName: 'Paul',
-      lastName: 'Richard',
-      date: 'Nov 20, 2025',
-      time: '10:00 AM',
-      age: 20,
-      email: 'test@example.com',
-      mobile: '987654321',
-      reason: 'New Patient',
-      lastVisit: 'Nov 10, 2024',
-      weight: '58 kgs',
-      temperature: '98',
-      bloodPressure: '120 / 80',
-      gender: 'Male',
-      address: 'Gurugram, Haryana',
-      bloodGroup: 'B+',
-      status: 1,
-    },
-    {
-      id: 2,
-      firstName: 'Anil',
-      lastName: 'Agarwal',
-      date: 'Nov 20, 2025',
-      time: '01:00 PM',
-      age: 20,
-      email: 'test@example.com',
-      mobile: '987654321',
-      reason: 'Follow-up',
-      lastVisit: 'Nov 10, 2024',
-      weight: '58 kgs',
-      temperature: '98',
-      bloodPressure: '120 / 80',
-      gender: 'Male',
-      address: 'Gurugram, Haryana',
-      bloodGroup: 'B+',
-      status: 0,
-    },
-    {
-      id: 3,
-      firstName: 'Ravi',
-      lastName: 'Sahota',
-      date: 'Nov 20, 2025',
-      time: '10:00 AM',
-      age: 20,
-      email: 'test@example.com',
-      mobile: '987654321',
-      reason: 'New Patient',
-      lastVisit: 'Nov 10, 2024',
-      weight: '58 kgs',
-      temperature: '98',
-      bloodPressure: '120 / 80',
-      gender: 'Male',
-      address: 'Gurugram, Haryana',
-      bloodGroup: 'B+',
-      status: 1,
-    },
-    {
-      id: 4,
-      firstName: 'Anil',
-      lastName: 'Agarwal',
-      date: 'Nov 20, 2025',
-      time: '01:00 PM',
-      age: 20,
-      email: 'test@example.com',
-      mobile: '987654321',
-      reason: 'Follow-up',
-      lastVisit: 'Nov 10, 2024',
-      weight: '58 kgs',
-      temperature: '98',
-      bloodPressure: '120 / 80',
-      gender: 'Male',
-      address: 'Gurugram, Haryana',
-      bloodGroup: 'B+',
-      status: 0,
-    },
-  ];
+  // appointments: any = [
+  //   {
+  //     id: 1,
+  //     firstName: 'Paul',
+  //     lastName: 'Richard',
+  //     date: 'Nov 20, 2025',
+  //     time: '10:00 AM',
+  //     age: 20,
+  //     email: 'test@example.com',
+  //     mobile: '987654321',
+  //     reason: 'New Patient',
+  //     lastVisit: 'Nov 10, 2024',
+  //     weight: '58 kgs',
+  //     temperature: '98',
+  //     bloodPressure: '120 / 80',
+  //     gender: 'Male',
+  //     address: 'Gurugram, Haryana',
+  //     bloodGroup: 'B+',
+  //     status: 1,
+  //   },
+  //   {
+  //     id: 2,
+  //     firstName: 'Anil',
+  //     lastName: 'Agarwal',
+  //     date: 'Nov 20, 2025',
+  //     time: '01:00 PM',
+  //     age: 20,
+  //     email: 'test@example.com',
+  //     mobile: '987654321',
+  //     reason: 'Follow-up',
+  //     lastVisit: 'Nov 10, 2024',
+  //     weight: '58 kgs',
+  //     temperature: '98',
+  //     bloodPressure: '120 / 80',
+  //     gender: 'Male',
+  //     address: 'Gurugram, Haryana',
+  //     bloodGroup: 'B+',
+  //     status: 0,
+  //   },
+  //   {
+  //     id: 3,
+  //     firstName: 'Ravi',
+  //     lastName: 'Sahota',
+  //     date: 'Nov 20, 2025',
+  //     time: '10:00 AM',
+  //     age: 20,
+  //     email: 'test@example.com',
+  //     mobile: '987654321',
+  //     reason: 'New Patient',
+  //     lastVisit: 'Nov 10, 2024',
+  //     weight: '58 kgs',
+  //     temperature: '98',
+  //     bloodPressure: '120 / 80',
+  //     gender: 'Male',
+  //     address: 'Gurugram, Haryana',
+  //     bloodGroup: 'B+',
+  //     status: 1,
+  //   },
+  //   {
+  //     id: 4,
+  //     firstName: 'Anil',
+  //     lastName: 'Agarwal',
+  //     date: 'Nov 20, 2025',
+  //     time: '01:00 PM',
+  //     age: 20,
+  //     email: 'test@example.com',
+  //     mobile: '987654321',
+  //     reason: 'Follow-up',
+  //     lastVisit: 'Nov 10, 2024',
+  //     weight: '58 kgs',
+  //     temperature: '98',
+  //     bloodPressure: '120 / 80',
+  //     gender: 'Male',
+  //     address: 'Gurugram, Haryana',
+  //     bloodGroup: 'B+',
+  //     status: 0,
+  //   },
+  // ];
   appointmentsList: any = [];
   userDetails: any = JSON.parse(localStorage.getItem('userDetails')!);
   paginationConfig = {
@@ -95,8 +95,8 @@ export class Appointments {
     pageSize: 10,
     pageSizeOptions: [5, 10, 15, 20],
     hidePageSizeOption: true,
-    totalRecords: 0
-  }
+    totalRecords: 0,
+  };
 
   // patientAppointmentData = {
   //   firstName: 'Akash',
@@ -119,7 +119,7 @@ export class Appointments {
   ) {}
 
   ngOnInit() {
-    setTimeout(() => { 
+    setTimeout(() => {
       this.getAppointmentsList();
     });
   }
@@ -130,30 +130,50 @@ export class Appointments {
 
   getAppointmentsList(data?: any) {
     this.utilService.setSpinnerState(true);
-    this.appointmentService.getAppointmentsList(this.paginationConfig, data).subscribe(
-      (res: any) => {
-        this.utilService.setSpinnerState(false);
-        if(res?.success) {
-          this.appointmentsList = res?.data?.appointment_list;
-          this.paginationConfig.page = res?.data?.page;
-          this.paginationConfig.pageSize = res?.data?.page_size;
-          this.paginationConfig.totalRecords = res?.data?.total_records;
-        }
-        else {
+    this.appointmentService
+      .getAppointmentsList(this.paginationConfig, data)
+      .subscribe(
+        (res: any) => {
+          this.utilService.setSpinnerState(false);
+          if (res?.success) {
+            this.appointmentsList = res?.data?.appointment_list;
+            this.appointmentsList?.forEach((e: any) => {
+              if (e?.paymentDetails?.length) {
+                e['consolidatedPaymentDetails'] = [];
+                let obj: any = {};
+                e.paymentDetails.forEach((ev: any) => {
+                  if (obj[ev.type]) {
+                    obj[ev.type] += ev.amount;
+                  } else {
+                    obj[ev.type] = ev.amount;
+                  }
+                });
+                e['consolidatedPaymentDetails'] = Object.entries(obj).map(
+                  ([type, amount]) => ({
+                    type,
+                    amount,
+                  })
+                );
+              }
+            });
+            this.paginationConfig.page = res?.data?.page;
+            this.paginationConfig.pageSize = res?.data?.page_size;
+            this.paginationConfig.totalRecords = res?.data?.total_records;
+          } else {
+            this.utilService.showToastMessage({
+              message: res?.message,
+              success: false,
+            });
+          }
+        },
+        (err: any) => {
+          this.utilService.setSpinnerState(false);
           this.utilService.showToastMessage({
-            message: res?.message,
+            message: err?.error?.message,
             success: false,
           });
         }
-      },
-      (err: any) => {
-        this.utilService.setSpinnerState(false);
-        this.utilService.showToastMessage({
-          message: err?.error?.message,
-          success: false,
-        });
-      }
-    );
+      );
   }
 
   handlePageEvent(event: any) {
@@ -162,6 +182,9 @@ export class Appointments {
   }
 
   updateRecords(data: any) {
+    this.paginationConfig.page = 1;
+    this.paginationConfig.pageSize = 10;
+    this.appointmentsList = [];
     this.getAppointmentsList(data);
   }
 }

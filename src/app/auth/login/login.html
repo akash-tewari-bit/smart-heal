@@ -1,13 +1,20 @@
 <div class="container-fluid">
     <div class="row login-wrapper">
-        <div class="col-md-12 d-flex justify-content-center align-items-center">
-            <form class="login-form p-4" [formGroup]="loginForm">
-                <div class="app-logo mt-3 mb-3">
-                    <img src="assets/images/logo_mobile.png" alt="Logo">
+        @if(!isMobile) {
+            <div class="col-md-7">
+                <div class="login-wrapper-img">
+                </div>
+            </div>
+        }
+        <div class="col-md-5 d-flex justify-content-center align-items-center" [ngClass]="{'login-wrapper-img': isMobile}">
+            <form [formGroup]="loginForm">
+                <div class="login-form p-4">
+                    <div class="app-logo mt-3 mb-3">
+                        <img src="assets/images/logo_mobile.png" alt="Logo">
                 </div>
                 <div class="row">
                     <div class="col-md-12 mb-3 text-center">
-                        <h3>Sign In</h3>
+                        <h4>Sign in to your account</h4>
                     </div>
                     <div class="col-md-12 mb-3">
                         <input type="text" [ngClass]="{'error-control': formSubmitted && loginForm.get('username')?.errors}" formControlName="username" placeholder="Username" class="form-control">
@@ -27,12 +34,14 @@
                     </div>
                     <div class="col-md-12 text-end">
                         <div class="d-grid gap-3">
-                            <a class="cursor-pointer" (click)="forgot()">Forgot password?</a>
-                            <button class="btn btn-primary" (click)="login()">Login</button>
-                            <button class="btn btn-outline-secondary" (click)="signUp()">Signup</button>
+                            <a class="cursor-pointer" (click)="forgot()">Forgot your password?</a>
+                            <button class="btn btn-primary" (click)="login()">Sign in</button>
+                            <!-- <button class="btn btn-outline-secondary" (click)="signUp()">Signup</button> -->
                         </div>
                     </div>
                 </div>
+            </div>
+                <p class="create-account-wrapper">New to SmartHeal? <a class="cursor-pointer" (click)="signUp()">Create Account</a></p>
             </form>
         </div>
     </div>

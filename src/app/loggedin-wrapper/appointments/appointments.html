@@ -22,11 +22,12 @@
                 <th scope="col">Patient</th>
                 <th scope="col">Type</th>
                 <th scope="col">Contact</th>
+                <th scope="col">Payment status</th>
                 <th scope="col">Status</th>
                 <th scope="col">Action</th>
               </tr>
             </thead>
-          @if (appointmentsList.length) {
+            @if (appointmentsList.length) {
             <tbody>
               <tr *ngFor="let item of appointmentsList">
                 <td>
@@ -41,6 +42,29 @@
                 <td>{{ item.type ? "Follow-up" : "New Patient" }}</td>
                 <td>{{ item?.mobile }}</td>
                 <td>
+                  <div class="d-flex align-items-center gap-1">
+                    <span
+                      class="badge rounded-pill"
+                      [ngClass]="{
+                        'text-bg-success': item?.paymentStatus,
+                        'text-bg-danger':
+                          item?.paymentStatus && item?.paymentStatus == 2,
+                        'text-bg-warning': !item?.paymentStatus
+                      }"
+                      >{{ item?.paymentStatus ? "Paid" : "Unpaid" }}</span
+                    >
+                    @if (item?.paymentStatus) {
+                      <i class="bi bi-info-circle" appBootstrapTooltip></i>
+                      <!-- Tooltip content just after the button -->
+                      <div class="tooltip-content" hidden>
+                        <div *ngFor="let data of item?.consolidatedPaymentDetails">
+                          <strong>{{ data?.type }}: </strong>{{ data?.amount }}
+                        </div>
+                      </div>
+                    }
+                  </div>
+                </td>
+                <td>
                   <span
                     class="badge rounded-pill"
                     [ngClass]="{
@@ -50,40 +74,41 @@
                     }"
                     >{{
                       item?.status
-                      ? item?.status == 1
-                      ? "Completed"
-                      : "No Show"
-                      : "Upcoming"
+                        ? item?.status == 1
+                          ? "Completed"
+                          : "No Show"
+                        : "Upcoming"
                     }}</span
                   >
                 </td>
                 <td>
-                  @if (userDetails?.role === 'owner') {
-                    <a class="cursor-pointer" (click)="appointmentAction(item)">{{
-                      item?.status == 1 ? "View Appointment" : "Take Appointment"
-                    }}</a>
-                  } @if (userDetails?.role !== 'owner') {
-                    <a class="cursor-pointer" (click)="appointmentAction(item)"
+                  @if (userDetails?.role == 'doctor' || userDetails?.role == 'admin' || userDetails?.role ===
+                  'owner') {
+                  <a class="cursor-pointer" (click)="appointmentAction(item)">{{
+                    item?.status == 1 ? "View Appointment" : "Take Appointment"
+                  }}</a>
+                  } @if (userDetails?.role != 'doctor' && userDetails?.role != 'admin' && userDetails?.role !==
+                  'owner') {
+                  <a class="cursor-pointer" (click)="appointmentAction(item)"
                     >View Appointment</a
-                    >
+                  >
                   }
                 </td>
               </tr>
             </tbody>
-          }
+            }
           </table>
           @if (appointmentsList.length) {
-            <mat-paginator
+          <mat-paginator
             [length]="paginationConfig.totalRecords"
             [pageSize]="paginationConfig.pageSize"
             [pageSizeOptions]="paginationConfig.pageSizeOptions"
             aria-label="Select page"
             [hidePageSize]="paginationConfig.hidePageSizeOption"
             (page)="handlePageEvent($event)"
-            >
-            </mat-paginator>
-          }
-          @if (!appointmentsList.length) {
+          >
+          </mat-paginator>
+          } @if (!appointmentsList.length) {
           <div class="no-record-wrapper border border-top-0">
             <h6>No appointments found. Please schedule one</h6>
           </div>

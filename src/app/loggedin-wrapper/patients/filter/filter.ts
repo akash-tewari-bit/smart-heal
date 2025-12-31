@@ -22,11 +22,11 @@ export class Filter {
     'December',
   ];
   ageList: any = [
-    'Below 20',
-    '20 to 30',
-    '30 to 40',
-    '40 to 50',
-    'Above 50',
+    { label: 'Below 20', value: '<20' },
+    { label: '20 to 30', value: '20-30' },
+    { label: '30 to 40', value: '30-40' },
+    { label: '40 to 50', value: '40-50' },
+    { label: 'Above 50', value: '>50' }
   ]
   text: any = ''
   month: any = ''
@@ -37,8 +37,46 @@ export class Filter {
     const obj = {
       text: this.text,
       month: this.month,
-      age: this.age
+      ...this.getAgeValue()
     }
     this.filterData.emit(obj);
+  }
+
+  resetRecords() {
+    this.text = '';
+    this.month = '';
+    this.age = '';
+    this.updateRecords();
+  }
+
+  getAgeValue() {
+    if(this.age) {
+      let obj: any = {
+        minAge: '',
+        maxAge: ''
+      }
+      if(this.age == '<20') {
+        obj.minAge = 0;
+        obj.maxAge = 20;
+      }
+      else if(this.age == '20-30') {
+        obj.minAge = 20;
+        obj.maxAge = 30;
+      }
+      else if(this.age == '30-40') {
+        obj.minAge = 30;
+        obj.maxAge = 40;
+      }
+      else if(this.age == '40-50') {
+        obj.minAge = 40;
+        obj.maxAge = 50;
+      }
+      else if(this.age == '>50') {
+        obj.minAge = 50;
+        obj.maxAge = -1;
+      }
+        return obj
+    }
+    return {}
   }
 }

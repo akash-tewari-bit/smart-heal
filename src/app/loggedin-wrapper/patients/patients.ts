@@ -110,8 +110,6 @@ export class Patients {
         this.utilService.setSpinnerState(false);
         if(res?.success) {
           this.patientsList = res?.data?.patient_list;
-          console.log(this.patientsList);
-          
           this.paginationConfig.page = res?.data?.page;
           this.paginationConfig.pageSize = res?.data?.page_size;
           this.paginationConfig.totalRecords = res?.data?.total_records;
@@ -139,6 +137,9 @@ export class Patients {
   }
 
   updateRecords(data: any) {
+    this.paginationConfig.page = 1;
+    this.paginationConfig.pageSize = 10;
+    this.patientsList = [];
     this.getPatientsList(data);
   }
 

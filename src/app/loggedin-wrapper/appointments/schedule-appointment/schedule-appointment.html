@@ -4,136 +4,182 @@
       <h3>Schedule Appointment</h3>
     </div>
   </div>
-  <form [formGroup]="appointmentForm">
-    <div class="row">
-      <div class="col-md-6 mb-4">
-        <input type="text" class="form-control" [ngClass]="{'error-control': formSubmitted && appointmentForm.get('firstName')?.errors}" placeholder="First Name" formControlName="firstName" />
-        @if (formSubmitted && appointmentForm.invalid && appointmentForm.touched) {
-            @if (appointmentForm.get('firstName')?.errors?.['required']) {
-                <p class="error-text">required</p>
-            }
-        }
-      </div>
-      <div class="col-md-6 mb-4">
-        <input type="text" class="form-control" placeholder="Last Name" formControlName="lastName" />
-      </div>
-      <div class="col-md-6 mb-4">
-        <input type="text" class="form-control" [ngClass]="{'error-control': formSubmitted && appointmentForm.get('mobile')?.errors}" placeholder="Mobile" formControlName="mobile" />
-        @if (formSubmitted && appointmentForm.invalid && appointmentForm.touched) {
-            @if (appointmentForm.get('mobile')?.errors?.['required']) {
-                <p class="error-text">required</p>
-            }
-        }
-      </div>
-      <div class="col-md-6 mb-4">
-        <input type="text" class="form-control" placeholder="Age" formControlName="age" />
-      </div>
-      <div class="col-md-6 mb-4">
-        <select class="form-select" formControlName="gender">
-          <option value="" disabled selected>Gender</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-        </select>
-      </div>
-      <div class="col-md-6 mb-4">
-        <input type="text" class="form-control" placeholder="Address" formControlName="address" />
-      </div>
-      <!-- <div class="col-md-6 mb-4">
-        <input type="text" class="form-control" placeholder="Last Visit" />
-      </div> -->
-      <div class="col-md-6 mb-4">
-        <input type="text" class="form-control" placeholder="Blood Group" formControlName="bloodGroup" />
-      </div>
-      <div class="col-md-6 mb-4">
-        <div class="input-group">
-          <input type="text" class="form-control" placeholder="Weight" formControlName="weight" />
-          <div class="btn-group input-group-text p-0" role="group">
-            <input
-              type="radio"
-              class="btn-check"
-              name="kgs"
-              id="kgs"
-              autocomplete="off"
-              checked
-            />
-            <label class="btn btn-outline-primary" for="kgs"
-              >Kgs</label>
-
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 mb-4">
-        <div class="d-flex justify-content-between align-items-center gap-2">
-          <input type="text" class="form-control" placeholder="Blood Pressure - Upper" formControlName="bloodPressureUpper" />
-          <span>/</span>
-          <input type="text" class="form-control" placeholder="Blood Pressure - Lower" formControlName="bloodPressureLower" />
-        </div>
-      </div>
-      <div class="col-md-6 mb-4">
-        <div class="input-group">
-          <input type="text" class="form-control" placeholder="Temperature" formControlName="temperature" />
-          <div class="btn-group input-group-text p-0" role="group">
-            <input
-              type="radio"
-              class="btn-check"
-              id="btnradio1"
-              autocomplete="off"
-              formControlName="temperatureType" value="celsius"
-              checked
-            />
-            <label class="btn btn-outline-primary" for="btnradio1"
-              >&#176;C</label>
-
-            <input
-              type="radio"
-              class="btn-check"
-              id="btnradio2"
-              autocomplete="off"
-              formControlName="temperatureType" value="Fahrenheit"
-            />
-            <label class="btn btn-outline-primary" for="btnradio2"
-              >&#176;F</label
-            >
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 mb-4">
-        <div class="appointment-date-wrapper rounded" [ngClass]="{'error-control': formSubmitted && appointmentForm.get('date')?.errors}">
-          <mat-form-field class="material-calendar">
-            <input matInput formControlName="date" (dateChange)="addEvent($event)" [min]="todayDate" [matDatepicker]="dp3" readonly placeholder="Select Date" (click)="dp3.open()">
-            <mat-datepicker-toggle matIconSuffix [for]="dp3"></mat-datepicker-toggle>
-            <mat-datepicker #dp3></mat-datepicker>
-          </mat-form-field>
-        </div>
-        @if (formSubmitted && appointmentForm.invalid && appointmentForm.touched) {
-            @if (appointmentForm.get('date')?.errors?.['required']) {
-                <p class="error-text">required</p>
-            }
-        }
-      </div>
-      @if (appointmentForm.get('date')?.value) {
+  @if (!showScheduleAppoitmentForm) {
+    <form [formGroup]="validateExistingPatientForm">
+      <div class="row">
         <div class="col-md-6 mb-4">
-          <div class="appointment-date-wrapper rounded" [ngClass]="{'error-control': formSubmitted && appointmentForm.get('time')?.errors}">
-            <mat-form-field class="material-calendar">
-              <input matInput [matTimepicker]="picker" formControlName="time" readonly placeholder="Select Time">
-              <mat-timepicker-toggle matIconSuffix [for]="picker"/>
-              <mat-timepicker interval="15min" #picker />
-            </mat-form-field>
+            <input type="text" class="form-control" [ngClass]="{'error-control': formSubmitted && validateExistingPatientForm.get('mobile')?.errors}" placeholder="Mobile" formControlName="mobile" />
+            @if (formSubmitted && validateExistingPatientForm.invalid && validateExistingPatientForm.touched) {
+                @if (validateExistingPatientForm.get('mobile')?.errors?.['required']) {
+                    <p class="error-text">required</p>
+                }
+                @if (validateExistingPatientForm.get('mobile')?.errors?.['minlength']) {
+                    <p class="error-text">required minimum length is 5</p>
+                }
+                @if (validateExistingPatientForm.get('mobile')?.errors?.['pattern']) {
+                    <p class="error-text">invalid mobile number</p>
+                }
+            }
           </div>
+          @if (patientsList.length) {
+            <div class="col-md-6 mb-4">
+              <select class="form-select" formControlName="patient" [ngClass]="{'error-control': formSubmitted && validateExistingPatientForm.get('patient')?.errors}">
+                <option value="" disabled selected>Select Patient</option>
+                <option value="new">Create New Patient</option>
+                <option [value]="item.patient_id" *ngFor="let item of patientsList">{{item.firstName}} {{item.lastName}}</option>
+              </select>
+              @if (formSubmitted && validateExistingPatientForm.invalid && validateExistingPatientForm.touched) {
+                @if (validateExistingPatientForm.get('patient')?.errors?.['required']) {
+                    <p class="error-text">required</p>
+                }
+            }
+            </div>
+          }
+          <div class="col-12">
+            <div class="d-flex gap-2">
+              <button type="button" class="btn btn-primary" (click)="validatePatient()">Submit</button>
+              <button type="button" class="btn btn-outline-primary" (click)="cancel()">Cancel</button>
+            </div>
+          </div>
+      </div>
+    </form>
+  }
+  @if (showScheduleAppoitmentForm) {
+    <form [formGroup]="appointmentForm">
+      <div class="row">
+        <div class="col-md-6 mb-4">
+          <input type="text" [readonly]="validateExistingPatientForm.get('patient')?.value && (validateExistingPatientForm.get('patient')?.value != 'new')" class="form-control" [ngClass]="{'error-control': formSubmitted && appointmentForm.get('firstName')?.errors}" placeholder="First Name" formControlName="firstName" />
           @if (formSubmitted && appointmentForm.invalid && appointmentForm.touched) {
-              @if (appointmentForm.get('time')?.errors?.['required']) {
+              @if (appointmentForm.get('firstName')?.errors?.['required']) {
                   <p class="error-text">required</p>
               }
           }
         </div>
-      }
-
-      <div class="col-12">
-        <div class="d-flex gap-2">
-          <button type="button" class="btn btn-primary" (click)="createAppointment()">Submit</button>
-          <button type="button" class="btn btn-outline-primary" (click)="cancel()">Cancel</button>
+        <div class="col-md-6 mb-4">
+          <input type="text" [readonly]="validateExistingPatientForm.get('patient')?.value && (validateExistingPatientForm.get('patient')?.value != 'new')" class="form-control" placeholder="Last Name" formControlName="lastName" />
+        </div>
+        <div class="col-md-6 mb-4">
+          <input type="text" readonly class="form-control" [ngClass]="{'error-control': formSubmitted && appointmentForm.get('mobile')?.errors}" placeholder="Mobile" formControlName="mobile" />
+          @if (formSubmitted && appointmentForm.invalid && appointmentForm.touched) {
+              @if (appointmentForm.get('mobile')?.errors?.['required']) {
+                  <p class="error-text">required</p>
+              }
+          }
+        </div>
+        <div class="col-md-6 mb-4">
+          <input type="text" class="form-control" placeholder="Age" formControlName="age" />
+        </div>
+        <div class="col-md-6 mb-4">
+          <select class="form-select" formControlName="gender">
+            <option value="" disabled selected>Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+        </div>
+        <div class="col-md-6 mb-4">
+          <input type="text" class="form-control" placeholder="Address" formControlName="address" />
+        </div>
+        <!-- <div class="col-md-6 mb-4">
+          <input type="text" class="form-control" placeholder="Last Visit" />
+        </div> -->
+        <div class="col-md-6 mb-4">
+          <input type="text" class="form-control" placeholder="Blood Group" formControlName="bloodGroup" />
+        </div>
+        <div class="col-md-6 mb-4">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Weight" formControlName="weight" />
+            <div class="btn-group input-group-text p-0" role="group">
+              <input
+                type="radio"
+                class="btn-check"
+                name="kgs"
+                id="kgs"
+                autocomplete="off"
+                checked
+              />
+              <label class="btn btn-outline-primary" for="kgs"
+                >Kgs</label>
+  
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-4">
+          <div class="d-flex justify-content-between align-items-center gap-2">
+            <input type="text" class="form-control" placeholder="Blood Pressure - Upper" formControlName="bloodPressureUpper" />
+            <span>/</span>
+            <input type="text" class="form-control" placeholder="Blood Pressure - Lower" formControlName="bloodPressureLower" />
+          </div>
+        </div>
+        <div class="col-md-6 mb-4">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Temperature" formControlName="temperature" />
+            <div class="btn-group input-group-text p-0" role="group">
+              <input
+                type="radio"
+                class="btn-check"
+                id="btnradio1"
+                autocomplete="off"
+                formControlName="temperatureType" value="celsius"
+                checked
+              />
+              <label class="btn btn-outline-primary" for="btnradio1"
+                >&#176;C</label>
+  
+              <input
+                type="radio"
+                class="btn-check"
+                id="btnradio2"
+                autocomplete="off"
+                formControlName="temperatureType" value="fahrenheit"
+              />
+              <label class="btn btn-outline-primary" for="btnradio2"
+                >&#176;F</label
+              >
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-4">
+          <div class="appointment-date-wrapper rounded" [ngClass]="{'error-control': formSubmitted && appointmentForm.get('date')?.errors}">
+            <mat-form-field class="material-calendar">
+              <input matInput formControlName="date" (dateChange)="addEvent($event)" [min]="todayDate" [matDatepicker]="dp3" readonly placeholder="Select Date" (click)="dp3.open()">
+              <mat-datepicker-toggle matIconSuffix [for]="dp3"></mat-datepicker-toggle>
+              <mat-datepicker #dp3></mat-datepicker>
+            </mat-form-field>
+          </div>
+          @if (formSubmitted && appointmentForm.invalid && appointmentForm.touched) {
+              @if (appointmentForm.get('date')?.errors?.['required']) {
+                  <p class="error-text">required</p>
+              }
+          }
+        </div>
+        @if (appointmentForm.get('date')?.value) {
+          <div class="col-md-6 mb-4">
+            <div class="appointment-date-wrapper rounded" [ngClass]="{'error-control': formSubmitted && appointmentForm.get('time')?.errors}">
+              <select class="form-select" formControlName="time">
+                <option value="" disabled selected>Select Time</option>
+                <option [value]="item.time" *ngFor="let item of timeOptions"[disabled]="item.disabled" [ngStyle]="{ color: item.disabled ? 'red' : null, lineHeight: '2.2', paddingLeft: '8px'}">{{item.time}}{{ item.disabled ? ' - (Already Booked)' : '' }}</option>
+              </select>
+              <!-- <mat-form-field class="material-calendar">
+                <input matInput [matTimepicker]="picker" formControlName="time" readonly placeholder="Select Time">
+                <mat-timepicker-toggle matIconSuffix [for]="picker"/>
+                <mat-timepicker interval="15min" #picker />
+              </mat-form-field> -->
+            </div>
+            @if (formSubmitted && appointmentForm.invalid && appointmentForm.touched) {
+                @if (appointmentForm.get('time')?.errors?.['required']) {
+                    <p class="error-text">required</p>
+                }
+            }
+          </div>
+        }
+  
+        <div class="col-12">
+          <div class="d-flex gap-2">
+            <button type="button" class="btn btn-primary" (click)="createAppointment()">Submit</button>
+            <button type="button" class="btn btn-outline-primary" (click)="cancel()">Cancel</button>
+          </div>
         </div>
       </div>
-    </div>
-  </form>
+    </form>
+  }
 </div>

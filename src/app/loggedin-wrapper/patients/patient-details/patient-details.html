@@ -55,14 +55,16 @@
             </div>
         </div>
     </div>
-    <div class="row">
+    <!-- @if (userDetails?.role == 'doctor' || userDetails?.role == 'admin' || userDetails?.role == 'owner') { -->
+      <div class="row">
         <div class="col-12 mb-4">
-            <h3>Previous Appointments</h3>
+          <h3>Previous Appointments</h3>
         </div>
         <div class="col-md-2 mb-3" *ngFor="let item of patientDetail?.list_of_appointments">
-            <button type="button" class="badge text-bg-info" (click)="getAppointmentData(item)">{{item | date : "MMM dd, yyyy"}}</button>
+          <button type="button" class="badge text-bg-info" (click)="getAppointmentData(item)">{{item | date : "MMM dd, yyyy"}}</button>
         </div>
-    </div>
+      </div>
+    <!-- } -->
     <!-- <div class="row">
         <div class="col-md-6 mb-4">
             <input type="text" class="form-control" placeholder="First Name">
@@ -237,6 +239,6 @@
 </div>
 
  <!-- Modal -->
-<app-modal [title]="selectedAppointmentDate | date : 'MMM dd, yyyy'" [showModal]="showModal" (closeModal)="closeModal()">
+<app-modal [title]="selectedAppointmentDate | date : 'MMM dd, yyyy'" [showModal]="showModal" (closeModal)="closeModal()" [buttonText]="'Close'" (success)="closeModal()">
   <img [src]="capturedImage" style="max-width: 100%;" />
 </app-modal>

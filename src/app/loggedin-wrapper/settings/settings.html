@@ -1,0 +1,89 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <h3>Settings</h3>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <ul class="nav nav-underline border-bottom" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link active text-dark"
+            id="home-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#home-tab-pane"
+            type="button"
+            role="tab"
+            aria-controls="home-tab-pane"
+            aria-selected="true"
+          >
+            General
+          </button>
+        </li>
+        @if (userDetails?.role == 'admin' || userDetails?.role === 'owner') {
+            <li class="nav-item" role="presentation">
+                <button
+                class="nav-link text-dark"
+                id="profile-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#profile-tab-pane"
+                type="button"
+                role="tab"
+                aria-controls="profile-tab-pane"
+                aria-selected="false"
+                >
+                UPI
+                </button>
+            </li>
+        }
+        <!-- @if (userDetails?.role == 'admin' || userDetails?.role === 'owner') {
+            <li class="nav-item" role="presentation">
+                <button
+                class="nav-link text-dark"
+                id="profile-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#subscription-tab-pane"
+                type="button"
+                role="tab"
+                aria-controls="subscription-tab-pane"
+                aria-selected="false"
+                >
+                Subscription
+                </button>
+            </li>
+        } -->
+      </ul>
+      <div class="tab-content" id="myTabContent">
+        <div
+          class="tab-pane fade mt-4 show active"
+          id="home-tab-pane"
+          role="tabpanel"
+          aria-labelledby="home-tab"
+          tabindex="0"
+        >
+           <app-general [configurations]="configurations"></app-general>
+        </div>
+        <div
+          class="tab-pane fade mt-4"
+          id="profile-tab-pane"
+          role="tabpanel"
+          aria-labelledby="profile-tab"
+          tabindex="0"
+        >
+          <app-upi [configurations]="configurations"></app-upi>
+        </div>
+        <!-- <div
+          class="tab-pane fade mt-4"
+          id="subscription-tab-pane"
+          role="tabpanel"
+          aria-labelledby="disabled-tab"
+          tabindex="0"
+        >
+          <app-subscription></app-subscription>
+        </div> -->
+      </div>
+    </div>
+  </div>
+</div>

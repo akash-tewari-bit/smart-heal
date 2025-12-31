@@ -1,0 +1,59 @@
+<div class="row billing-wrapper">
+  <div class="col-12 mb-3">
+    <div class="alert alert-info" role="alert">
+      <strong>Note</strong>: To receive payments via UPI, please provide the
+      following details.
+    </div>
+  </div>
+</div>
+<form [formGroup]="upiForm">
+<div class="row">
+  <div class="col-md-3 mb-3">
+    <label class="form-label">UPI ID</label>
+  </div>
+  <div class="col-md-3 mb-3">
+    <input type="text" class="form-control" formControlName="upi_id" [ngClass]="{'error-control': formSubmitted && upiForm.get('upi_id')?.errors}" />
+    @if (formSubmitted && upiForm.invalid && upiForm.touched) {
+        @if (upiForm.get('upi_id')?.errors?.['required']) {
+            <p class="error-text">required</p>
+        }
+    }
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-3 mb-3">
+    <label class="form-label">Name (as per UPI)</label>
+  </div>
+  <div class="col-md-3 mb-3">
+    <input type="text" class="form-control" formControlName="name" [ngClass]="{'error-control': formSubmitted && upiForm.get('name')?.errors}" />
+    @if (formSubmitted && upiForm.invalid && upiForm.touched) {
+        @if (upiForm.get('name')?.errors?.['required']) {
+            <p class="error-text">required</p>
+        }
+    }
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-3 mb-3">
+    <label class="form-label">Currency</label>
+  </div>
+  <div class="col-md-3 mb-3">
+    <div [ngClass]="{'error-control': formSubmitted && upiForm.get('currency')?.errors}">
+      <select class="form-select" formControlName="currency">
+        <option value="" disabled>Currency</option>
+        <option [value]="item.code" *ngFor="let item of currencies">{{item.name}}</option>
+      </select>
+    </div>
+    @if (formSubmitted && upiForm.invalid && upiForm.touched) {
+        @if (upiForm.get('currency')?.errors?.['required']) {
+            <p class="error-text">required</p>
+        }
+    }
+  </div>
+</div>
+<div class="row">
+  <div class="col-12 mb-3">
+    <button class="btn-primary btn" (click)="submit()">Save Changes</button>
+  </div>
+</div>
+</form>

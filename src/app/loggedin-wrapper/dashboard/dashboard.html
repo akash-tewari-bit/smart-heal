@@ -1,15 +1,43 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-12">
+    <div class="col-12 d-flex justify-content-between align-items-center gap-2">
       <h2 class="mb-4">Dashboard</h2>
+      <div>
+        <mat-form-field class="material-calendar">
+          <mat-label>Enter a date range</mat-label>
+          <mat-date-range-input [rangePicker]="picker">
+            <input
+              matStartDate
+              [(ngModel)]="startDate"
+              placeholder="Start date"
+            />
+            <input matEndDate (dateChange)="addEvent($event)" [(ngModel)]="endDate" placeholder="End date" />
+          </mat-date-range-input>
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+      </div>
     </div>
   </div>
+  @if (!configurations?.subscription?.plan_name) {
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card no-subscription-wrapper">
+        <h5>You don't have any subscription. Please <a routerLink="/settings">subscribe</a>.</h5>
+      </div>
+    </div>
+  </div>
+}
+@else {
   <div class="row mb-3">
     <div class="col-md-3 mb-3">
       <div class="card bg-primary text-white">
         <div class="card-body">
-          <p class="card-text fs-6">Today's Appointments</p>
-          <h2 class="card-title">12</h2>
+          <p class="card-text fs-6">Upcoming Appointments</p>
+          <h2 class="card-title">{{appointmentsList?.length}}</h2>
         </div>
       </div>
     </div>
@@ -17,7 +45,7 @@
       <div class="card bg-secondary text-white">
         <div class="card-body">
           <p class="card-text fs-6">New Patients</p>
-          <h2 class="card-title">9 This Week</h2>
+          <h2 class="card-title">{{patientsList?.length}}</h2>
         </div>
       </div>
     </div>
@@ -25,45 +53,72 @@
       <div class="card bg-primary-subtle text-white">
         <div class="card-body">
           <p class="card-text fs-6">Unread Messages</p>
-          <h2 class="card-title">6</h2>
+          <h2 class="card-title">{{notificationsList?.length ?? 0}}</h2>
         </div>
       </div>
     </div>
-    <div class="col-md-3 mb-3">
-      <div class="card">
-        <div class="card-body">
-          <p class="card-text fs-6">Billing This Month</p>
-          <h2 class="card-title">$12,900</h2>
+    @if (userDetails?.role == 'admin' || userDetails?.role == 'owner') {
+      <div class="col-md-3 mb-3">
+        <div class="card">
+          <div class="card-body">
+            <p class="card-text fs-6">Billing This Month</p>
+            <h2 class="card-title">$12,900</h2>
+          </div>
         </div>
       </div>
-    </div>
+    }
   </div>
 
   <div class="row">
     <div class="col-md-8 mb-4">
       <div class="card">
         <h3 class="border-bottom p-3">Upcoming Appointments</h3>
-        <div class="table-responsive">
+        <div
+          class="table-responsive"
+          [ngClass]="{ 'no-record-structure': !appointmentsList.length }"
+        >
           <table class="table">
             <thead>
               <tr>
                 <th scope="col">Time</th>
                 <th scope="col">Patient</th>
-                <th scope="col">Reason</th>
+                <th scope="col">Type</th>
                 <th scope="col">Action</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let item of upcomingAppointments">
-                <td>{{ item.time }}</td>
-                <td>{{ item.patientName }}</td>
-                <td>{{ item.reason }}</td>
+              <tr *ngFor="let item of appointmentsList">
+                <td>{{
+                    item.scheduled_date.split("/").reverse().join("-") +
+                      "T" +
+                      item.scheduled_time | date : "hh:mm a"
+                  }}</td>
+                <td>{{ item.firstName }} {{ item.lastName }}</td>
+                <td>{{ item.type ? "Follow-up" : "New Patient" }}</td>
                 <td>
-                  <a href="">View</a>
+                  <a class="cursor-pointer" (click)="appointmentAction(item)">View</a>
                 </td>
               </tr>
             </tbody>
           </table>
+
+          @if (appointmentsList.length) {
+            <mat-paginator
+            [length]="paginationConfig.totalRecords"
+            [pageSize]="paginationConfig.pageSize"
+            [pageSizeOptions]="paginationConfig.pageSizeOptions"
+            aria-label="Select page"
+            [hidePageSize]="paginationConfig.hidePageSizeOption"
+            (page)="handlePageEvent($event)"
+            >
+            </mat-paginator>
+          }
+          @if (!appointmentsList.length) {
+          <div class="no-record-wrapper border border-top-0">
+            <h6>No upcoming appointments found. Please schedule one</h6>
+          </div>
+          }
+
         </div>
       </div>
     </div>
@@ -79,14 +134,16 @@
                 <i class="bi bi-clock"></i>
               </a>
             </div>
+            @if (userDetails?.role == 'admin' || userDetails?.role == 'owner') {
+              <div class="mb-2">
+                <a class="icon-link" routerLink="/staff-management/add-staff">
+                  Add Staff
+                  <i class="bi bi-person-add"></i>
+                </a>
+              </div>
+            }
             <div class="mb-2">
-              <a class="icon-link" href="#">
-                Add Staff
-                <i class="bi bi-person-add"></i>
-              </a>
-            </div>
-            <div class="mb-2">
-              <a class="icon-link" href="#">
+              <a class="icon-link" routerLink="/notifications">
                 Unread Notifications
                 <i class="bi bi-menu-up"></i>
               </a>
@@ -102,4 +159,8 @@
       </div>
     </div>
   </div>
+
+}
+
+
 </div>

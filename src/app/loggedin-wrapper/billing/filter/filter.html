@@ -1,0 +1,27 @@
+<div class="row mb-3">
+    <div class="col-md-3 mb-3">
+        <h6>Filter By:</h6>
+        <!-- <mat-form-field class="material-calendar">
+            <mat-label>Enter a date range</mat-label>
+            <mat-date-range-input [rangePicker]="picker">
+                <input matStartDate [(ngModel)]="startDate" placeholder="Start date">
+                <input matEndDate [(ngModel)]="endDate" placeholder="End date">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+            </mat-form-field> -->
+            <select class="form-select" [(ngModel)]="paymentType">
+                <option value="" disabled selected>Payment Type</option>
+                <option value="cash">Cash</option>
+                <option value="upi">UPI</option>
+                <option value="card">Card</option>
+            </select>
+    </div>
+    <div class="col-md-2 mb-3 d-flex align-items-end gap-2">
+        <button class="btn btn-primary" type="button" (click)="updateRecords()">Apply</button>
+        <button class="btn btn-outline-primary" type="button" (click)="resetRecords()">Clear</button>
+    </div>
+    <!-- <div class="offset-md-3 col-md-2 mb-3 d-flex align-items-end justify-content-end">
+        <button class="btn btn-primary" type="button" (click)="updateRecords()">Export</button>
+    </div> -->
+</div>

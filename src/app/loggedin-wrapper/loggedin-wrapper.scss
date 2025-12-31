@@ -2,7 +2,7 @@
     height: 100%;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
       .login-column {
         flex-direction: column;
       }
@@ -14,7 +14,7 @@
       }
     }
 
-    @media (min-width: 768px) {
+    @media (min-width: 767px) {
       .header-body-wrapper {
   width: calc(100% - 292px);
       }

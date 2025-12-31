@@ -1,0 +1,4 @@
+.nav-underline .nav-link.active, .nav-underline .show > .nav-link {
+    color: var(--bs-primary) !important;
+    border-bottom-color: var(--bs-primary) !important;
+}

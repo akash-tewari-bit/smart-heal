@@ -1,7 +1,7 @@
 <!-- Modal -->
  @if (showModal) {
     <div class="modal-backdrop fade show"></div>
-     <div class="modal fade show d-block" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+     <div class="modal fade show d-block" [ngClass]="{'modal-xl': modalFullWidth}" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
              <div class="modal-content">
                  <div class="modal-header">
@@ -12,7 +12,7 @@
                         <ng-content></ng-content>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" (click)="close()">{{title}}</button>
+                        <button type="button" [disabled]="disablePrimaryButton" class="btn btn-primary" (click)="successEvent()">{{buttonText}}</button>
                     </div>
                 </div>
             </div>

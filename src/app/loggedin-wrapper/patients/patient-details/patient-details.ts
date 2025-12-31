@@ -21,6 +21,7 @@ export class PatientDetails {
   showModal = false;
   selectedAppointmentDate: any = '';
   showContentToCapture = true;
+  userDetails: any = JSON.parse(localStorage.getItem('userDetails')!);
 
   constructor(public fb: FormBuilder, public router: Router, public activatedRoute: ActivatedRoute, public utilService: UtilityService, public patientService: PatientsService) {
     // this.patientDetailForm = this.fb.group({
@@ -121,20 +122,29 @@ export class PatientDetails {
 
   getAppointmentData(date: any) {
     this.selectedAppointmentDate = date;
+    this.utilService.setSpinnerState(true);
     this.patientService.getAppointmentData(this.patientId, this.selectedAppointmentDate).subscribe((res: any) => {
-      console.log(res);
-      this.selectedAppointmentData = res?.data;
-      setTimeout(() => {
-        this.captureAndOpenModal();
-        // html2canvas(this.captureElement.nativeElement).then(canvas => {
-        //   this.capturedImage = canvas.toDataURL('image/png');
-        //   this.showModal = true;
-        // }); 
-      });
-      
+      if(res?.success) {
+        this.utilService.setSpinnerState(false);
+        this.selectedAppointmentData = res?.data;
+        setTimeout(() => {
+          this.captureAndOpenModal(); 
+        });
+      }
+      else {
+        this.utilService.setSpinnerState(false);
+        this.utilService.showToastMessage({
+          message: res?.message,
+          success: false,
+        });
+      }
     },
     err => {
-
+      this.utilService.setSpinnerState(false);
+        this.utilService.showToastMessage({
+          message: err?.error?.message,
+          success: false,
+        });
     })
   }
 

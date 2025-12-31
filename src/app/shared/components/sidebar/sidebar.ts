@@ -8,7 +8,9 @@ import { Component, HostListener } from '@angular/core';
 })
 export class Sidebar {
 
-  isMobile = false;
+  isMobile = window.innerWidth < 768;
+  userDetails: any = JSON.parse(localStorage.getItem('userDetails')!);
+  configurations: any = JSON.parse(localStorage.getItem('configurations')!);
 
   @HostListener('window:resize', ['$event'])
   onResize(event?: any) {
@@ -17,6 +19,10 @@ export class Sidebar {
 
   ngOnInit() {
     this.onResize();
+  }
+  
+  ngAfterContentChecked() {
+    this.configurations= JSON.parse(localStorage.getItem('configurations')!);
   }
 
 }

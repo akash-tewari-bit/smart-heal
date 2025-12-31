@@ -22,7 +22,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     Appointments,
     ScheduleAppointment,
     AppointmentAction,
-    Filter
+    Filter,
   ],
   imports: [
     CommonModule,

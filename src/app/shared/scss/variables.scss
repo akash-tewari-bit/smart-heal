@@ -4,6 +4,7 @@
 
 :root {
     --bs-primary: #0043a8;
+    --bs-secondary: #4caa58;
     --bs-primary-bg-subtle: #007aff;
     // --bs-btn-bg: #0043a8;
     // --ion-color-secondary: #007aff;
@@ -19,7 +20,7 @@
   --bs-primary-focus: rgba(0, 67, 168, 0.5);
 }
 
-.btn-primary {
+.btn-primary, .btn.disabled, .btn:disabled, fieldset:disabled .btn {
   background-color: var(--bs-primary);
   border-color: var(--bs-primary);
 }
@@ -31,6 +32,21 @@
 
 .btn-primary:focus {
   box-shadow: 0 0 0 0.25rem var(--bs-primary-focus);
+}
+
+
+.btn-secondary {
+  background-color: var(--bs-secondary);
+  border-color: var(--bs-secondary);
+}
+
+// .btn-secondary:hover {
+//   background-color: var(--bs-secondary-hover);
+//   border-color: var(--bs-secondary-hover);
+// }
+
+.btn-secondary:focus {
+  box-shadow: 0 0 0 0.25rem var(--bs-secondary-focus);
 }
 
 .btn-outline-secondary {

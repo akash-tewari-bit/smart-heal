@@ -25,8 +25,20 @@ export class PatientsService {
       if (filter?.month) {
         queryString += `&month=${filter?.month}`;
       }
-      if (filter?.age) {
-        queryString += `&age=${filter?.age}`;
+      if (filter?.minAge > -1) {
+        queryString += `&minAge=${filter?.minAge}`;
+      }
+      if (filter?.maxAge) {
+        queryString += `&maxAge=${filter?.maxAge}`;
+      }
+      if(filter?.type > -1) {
+        queryString += `&type=${filter?.type}`
+      }
+      if(filter?.startDate) {
+        queryString += `&startDate=${filter?.startDate}`
+      }
+      if(filter?.endDate) {
+        queryString += `&endDate=${filter?.endDate}`
       }
     }
     const url = `${environment.baseUrl}patients${queryString}`;

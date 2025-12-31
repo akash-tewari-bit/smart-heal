@@ -1,15 +1,17 @@
 <nav class="navbar navbar-dark bg-primary fixed-top d-md-none">
   <div class="container-fluid">
-    <app-header class="w-100">
-      <button
+    @if (isMobile) {
+      <app-header class="w-100">
+        <button
         class="navbar-toggler d-md-none"
         type="button"
         data-bs-toggle="offcanvas"
         data-bs-target="#sidebar"
-      >
+        >
         <span class="navbar-toggler-icon"></span>
       </button>
     </app-header>
+  }
   </div>
 </nav>
 
@@ -47,40 +49,70 @@
           Dashboard
         </a>
       </li>
-      <li class="nav-item">
-        <a
-          routerLink="/patients"
+      @if (configurations?.subscription?.plan_name) {
+        <li class="nav-item">
+          <a
+            routerLink="/patients"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: false }" [attr.data-bs-toggle]="isMobile ? 'offcanvas' : null"
+          data-bs-target="#sidebar"
+            class="nav-link text-white p-3"
+          >
+            Patients
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            routerLink="/appointments"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: false }" [attr.data-bs-toggle]="isMobile ? 'offcanvas' : null"
+          data-bs-target="#sidebar"
+            class="nav-link text-white p-3"
+          >
+            Appointments
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/notifications"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: false }" [attr.data-bs-toggle]="isMobile ? 'offcanvas' : null"
+          data-bs-target="#sidebar" class="nav-link text-white p-3"> Notifications </a>
+        </li>
+      @if (userDetails?.role == 'admin' || userDetails?.role == 'owner') {
+        <li class="nav-item">
+          <a routerLink="/staff-management"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: false }" [attr.data-bs-toggle]="isMobile ? 'offcanvas' : null"
-        data-bs-target="#sidebar"
-          class="nav-link text-white p-3"
-        >
-          Patients
-        </a>
-      </li>
-      <li class="nav-item">
-        <a
-          routerLink="/appointments"
+          data-bs-target="#sidebar" class="nav-link text-white p-3"> Staff Management </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/billing"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: false }" [attr.data-bs-toggle]="isMobile ? 'offcanvas' : null"
-        data-bs-target="#sidebar"
-          class="nav-link text-white p-3"
-        >
-          Appointments
-        </a>
-      </li>
+          data-bs-target="#sidebar"  class="nav-link text-white p-3"> Billing </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/subscriptions"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: false }" [attr.data-bs-toggle]="isMobile ? 'offcanvas' : null"
+          data-bs-target="#sidebar" class="nav-link text-white p-3"> Subscriptions </a>
+        </li>
+      }
+      }
       <li class="nav-item">
-        <a href="#" class="nav-link text-white p-3"> Notification </a>
+        <a routerLink="/settings"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: false }" [attr.data-bs-toggle]="isMobile ? 'offcanvas' : null"
+        data-bs-target="#sidebar" class="nav-link text-white p-3"> Settings </a>
       </li>
+    <!-- @if (userDetails?.role == 'owner') {
       <li class="nav-item">
-        <a href="#" class="nav-link text-white p-3"> Staff Management </a>
+        <a routerLink="/developers"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: false }" [attr.data-bs-toggle]="isMobile ? 'offcanvas' : null"
+        data-bs-target="#sidebar" class="nav-link text-white p-3"> Developers </a>
       </li>
-      <li class="nav-item">
-        <a href="#" class="nav-link text-white p-3"> Billing </a>
-      </li>
-      <li class="nav-item">
-        <a href="#" class="nav-link text-white p-3"> Reports </a>
-      </li>
+    } -->
     </ul>
   </div>
 </div>
