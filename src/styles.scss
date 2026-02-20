@@ -62,6 +62,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     min-height: auto;
     height: auto;
 }
+.material-calendar svg path {
+    fill: var(--bs-primary);
+}
 .nav-underline li button {
     padding-left: 35px !important;
     padding-right: 35px !important;
@@ -70,6 +73,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+.time-wrapper .mat-form-field-appearance-fill .mdc-text-field--no-label .mat-mdc-select-arrow-wrapper {
+    display: none !important;
 }
 @media (min-width: 397px) and (max-width: 485px) {
     .nav-underline li button {

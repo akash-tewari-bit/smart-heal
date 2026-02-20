@@ -27,32 +27,8 @@ export class Header {
   text: any = '';
   private searchSubject = new Subject<string>();
   private destroy$ = new Subject<void>();
-  // notificationList = [
-  //   { title: 'New appointment created', message: 'Dated Nov 20, 2025 - 12:15 PM' },
-  //   { title: 'Leave applied', message: 'Dated Nov 20, 2025 - 12:15 PM' },
-  //   { title: 'Payment received', message: 'Dated Nov 20, 2025 - 12:15 PM' },
-  // ]
 
-  notificationList: any = [
-    // {
-    //   date: '12/10/2025',
-    //   message: 'Appointment Created',
-    //   patientName: 'Stone Cold',
-    //   time: '15:30:00',
-    //   type: 'appointment',
-    //   staffName: 'Sam',
-    //   appointment_id: '0e0414ce-70b9-4c55-bb3f-8acb54e4f888'
-    // },
-    // {
-    //   date: '12/10/2025',
-    //   message: 'Payment Received',
-    //   patientName: 'Stone Cold',
-    //   time: '15:30:00',
-    //   type: 'payment',
-    //   staffName: 'Akash',
-    //   appointment_id: '0e0414ce-70b9-4c55-bb3f-8acb54e4f888'
-    // }
-  ];
+  notificationList: any = [];
   searchList: any = [];
   showSearchSection = false;
   @ViewChild('searchWrapper') searchWrapperRef!: ElementRef;
@@ -223,6 +199,15 @@ export class Header {
         if(res?.success) {
           this.utilService.setSpinnerState(false);
           this.configurations = res?.data;
+          // if(this.configurations.subscription.appointment_left < 0) {
+          //   this.configurations.subscription.appointment_left = -1;
+          // }
+          // this.configurations.subscription.appointment_left = 0;
+          // this.configurations.subscription.end_date = '2026-01-25';
+          if(this.configurations.subscription.appointment_left === -1) {
+            this.configurations.subscription.appointment_left = 'Unlimited';
+          }
+          this.utilService.setConfigurations(this.configurations);
           localStorage.setItem('configurations', JSON.stringify(this.configurations));
         }
         else {

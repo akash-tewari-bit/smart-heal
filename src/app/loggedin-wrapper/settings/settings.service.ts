@@ -36,7 +36,7 @@ export class SettingsService {
   }
 
   getBillingHistory() {
-    const url = `${environment.baseUrl}subscriptions/get_subscription_billing`
+    const url = `${environment.baseUrl}subscriptions/get_subscription`
     return this.http.get<any>(url);
   }
   

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-filter',
@@ -11,6 +11,7 @@ export class Filter {
   // startDate: any;
   // endDate: any;
   @Output() filterData = new EventEmitter<any>();
+  @Input() hasSelectedBilling: any = [];
 
   ngOnInit() {
     // const today = new Date();
@@ -39,6 +40,13 @@ export class Filter {
     // this.startDate = '';
     // this.endDate = '';
     this.updateRecords();
+  }
+
+  deleteBilling() {
+    const obj = {
+      action: 'delete',
+    }
+    this.filterData.emit(obj);
   }
 
 }

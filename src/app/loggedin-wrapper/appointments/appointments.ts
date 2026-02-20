@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { UtilityService } from '../../shared/services/utility.service';
 import { AppointmentService } from './appointment.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-appointments',
@@ -10,84 +11,6 @@ import { AppointmentService } from './appointment.service';
   styleUrl: './appointments.scss',
 })
 export class Appointments {
-  // appointments: any = [
-  //   {
-  //     id: 1,
-  //     firstName: 'Paul',
-  //     lastName: 'Richard',
-  //     date: 'Nov 20, 2025',
-  //     time: '10:00 AM',
-  //     age: 20,
-  //     email: 'test@example.com',
-  //     mobile: '987654321',
-  //     reason: 'New Patient',
-  //     lastVisit: 'Nov 10, 2024',
-  //     weight: '58 kgs',
-  //     temperature: '98',
-  //     bloodPressure: '120 / 80',
-  //     gender: 'Male',
-  //     address: 'Gurugram, Haryana',
-  //     bloodGroup: 'B+',
-  //     status: 1,
-  //   },
-  //   {
-  //     id: 2,
-  //     firstName: 'Anil',
-  //     lastName: 'Agarwal',
-  //     date: 'Nov 20, 2025',
-  //     time: '01:00 PM',
-  //     age: 20,
-  //     email: 'test@example.com',
-  //     mobile: '987654321',
-  //     reason: 'Follow-up',
-  //     lastVisit: 'Nov 10, 2024',
-  //     weight: '58 kgs',
-  //     temperature: '98',
-  //     bloodPressure: '120 / 80',
-  //     gender: 'Male',
-  //     address: 'Gurugram, Haryana',
-  //     bloodGroup: 'B+',
-  //     status: 0,
-  //   },
-  //   {
-  //     id: 3,
-  //     firstName: 'Ravi',
-  //     lastName: 'Sahota',
-  //     date: 'Nov 20, 2025',
-  //     time: '10:00 AM',
-  //     age: 20,
-  //     email: 'test@example.com',
-  //     mobile: '987654321',
-  //     reason: 'New Patient',
-  //     lastVisit: 'Nov 10, 2024',
-  //     weight: '58 kgs',
-  //     temperature: '98',
-  //     bloodPressure: '120 / 80',
-  //     gender: 'Male',
-  //     address: 'Gurugram, Haryana',
-  //     bloodGroup: 'B+',
-  //     status: 1,
-  //   },
-  //   {
-  //     id: 4,
-  //     firstName: 'Anil',
-  //     lastName: 'Agarwal',
-  //     date: 'Nov 20, 2025',
-  //     time: '01:00 PM',
-  //     age: 20,
-  //     email: 'test@example.com',
-  //     mobile: '987654321',
-  //     reason: 'Follow-up',
-  //     lastVisit: 'Nov 10, 2024',
-  //     weight: '58 kgs',
-  //     temperature: '98',
-  //     bloodPressure: '120 / 80',
-  //     gender: 'Male',
-  //     address: 'Gurugram, Haryana',
-  //     bloodGroup: 'B+',
-  //     status: 0,
-  //   },
-  // ];
   appointmentsList: any = [];
   userDetails: any = JSON.parse(localStorage.getItem('userDetails')!);
   paginationConfig = {
@@ -97,31 +20,31 @@ export class Appointments {
     hidePageSizeOption: true,
     totalRecords: 0,
   };
-
-  // patientAppointmentData = {
-  //   firstName: 'Akash',
-  //   lastName: 'Tewari',
-  //   age: '30',
-  //   mobile: '9899273448',
-  //   gender: 'male',
-  //   address: 'Kashipur',
-  //   bloodGroup: 'B+',
-  //   weight: '84',
-  //   bloodPressureUpper: '120',
-  //   bloodPressureLower: '80',
-  //   temperature: '98.3',
-  // };
+  appointmentsLeft: any = 0
+  noAppointmentSchedulingText1: any;
+  noAppointmentSchedulingText2: any;
+  isMobile = window.innerWidth < 768;
 
   constructor(
     public router: Router,
     public utilService: UtilityService,
-    public appointmentService: AppointmentService
+    public appointmentService: AppointmentService,
+    public datePipe: DatePipe
   ) {}
 
-  ngOnInit() {
-    setTimeout(() => {
-      this.getAppointmentsList();
-    });
+  ngAfterContentChecked() {
+    this.appointmentsLeft = this.utilService.configurations?.subscription?.appointment_left ?? 0;
+    const todayDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd')
+    if(todayDate !== null && todayDate > this.utilService.configurations?.subscription?.end_date) {
+      this.noAppointmentSchedulingText1 = this.utilService.subscriptionExpiredText;
+      this.noAppointmentSchedulingText2 = this.utilService.renewPlanText;
+    }
+    if(todayDate !== null && todayDate <= this.utilService.configurations?.subscription?.end_date) {
+      if(!this.appointmentsLeft) {
+        this.noAppointmentSchedulingText1 = this.utilService.appointmentLimitReachedText;
+        this.noAppointmentSchedulingText2 = this.utilService.upgradePlanText;
+      }
+    }
   }
 
   appointmentAction(item: any) {

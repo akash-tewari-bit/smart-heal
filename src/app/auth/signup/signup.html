@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluidd">
     <div class="row login-wrapper">
         @if(!isMobile) {
             <div class="col-md-7">
@@ -10,6 +10,159 @@
             <form [formGroup]="signUpForm">
                 <div class="login-form p-4">
                 <div class="app-logo mt-3 mb-3">
+                    <img src="assets/images/logo_mobile.png" alt="Logo" />
+                </div>
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <h4>Sign Up</h4>
+                    </div>
+                    <div class="trial-label mb-2 text-center">
+                        <label class="form-check-label">Get started instantly with a complimentary 14-day Basic Plan trial.</label>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <input type="text" [ngClass]="{'error-control': formSubmitted && signUpForm.get('firstName')?.errors}" formControlName="firstName" placeholder="First Name" class="form-control" />
+                        @if (formSubmitted && signUpForm.invalid && signUpForm.touched) {
+                            @if (signUpForm.get('firstName')?.errors?.['required']) {
+                                <p class="error-text">required</p>
+                            }
+                            @if (signUpForm.get('firstName')?.errors?.['minlength']) {
+                                <p class="error-text">required minimum length is 3</p>
+                            }
+                            @if (signUpForm.get('firstName')?.errors?.['maxlength']) {
+                                <p class="error-text">required maximum length is 15</p>
+                            }
+                        }
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <input type="text" [ngClass]="{'error-control': formSubmitted && signUpForm.get('lastName')?.errors}" formControlName="lastName" placeholder="Last Name"
+                            class="form-control" />
+                            @if (formSubmitted && signUpForm.invalid && signUpForm.touched) {
+                            @if (signUpForm.get('lastName')?.errors?.['required']) {
+                                <p class="error-text">required</p>
+                            }
+                            @if (signUpForm.get('lastName')?.errors?.['minlength']) {
+                                <p class="error-text">required minimum length is 3</p>
+                            }
+                            @if (signUpForm.get('lastName')?.errors?.['maxlength']) {
+                                <p class="error-text">required maximum length is 15</p>
+                            }
+                        }
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <input type="email" [ngClass]="{'error-control': formSubmitted && signUpForm.get('email')?.errors}" formControlName="email" placeholder="Email" class="form-control" />
+                        @if (formSubmitted && signUpForm.invalid && signUpForm.touched) {
+                            @if (signUpForm.get('email')?.errors?.['required']) {
+                                <p class="error-text">required</p>
+                            }
+                            @if (signUpForm.get('email')?.errors?.['pattern']) {
+                                <p class="error-text">invalid email id</p>
+                            }
+                        }
+                    </div>
+                    <!-- <div class="col-md-12 mb-3">
+                        <input type="text" [ngClass]="{'error-control': formSubmitted && signUpForm.get('entityName')?.errors}" formControlName="entityName" placeholder="Hospital/Clinic Name" class="form-control" />
+                        @if (formSubmitted && signUpForm.invalid && signUpForm.touched) {
+                            @if (signUpForm.get('entityName')?.errors?.['required']) {
+                                <p class="error-text">required</p>
+                            }
+                        }
+                    </div> -->
+                    <div class="col-md-12 mb-3">
+                        <select class="form-select" [ngClass]="{'error-control': formSubmitted && signUpForm.get('country')?.errors}" formControlName="country">
+                            <option value="" disabled>Country</option>
+                            <option value="india">India</option>
+                        </select>
+                        @if (formSubmitted && signUpForm.invalid && signUpForm.touched) {
+                            @if (signUpForm.get('country')?.errors?.['required']) {
+                                <p class="error-text">required</p>
+                            }
+                        }
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <input type="tel" [ngClass]="{'error-control': formSubmitted && signUpForm.get('mobile')?.errors}" formControlName="mobile" placeholder="Mobile" class="form-control" />
+                        @if (formSubmitted && signUpForm.invalid && signUpForm.touched) {
+                            @if (signUpForm.get('mobile')?.errors?.['required']) {
+                                <p class="error-text">required</p>
+                            }
+                            @if (signUpForm.get('mobile')?.errors?.['minlength']) {
+                                <p class="error-text">required minimum length is 5</p>
+                            }
+                        }
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <input type="text" [ngClass]="{'error-control': formSubmitted && signUpForm.get('username')?.errors}" formControlName="username" placeholder="Username" class="form-control" />
+                        @if (formSubmitted && signUpForm.invalid && signUpForm.touched) {
+                            @if (signUpForm.get('username')?.errors?.['required']) {
+                                <p class="error-text">required</p>
+                            }
+                            @if (signUpForm.get('username')?.errors?.['minlength']) {
+                                <p class="error-text">required minimum length is 3</p>
+                            }
+                            @if (signUpForm.get('username')?.errors?.['maxlength']) {
+                                <p class="error-text">required maximum length is 18</p>
+                            }
+                            @if (signUpForm.get('username')?.errors?.['pattern']) {
+                                <p class="error-text">invalid username</p>
+                            }
+                        }
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <input type="password" [ngClass]="{'error-control': formSubmitted && signUpForm.get('password')?.errors}" formControlName="password" placeholder="Password" class="form-control" />
+                        @if (formSubmitted && signUpForm.invalid && signUpForm.touched) {
+                            @if (signUpForm.get('password')?.errors?.['required']) {
+                                <p class="error-text">required</p>
+                            }
+                            @if (signUpForm.get('password')?.errors?.['minlength']) {
+                                <p class="error-text">required minimum length is 6</p>
+                            }
+                        }
+                    </div>
+                    <div class="col-md-12 text-end">
+                        <div class="d-grid gap-3">
+                            <button class="btn btn-primary" [disabled]="signUpForm.invalid" (click)="signUp()">Create Account</button>
+                            <button class="btn btn-outline-secondary" (click)="cancel()">Cancel</button>
+                        </div>
+                        <!-- <div class="d-flex gap-2 trial-label">
+                            <label class="form-check-label">Get started instantly with a complimentary 14-day Basic Plan trial.</label>
+                      </div> -->
+                    </div>
+                </div>
+                </div>
+                <p class="create-account-wrapper">Already have an account? <a class="cursor-pointer" (click)="signIn()">Sign In</a></p>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <div class="login-page login-wrapper">
+    <img src="assets/images/login-wrapper-img.png" alt="EMR Background" class="background-image" />
+
+    <div class="overlay">
+        <div class="login-card">
+            <form [formGroup]="signUpForm">
+                <div class="login-form p-4">
+                <div class="app-logo mt-3 mb-3 text-center">
                     <img src="assets/images/logo_mobile.png" alt="Logo" />
                 </div>
                 <div class="row">
@@ -126,6 +279,6 @@
             </form>
         </div>
     </div>
-</div>
+</div> -->
 
 

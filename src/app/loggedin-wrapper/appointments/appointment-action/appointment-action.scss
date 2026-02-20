@@ -13,3 +13,37 @@
     z-index: 1;
     left: 12px;
 }
+.medicine-composition {
+    font-size: 10px;
+    color: #7e7b7b;
+}
+.medicine-column {
+    width: 35%;
+}
+.no-appointments-left-wrapper {
+    min-height: 300px;
+    border: 1px solid var(--bs-border-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+.time-wrapper .mat-form-field-appearance-fill .mdc-text-field--no-label .mat-mdc-select-arrow-wrapper {
+    display: none !important;
+}
+.time-wrapper i {
+    font-size: 18px;
+    color: var(--bs-primary);
+    position: absolute;
+    right: 0px;
+    padding: .375rem .75rem;
+    pointer-events: none;
+}
+.time-wrapper span {
+    position: absolute;
+    left: 0;
+    padding: .475rem .75rem;
+    color: #585c5e;
+    pointer-events: none;
+}

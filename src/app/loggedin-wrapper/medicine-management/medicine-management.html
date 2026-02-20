@@ -1,0 +1,80 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h3>Medicine Management</h3>
+        </div>
+        <div class="col-12 d-flex justify-content-end align-items-center mb-4">
+            <button class="btn btn-primary" routerLink="/medicine-management/add-medicine">
+                <i class="bi bi-plus-square me-2"></i>Add Medicine
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="row mb-3">
+                <div class="col-12">
+                    <h6>Filter By:</h6>
+                </div>
+                <div class="col-md-12 mb-3 d-flex align-items-end gap-3">
+                    <div>
+                        <input type="text" class="form-control" placeholder="Medicine Name" [(ngModel)]="text">
+                    </div>
+                    <div class="d-flex align-items-end gap-2">
+                        <button class="btn btn-primary" type="button" (click)="updateRecords()">Apply</button>
+                        <button class="btn btn-outline-primary" type="button" (click)="resetRecords()">Reset</button>
+                    </div>
+                </div>
+            </div>
+            <!-- <app-filter (filterData)="updateRecords($event)"></app-filter> -->
+            <div class="card border-0">
+                <div class="table-responsive" [ngClass]="{ 'no-record-structure': !medicineList.length }">
+                    <table class="table border mb-0">
+                        <thead>
+                            <tr>
+                                <th scope="col">Medicine Name</th>
+                                <th scope="col">Composition</th>
+                                <th scope="col">Manufacturer</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        @if (medicineList.length) {
+                        <tbody>
+                            <tr *ngFor="let item of medicineList">
+                                <td>{{ item.medicine_name }}</td>
+                                <td>{{ item.composition }}</td>
+                                <td>{{ item.manufacturer }}</td>
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        <a class="cursor-pointer" (click)="editMedicine(item)"
+                                        >Edit</a
+                                        >
+                                        <a class="cursor-pointer" (click)="deleteMedicine(item)"
+                                        >Delete</a
+                                        >
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                        }
+                    </table>
+                    @if (medicineList.length) {
+                    <mat-paginator
+            [length]="paginationConfig.totalRecords"
+            [pageSize]="paginationConfig.pageSize"
+            [pageSizeOptions]="paginationConfig.pageSizeOptions"
+            aria-label="Select page"
+            [hidePageSize]="paginationConfig.hidePageSizeOption"
+            (page)="handlePageEvent($event)"
+            >
+            </mat-paginator>
+                    } @if (!medicineList.length) {
+                    <div class="no-record-wrapper border border-top-0">
+                        <h6>No medicine found. Please add one</h6>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

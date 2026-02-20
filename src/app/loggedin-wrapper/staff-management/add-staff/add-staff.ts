@@ -15,19 +15,13 @@ export class AddStaff {
   formSubmitted = false;
   staffId: any = '';
   staffDetail: any = '';
-
+  staffLeft: any = 0;
+  
   constructor(public fb: FormBuilder, public router: Router, public staffManagementService: StaffManagementService, public utilService: UtilityService, public activatedRoute: ActivatedRoute) {
-    // this.staffForm = this.fb.group({
-    //   firstName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]],
-    //   lastName: [''],
-    //   email: ['', [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
-    //   country: ['', Validators.required],
-    //   mobile: ['', [Validators.required, Validators.minLength(5)]],
-    //   role: ['', [Validators.required]],
-    //   username: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(18), Validators.pattern(/^(?=[a-zA-Z])(?=.*[._-])(?!.*[._-]{2})[a-zA-Z][a-zA-Z0-9._-]{1,18}[a-zA-Z0-9]$/)]],
-    //   password: ['', [Validators.required, Validators.minLength(6)]],
-    //   sendToEmail: [true, [Validators.required]],
-    // })
+  }
+  
+  ngAfterContentChecked() {
+    this.staffLeft = this.utilService.configurations?.staff_left ?? 0;
   }
 
   ngOnInit() {
@@ -71,6 +65,7 @@ export class AddStaff {
             success: true,
           });
           this.router.navigate(['/staff-management']);
+          this.staffManagementService.notifyStaffCountUpdate(true);
         }
         else {
           this.utilService.setSpinnerState(false);
@@ -128,11 +123,11 @@ export class AddStaff {
     this.staffForm = this.fb.group({
       firstName: [this.staffDetail?.firstName ?? '', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]],
       lastName: [this.staffDetail?.lastName ?? ''],
-      email: [this.staffDetail?.email ?? '', [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
+      email: [this.staffDetail?.email ?? '', [Validators.required, Validators.pattern(/^[a-zA-Z0-9]+[a-zA-Z0-9._%+-]*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}$/)]],
       country: [this.staffDetail?.country ?? '', Validators.required],
       mobile: [this.staffDetail?.mobile ?? '', [Validators.required, Validators.minLength(5)]],
       role: [this.staffDetail?.role ?? '', [Validators.required]],
-      username: [this.staffDetail?.username ?? '', [Validators.required, Validators.minLength(5), Validators.maxLength(18), Validators.pattern(/^(?=[a-zA-Z])(?=.*[._-])(?!.*[._-]{2})[a-zA-Z][a-zA-Z0-9._-]{1,18}[a-zA-Z0-9]$/)]],
+      username: [this.staffDetail?.username ?? '', [Validators.required, Validators.minLength(3), Validators.maxLength(18), Validators.pattern(/^[a-zA-Z][a-zA-Z0-9._-]{2,19}$/)]],
       password: [this.staffDetail?.password ?? '', [Validators.required, Validators.minLength(6)]],
       sendToEmail: [this.staffDetail?.sendToEmail ?? true, [Validators.required]],
     })

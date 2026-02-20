@@ -65,9 +65,9 @@
           <th scope="col">Plan Name</th>
           <th scope="col">Start Date</th>
           <th scope="col">End Date</th>
-          <th scope="col">Amount</th>
+          <th scope="col">Amount /Month</th>
           <th scope="col">Status</th>
-          <th scope="col">Action</th>
+          <!-- <th scope="col">Action</th> -->
         </tr>
       </thead>
         @if (planDetails.length) {
@@ -80,11 +80,11 @@
             <td>
               <span class="badge rounded-pill" [ngClass]="{'text-bg-success': item.is_active, 'text-bg-danger': !item.is_active }"> {{item.is_active ? 'Active' : 'Inactive'}} </span>
             </td>
-            <td>
+            <!-- <td>
               <a class="cursor-pointer" (click)="view(item)">
                 View
               </a>
-            </td>
+            </td> -->
           </tr>
         </tbody>
       }
@@ -107,30 +107,45 @@
 [modalFullWidth]="true" [buttonText]="'Close'" (success)="closeModal($event)"
 >
 <div class="row">
-  <div class="col-md-3 mt-3 mb-3" *ngFor="let item of plans">
+  <div class="col-md-4 mt-3 mb-3" *ngFor="let item of plans">
     <div class="plan-wrapper card">
-      <div>
-        <h2 class="text-center">{{item?.name}}</h2>
-        <h3 class="text-center mb-4">{{item?.currency}} {{item?.price}}<small>/month</small></h3>
-      </div>
-      <div class="plan-body">
-        <ul>
-          <li *ngFor="let desc of item?.description">{{desc}}</li>
-          <!-- <li>Basic patient history</li>
-          <li>Limited reporting</li> -->
-        </ul>
-      </div>
-      <div class="plan-footer">
-        @if (item?.id === activeplan?.plan_id) {
-          <button class="btn btn-secondary w-100 pe-none">
-             <i class="bi bi-cart-check"></i> Active Plan
-           </button>
+      <div class="mb-4">
+        <h2 class="text-center">{{item?.name | titlecase}}</h2>
+        <h5 class="text-center mb-4">
+          @if (item?.name === 'custom') {
+             <span>Custom pricing</span>
           }
           @else {
-            <button class="btn btn-primary w-100" (click)="queryForm(item)">Get Started</button>
+             <span>{{item?.currency}} {{item?.price}}<small>/month</small></span>
           }
-          <!-- <button class="btn btn-outline-primary w-100">Active</button> -->
+        </h5>
+        <div class="plan-footer">
+          @if (item?.id === activeplan?.plan_id) {
+            <button class="btn btn-secondary w-100 pe-none">
+               <i class="bi bi-clipboard-check"></i> Active Plan
+            </button>
+          }
+          @else {
+            <button class="btn btn-primary w-100" (click)="queryForm(item)">{{item?.name === 'custom' ? 'Contact Support' : 'Get Started'}}</button>
+          }
         </div>
+      </div>
+      <div class="plan-body">
+        <h6>What's included:</h6>
+        <ul>
+          <li *ngFor="let desc of item?.description"><i class="bi bi-check2-square check-icon"></i> {{desc}}</li>
+        </ul>
+      </div>
+      <!-- <div class="plan-footer">
+        @if (item?.id === activeplan?.plan_id) {
+          <button class="btn btn-secondary w-100 pe-none">
+             <i class="bi bi-clipboard-check"></i> Active Plan
+          </button>
+        }
+        @else {
+          <button class="btn btn-primary w-100" (click)="queryForm(item)">Get Started</button>
+        }
+      </div> -->
       </div>
     </div>
     <!-- <div class="col-md-3 mt-3 mb-3">
@@ -197,7 +212,7 @@
 [title]="'Send to Support'"
 [showModal]="showQueryForm"
 (closeModal)="closeModal($event)"
-[modalFullWidth]="false" [buttonText]="'Submit'" (success)="submitQuery($event)" [disablePrimaryButton]="disablePrimaryButton"
+[modalFullWidth]="false" [buttonText]="'Submit'" (success)="submitQuery($event)" [disablePrimaryButton]="disablePrimaryButton" [showActionButtons]="selectedPlan?.name === 'custom' ? false : true"
 >
 @if (showConfirmationText) {
   <div class="plan-confirmation d-flex justify-content-center align-items-center">
@@ -210,19 +225,97 @@
 @else {
   <!-- <form> -->
     <div class="row">
-      <div class="col-md-12">
-        <div>
-          <h2 class="text-center">{{selectedPlan?.name}}</h2>
-          <h3 class="text-center mb-4">{{selectedPlan?.currency}} {{selectedPlan?.price}}<small>/month</small></h3>
+      @if (selectedPlan?.name === 'custom') {
+        <form [formGroup]="customForm">
+                <div class="login-form p-4">
+                    <!-- <div class="app-logo mt-3 mb-3">
+                        <img src="assets/images/logo_mobile.png" alt="Logo">
+                </div> -->
+                <div class="row">
+                      <!-- <div class="col-md-12 mb-3 text-center">
+                          <h4>Sign in to your account</h4>
+                      </div> -->
+                    <div class="col-md-12 mb-3">
+                        <input type="text" [ngClass]="{'error-control': formSubmitted && customForm.get('name')?.errors}" formControlName="name" placeholder="Name" class="form-control">
+                        <!-- @if (formSubmitted && loginForm.invalid && loginForm.touched) {
+                            @if (loginForm.get('username')?.errors?.['required']) {
+                                <p class="error-text">required</p>
+                            }
+                        } -->
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <input type="email" [ngClass]="{'error-control': formSubmitted && customForm.get('email')?.errors}" formControlName="email" placeholder="Email" class="form-control">
+                        <!-- @if (formSubmitted && loginForm.invalid && loginForm.touched) {
+                            @if (loginForm.get('password')?.errors?.['required']) {
+                                <p class="error-text">required</p>
+                            }
+                        } -->
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <input type="text" [ngClass]="{'error-control': formSubmitted && customForm.get('company_name')?.errors}" formControlName="company_name" placeholder="Company Name" class="form-control">
+                        <!-- @if (formSubmitted && loginForm.invalid && loginForm.touched) {
+                            @if (loginForm.get('password')?.errors?.['required']) {
+                                <p class="error-text">required</p>
+                            }
+                        } -->
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <textarea
+                          class="form-control"
+                          rows="5"
+                          placeholder="Enter description of your requirements"
+                          formControlName="message"
+                        ></textarea>
+                        <!-- @if (formSubmitted && loginForm.invalid && loginForm.touched) {
+                            @if (loginForm.get('password')?.errors?.['required']) {
+                                <p class="error-text">required</p>
+                            }
+                        } -->
+                    </div>
+                    <div class="col-md-12 text-end mb-3">
+                        <div class="d-grid gap-3">
+                            <!-- <a class="cursor-pointer" (click)="forgot()">Forgot your password?</a> -->
+                            <button class="btn btn-primary" (click)="submitQuery()" [disabled]="customForm.invalid">Submit Request</button>
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-12 mb-2">
+                        <div class="d-flex gap-2 terms-condition">
+                            <label class="form-check-label" for="inlineCheckbox1"
+                            >
+                            By clicking on 'Sign In', you acknowledge the <a class="cursor-pointer" href="docs/Terms_of_Service_Smart_Heal_App_1.0.pdf" target="_blank">Terms of Services</a> and <a class="cursor-pointer" href="docs/Privacy_Policy_Smart_Heal_App_1.0.pdf" target="_blank">Privacy Policy</a>
+                            </label
+                            >
+                      </div>
+                    </div> -->
+                </div>
+            </div>
+            </form>
+      }
+      @else {
+        <div class="col-md-12">
+          <div class="mb-3">
+            <h2 class="text-center">{{selectedPlan?.name}}</h2>
+            @if (selectedPlan?.currency && UpdatedPrice) {
+              <div class="mb-3 d-flex justify-content-center align-items-center">
+              <h3 class="text-center mb-0 me-2">{{selectedPlan?.currency}} {{UpdatedPrice}}</h3>
+                <small *ngIf="startDate && endDate">({{ startDate | date: "MMM dd, yyyy" }} - {{ endDate | date: "MMM dd, yyyy" }})</small>
+              </div>
+            }
+            <select class="form-select" (change)="updateAmount($event)" [value]="monthSelected">
+              <option value="" selected>Select Duration</option>
+              <option value="1">1 Month</option>
+              <option value="3">3 Months</option>
+              <option value="6">6 Months</option>
+              <option value="12">12 Months</option>
+            </select>
+          </div>
+          <div class="plan-body">
+            <ul>
+              <li *ngFor="let desc of selectedPlan?.description"><i class="bi bi-check2-square check-icon"></i> {{desc}}</li>
+            </ul>
+          </div>
         </div>
-        <div class="plan-body">
-          <ul>
-            <li *ngFor="let desc of selectedPlan?.description">{{desc}}</li>
-            <!-- <li>Basic patient history</li>
-            <li>Limited reporting</li> -->
-          </ul>
-        </div>
-      </div>
+      }
     </div>
   <!-- </form> -->
 }

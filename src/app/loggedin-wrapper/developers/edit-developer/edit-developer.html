@@ -1,0 +1,215 @@
+<div class="container-fluid">
+  <div class="row">
+    <form [formGroup]="clientForm">
+    <div class="col-12">
+      <h3 class="mb-4">View/Edit Client</h3>
+      <div class="card border-0 mb-3">
+        <div class="table-responsive" [ngClass]="{ 'no-record-structure': !clientDetail }">
+          <table class="table border mb-0">
+            <!-- <thead>
+              <tr>
+                <th scope="col">Client Name</th>
+                <th scope="col">Brand Name</th>
+                <th scope="col">Subscription Plan</th>
+                <th scope="col">Ends On</th>
+                <th scope="col">Active/Inactive</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead> -->
+            <tbody>
+              <tr>
+                <td><strong>Username</strong></td>
+                <td><input type="text" class="form-control" formControlName="username"></td>
+              </tr>
+              <tr>
+                <td><strong>First Name</strong></td>
+                <td><input type="text" class="form-control" formControlName="firstName"></td>
+              </tr>
+              <tr>
+                <td><strong>Last Name</strong></td>
+                <td><input type="text" class="form-control" formControlName="lastName"></td>
+              </tr>
+              <tr>
+                <td><strong>Mobile</strong></td>
+                <td><input type="text" class="form-control" formControlName="mobile"></td>
+              </tr>
+              <tr>
+                <td><strong>Email</strong></td>
+                <td><input type="text" class="form-control" formControlName="email"></td>
+              </tr>
+              <tr>
+                <td><strong>Country</strong></td>
+                <td><input type="text" class="form-control" formControlName="country"></td>
+              </tr>
+              <tr>
+                <td><strong>Brand Name</strong></td>
+                <td><input type="text" class="form-control" formControlName="brandName"></td>
+              </tr>
+              <tr>
+                <td><strong>Role</strong></td>
+                <td><input type="text" class="form-control" formControlName="role"></td>
+              </tr>
+              <!-- <tr>
+                <td><strong>Subscription Plan</strong></td>
+                <td><input type="text" class="form-control" [(ngModel)]="clientDetail.subscription"></td>
+              </tr> -->
+              <!-- <tr>
+                <td><strong>Start Date</strong></td>
+                <td>
+                    <div>
+                        <mat-form-field class="material-calendar">
+                        <input matInput (dateChange)="addEvent($event)" [(ngModel)]="clientDetail.subscription_startDate" [min]="todayDate" [matDatepicker]="dp2" readonly placeholder="Select Date" (click)="dp2.open()">
+                        <mat-datepicker-toggle matIconSuffix [for]="dp2"></mat-datepicker-toggle>
+                        <mat-datepicker #dp2></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+              </tr>
+              <tr>
+                <td><strong>End Date</strong></td>
+                <td>
+                    <div>
+                        <mat-form-field class="material-calendar">
+                        <input matInput (dateChange)="addEvent($event)" [(ngModel)]="clientDetail.subscription_endDate" [min]="todayDate" [matDatepicker]="dp3" readonly placeholder="Select Date" (click)="dp3.open()">
+                        <mat-datepicker-toggle matIconSuffix [for]="dp3"></mat-datepicker-toggle>
+                        <mat-datepicker #dp3></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+              </tr> -->
+              <!-- <tr>
+                <td><strong>Active/Inactive</strong></td>
+                <td><input type="text" class="form-control" formControlName="isActive"></td>
+              </tr> -->
+              <tr>
+                <td><strong>Appointment Left</strong></td>
+                <td><input type="text" class="form-control" formControlName="appointment_left"></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- @if (ClientList.length) {
+            <mat-paginator
+            [length]="paginationConfig.totalRecords"
+            [pageSize]="paginationConfig.pageSize"
+            [pageSizeOptions]="paginationConfig.pageSizeOptions"
+            aria-label="Select page"
+            [hidePageSize]="paginationConfig.hidePageSizeOption"
+            (page)="handlePageEvent($event)"
+            >
+        </mat-paginator>
+        } -->
+        <!-- @if (!ClientList.length) {
+            <div class="no-record-wrapper border border-top-0">
+                <h6>No Client found.</h6>
+            </div>
+            } -->
+        </div>
+    </div>
+    <div class="card border-0 mb-3 subscriptions-wrapper">
+      <h4 class="mb-3">Subscriptions</h4>
+      <ng-container formArrayName="subscriptions">
+        <div class="table-responsive" [ngClass]="{ 'no-record-structure': !clientDetail?.subscription.length }">
+            <table class="table border mb-0">
+              <thead>
+                <tr>
+                  <th scope="col">Plan Name</th>
+                  <th scope="col">Start Date</th>
+                  <th scope="col">End Date</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Active/Inactive</th>
+                </tr>
+              </thead>
+            <!-- @if (clientDetail?.subscription.length) { -->
+              <tbody>
+                <tr *ngFor="let item of subscriptions.controls;let i = index" [formGroupName]="i">
+                  <td>
+                    @if (item.get('is_active')?.value) {
+                      <div class="appointment-date-wrapper time-wrapper rounded position-relative">
+                        <mat-form-field class="material-calendar">
+                          <mat-select formControlName="plan_name">
+                            <mat-option [value]="item" *ngFor="let item of plans">{{item}}</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                        <i class="bi bi-chevron-down"></i>
+                        <!-- @if (!appointmentForm.get('time')?.value) {
+                          <span>Select Time</span>
+                        } -->
+                      </div>
+                      <!-- <input type="text" class="form-control" formControlName="plan_name"> -->
+                    }
+                    @else {
+                      <span class="badge" [ngClass]="{'bg-primary': item.get('plan_name')?.value === 'Basic', 'bg-secondary': item.get('plan_name')?.value === 'Professional'}">{{ item.get('plan_name')?.value }}</span>  
+                    }
+                  </td>
+                  <td>
+                    @if (item.get('is_active')?.value) {
+                      <div>
+                        <mat-form-field class="material-calendar">
+                        <input matInput formControlName="subscription_startDate" (dateChange)="addEvent($event)" [min]="todayDate" [matDatepicker]="dp2" readonly placeholder="Select Date" (click)="dp2.open()">
+                        <mat-datepicker-toggle matIconSuffix [for]="dp2"></mat-datepicker-toggle>
+                        <mat-datepicker #dp2></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                    }
+                    @else {
+                      {{ item.get('subscription_startDate')?.value | date : "MMM dd, yyyy" }}
+                    }
+                  </td>
+                  <td>
+                    @if (item.get('is_active')?.value) {
+                      <div>
+                        <mat-form-field class="material-calendar">
+                        <input matInput formControlName="subscription_endDate" (dateChange)="addEvent($event)" [min]="todayDate" [matDatepicker]="dp3" readonly placeholder="Select Date" (click)="dp3.open()">
+                        <mat-datepicker-toggle matIconSuffix [for]="dp3"></mat-datepicker-toggle>
+                        <mat-datepicker #dp3></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                    }
+                    @else {
+                      {{ item.get('subscription_endDate')?.value | date : "MMM dd, yyyy" }}
+                    }
+                  </td>
+                  <td>
+                    @if (item.get('is_active')?.value) {
+                      <input type="text" class="form-control" formControlName="plan_price">
+                    }
+                    @else {
+                      {{ item.get('plan_price')?.value }}
+                    }
+                  </td>
+                  <td>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" formControlName="is_active">
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            <!-- } -->
+            </table>
+            <!-- @if (clientList.length) {
+              <mat-paginator
+              [length]="paginationConfig.totalRecords"
+              [pageSize]="paginationConfig.pageSize"
+              [pageSizeOptions]="paginationConfig.pageSizeOptions"
+              aria-label="Select page"
+              [hidePageSize]="paginationConfig.hidePageSizeOption"
+              (page)="handlePageEvent($event)"
+              >
+              </mat-paginator>
+            } -->
+            <!-- @if (!clientList.length) {
+            <div class="no-record-wrapper border border-top-0">
+              <h6>No Client found.</h6>
+            </div>
+            } -->
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="d-flex gap-2">
+      <button class="btn btn-primary" (click)="updateDeveloperDetails()">Save Changes</button>
+      <button class="btn btn-outline-primary" (click)="cancel()">Cancel</button>
+    </div>
+  </div>
+</form>
+  </div>
+</div>

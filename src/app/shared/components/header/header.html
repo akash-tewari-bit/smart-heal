@@ -1,7 +1,7 @@
 <div [ngClass]="{'pr-3 pl-3 header-container': !isMobile, 'mobile-container pe-0 ps-0': isMobile}">
-  <div [ngClass]="{'row': !isMobile, 'd-flex justify-content-between align-items-center': isMobile}">
+  <div [ngClass]="{'row': !isMobile, 'd-flex justify-content-between align-items-center gap-3': isMobile}">
     <ng-content></ng-content>
-    <div [ngClass]="{'col-md-8': !isMobile}">
+    <div [ngClass]="{'col-md-7': !isMobile}">
       <div #searchWrapper [ngClass]="{'search-wrapper': !isMobile}" class="position-relative">
         <input
           type="text"
@@ -33,7 +33,16 @@
         }
       </div>
     </div>
-    <div class="d-flex justify-content-end gap-4" [ngClass]="{'col-md-4': !isMobile}">
+    <div class="d-flex justify-content-end gap-2" [ngClass]="{'col-md-5': !isMobile}">
+      @if (userDetails?.role == 'doctor' || userDetails?.role == 'admin' || userDetails?.role === 'owner') {
+        <div class="appointments-left d-flex flex-column justify-content-center align-items-center">
+          <span>
+            @if (!isMobile) {
+              Appointments left 
+            }
+            <span class="count d-flex justify-content-center align-items-center gap-1"><i class="bi bi-wallet2"></i>{{configurations?.subscription?.appointment_left ?? 0}}</span></span>
+        </div>
+      }
       <div class="dropdown notofication-wrapper position-relative btn" [ngClass]="{'d-none': isMobile}" id="notificationDropdown"
        data-bs-toggle="dropdown"
        aria-expanded="false">
@@ -77,13 +86,14 @@
         <span [ngClass]="{'d-none': isMobile}">
           {{ userDetails?.firstName }} {{ userDetails?.lastName }}
         </span>
-        <div [ngClass]="{'header-profile-with-image': configurations?.general?.profile_image_url, 'header-profile-image-wrapper': !configurations?.general?.profile_image_url}">
-          @if (configurations?.general?.profile_image_url) {
+        <div class="header-profile-image-wrapper">
+        <!-- <div [ngClass]="{'header-profile-with-image': configurations?.general?.profile_image_url, 'header-profile-image-wrapper': !configurations?.general?.profile_image_url}"> -->
+          <!-- @if (configurations?.general?.profile_image_url) {
             <img [src]="configurations?.general?.profile_image_url" alt="profile-image">
           }
-          @else {
+          @else { -->
             <i class="bi bi-person-circle" [ngClass]="{'text-primary': !isMobile, 'text-white': isMobile}"></i>
-          }
+          <!-- } -->
         </div>
       </div>
       <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">

@@ -1,8 +1,8 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-12 d-flex justify-content-between align-items-center gap-2">
+    <div class="col-12 justify-content-between align-items-center gap-2" [ngClass]="{'d-flex': !isMobile}">
       <h2 class="mb-4">Dashboard</h2>
-      <div>
+      <div class="mb-3">
         <mat-form-field class="material-calendar">
           <mat-label>Enter a date range</mat-label>
           <mat-date-range-input [rangePicker]="picker">
@@ -32,27 +32,27 @@
   </div>
 }
 @else {
-  <div class="row mb-3">
+  <div class="row mb-3 dashboard-tile-wrapper">
     <div class="col-md-3 mb-3">
       <div class="card bg-primary text-white">
         <div class="card-body">
-          <p class="card-text fs-6">Upcoming Appointments</p>
-          <h2 class="card-title">{{appointmentsList?.length}}</h2>
+          <p class="card-text">Upcoming Appointments</p>
+          <h2 class="card-title">{{summaryData?.upcoming_appointments ?? 0}}</h2>
         </div>
       </div>
     </div>
     <div class="col-md-3 mb-3">
       <div class="card bg-secondary text-white">
         <div class="card-body">
-          <p class="card-text fs-6">New Patients</p>
-          <h2 class="card-title">{{patientsList?.length}}</h2>
+          <p class="card-text">New Patients</p>
+          <h2 class="card-title">{{summaryData?.new_patients ?? 0}}</h2>
         </div>
       </div>
     </div>
     <div class="col-md-3 mb-3">
       <div class="card bg-primary-subtle text-white">
         <div class="card-body">
-          <p class="card-text fs-6">Unread Messages</p>
+          <p class="card-text">Unread Messages</p>
           <h2 class="card-title">{{notificationsList?.length ?? 0}}</h2>
         </div>
       </div>
@@ -61,8 +61,8 @@
       <div class="col-md-3 mb-3">
         <div class="card">
           <div class="card-body">
-            <p class="card-text fs-6">Billing This Month</p>
-            <h2 class="card-title">$12,900</h2>
+            <p class="card-text">Billing</p>
+            <h2 class="card-title">₹{{billingSummaryData?.totalEarning ?? 0}}</h2>
           </div>
         </div>
       </div>
@@ -80,7 +80,7 @@
           <table class="table">
             <thead>
               <tr>
-                <th scope="col">Time</th>
+                <th scope="col">Date & Time</th>
                 <th scope="col">Patient</th>
                 <th scope="col">Type</th>
                 <th scope="col">Action</th>
@@ -88,7 +88,9 @@
             </thead>
             <tbody>
               <tr *ngFor="let item of appointmentsList">
-                <td>{{
+                <td>
+                  {{ item.scheduled_date | date : "MMM dd, yyyy" }} -
+                  {{
                     item.scheduled_date.split("/").reverse().join("-") +
                       "T" +
                       item.scheduled_time | date : "hh:mm a"
@@ -139,6 +141,12 @@
                 <a class="icon-link" routerLink="/staff-management/add-staff">
                   Add Staff
                   <i class="bi bi-person-add"></i>
+                </a>
+              </div>
+              <div class="mb-2">
+                <a class="icon-link" routerLink="/medicine-management/add-medicine">
+                  Add Medicine
+                  <i class="bi bi-journal-medical"></i>
                 </a>
               </div>
             }

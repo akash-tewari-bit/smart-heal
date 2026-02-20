@@ -22,7 +22,7 @@
           <mat-date-range-picker #picker></mat-date-range-picker>
         </mat-form-field>
       </div>
-      <button class="btn btn-primary w-40">Download Report</button>
+      <button class="btn btn-primary w-40" (click)="downloadReport()">Download Report</button>
     </div>
   </div>
   <div class="row g-3 mb-4">
@@ -59,7 +59,7 @@
     <div class="col-md-8">
       <div class="card shadow-sm p-3">
         <div>
-          <app-filter (filterData)="updateRecords($event)"></app-filter>
+          <app-filter (filterData)="updateRecords($event)" [hasSelectedBilling]="hasSelectedBilling"></app-filter>
         </div>
         <div class="card border-0">
           <div
@@ -79,7 +79,7 @@
               @if (billingList.length) {
               <tbody>
                 <tr *ngFor="let item of billingList">
-                  <td>{{ item.firstName }} {{ item.lastName }}</td>
+                  <td><input class="form-check-input me-1" type="checkbox" (change)="updateSelectedBilling($event, item)" [(ngModel)]="item.selected" /> {{ item.firstName }} {{ item.lastName }}</td>
                   <td>{{ item.billingDate | date : "MMM dd, yyyy" }}</td>
                   <td>{{ item.billingType }}</td>
                   <td>{{ item?.receivedBy }}</td>

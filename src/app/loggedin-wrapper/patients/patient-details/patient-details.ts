@@ -24,23 +24,6 @@ export class PatientDetails {
   userDetails: any = JSON.parse(localStorage.getItem('userDetails')!);
 
   constructor(public fb: FormBuilder, public router: Router, public activatedRoute: ActivatedRoute, public utilService: UtilityService, public patientService: PatientsService) {
-    // this.patientDetailForm = this.fb.group({
-    //   id: [''],
-    //   firstName: [''],
-    //   lastName: [''],
-    //   time: [''],
-    //   age: [''],
-    //   email: [''],
-    //   mobile: [''],
-    //   reason: [''],
-    //   lastVisit: [''],
-    //   weight: [''],
-    //   temperature: [''],
-    //   bloodPressure: [''],
-    //   gender: [''],
-    //   address: [''],
-    //   bloodGroup: ['']
-    // })
   }
 
   ngOnInit() {
@@ -50,33 +33,12 @@ export class PatientDetails {
         this.getPatientDetails();
       });
     }
-    // this.patientDetailForm.setValue({
-    //   id: 4,
-    //   firstName: 'Anil',
-    //   lastName: 'Agarwal',
-    //   time: '01:00 PM',
-    //   age: 20,
-    //   email: 'test@example.com',
-    //   mobile: '987654321',
-    //   reason: 'Follow-up',
-    //   lastVisit: 'Nov 10, 2024',
-    //   weight: '58 kgs',
-    //   temperature: '98',
-    //   bloodPressure: '120 / 80',
-    //   gender: 'Male',
-    //   address: 'Gurugram, Haryana',
-    //   bloodGroup: 'B+'
-    // })
-    // this.patientDetail = this.patientDetailForm.value
-    
   }
 
   getPatientDetails() {
     this.utilService.setSpinnerState(true);
     this.patientService.getPatientData(this.patientId).subscribe(
       (res: any) => {
-        console.log(res);
-        
         this.utilService.setSpinnerState(false);
         if(res?.success) {
           this.patientDetail = res?.data;
@@ -111,6 +73,7 @@ export class PatientDetails {
       bloodPressureUpper: [data?.bloodPressureUpper ?? null],
       bloodPressureLower: [data?.bloodPressureLower ?? null],
       temperature: [data?.temperature ?? null],
+      pulseRate: [data?.pulseRate ?? null],
       gender: [data?.gender ?? null],
       address: [data?.address ?? null],
     })

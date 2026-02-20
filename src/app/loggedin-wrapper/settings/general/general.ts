@@ -33,7 +33,6 @@ export class General {
 
   saveChanges() {
     const form = this.generalSettingsForm.value
-    console.log(form);
     const formData = new FormData();
     formData.append('image', this.selectedFile ?? '');       // file
     formData.append('mobile', form.mobile ?? '');              // simple string

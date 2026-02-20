@@ -11,26 +11,7 @@ import { DatePipe } from '@angular/common';
   styleUrl: './notification.scss'
 })
 export class Notification {
-  notificationList: any = [
-    // {
-    //   date: '12/10/2025',
-    //   message: 'Appointment Created',
-    //   patientName: 'Stone Cold',
-    //   time: '15:30:00',
-    //   type: 'appointment',
-    //   staffName: 'Sam',
-    //   appointment_id: '0e0414ce-70b9-4c55-bb3f-8acb54e4f888'
-    // },
-    // {
-    //   date: '12/10/2025',
-    //   message: 'Payment Received',
-    //   patientName: 'Stone Cold',
-    //   time: '15:30:00',
-    //   type: 'payment',
-    //   staffName: 'Akash',
-    //   appointment_id: '0e0414ce-70b9-4c55-bb3f-8acb54e4f888'
-    // }
-  ];
+  notificationList: any = [];
 
   paginationConfig = {
     page: 1,
@@ -75,39 +56,44 @@ export class Notification {
   }
 
   markAllAsRead(all = false, item?: any) {
-    const payload: any = {
-      mark_all_as_read: all,
-      id: item ? [item?.id] : [],
-    };
-    this.utilService.setSpinnerState(true);
-    this.notificationsService
-      .markNotificationAsRead(this.utilService.transformObj(payload))
-      .subscribe(
-        (res: any) => {
-          if (res?.success) {
+    if(!item || !item?.read) {
+      const payload: any = {
+        mark_all_as_read: all,
+        id: item ? [item?.id] : [],
+      };
+      this.utilService.setSpinnerState(true);
+      this.notificationsService
+        .markNotificationAsRead(this.utilService.transformObj(payload))
+        .subscribe(
+          (res: any) => {
+            if (res?.success) {
+              this.utilService.setSpinnerState(false);
+              this.utilService.showToastMessage({
+                message: res.message,
+                success: true,
+              });
+              if (item)
+                this.router.navigate(['/appointments', item.appointment_id]);
+            } else {
+              this.utilService.setSpinnerState(false);
+              this.utilService.showToastMessage({
+                message: res.message,
+                success: false,
+              });
+            }
+          },
+          (err) => {
             this.utilService.setSpinnerState(false);
             this.utilService.showToastMessage({
-              message: res.message,
-              success: true,
-            });
-            if (item)
-              this.router.navigate(['/appointments', item.appointment_id]);
-          } else {
-            this.utilService.setSpinnerState(false);
-            this.utilService.showToastMessage({
-              message: res.message,
+              message: err?.error?.message,
               success: false,
             });
           }
-        },
-        (err) => {
-          this.utilService.setSpinnerState(false);
-          this.utilService.showToastMessage({
-            message: err?.error?.message,
-            success: false,
-          });
-        }
-      );
+        );
+    }
+    else {
+      if (item) this.router.navigate(['/appointments', item.appointment_id]);
+    }
   }
 
 }

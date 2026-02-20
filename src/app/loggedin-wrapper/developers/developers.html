@@ -4,41 +4,41 @@
       <h3 class="mb-4">Client's List</h3>
       <!-- <app-filter (filterData)="updateRecords($event)"></app-filter> -->
       <div class="card border-0">
-        <div class="table-responsive" [ngClass]="{ 'no-record-structure': !ClientList.length }">
+        <div class="table-responsive" [ngClass]="{ 'no-record-structure': !clientList.length }">
           <table class="table border mb-0">
             <thead>
               <tr>
                 <th scope="col">Client Name</th>
                 <th scope="col">Brand Name</th>
                 <th scope="col">Subscription Plan</th>
-                <th scope="col">Subscription Expiry</th>
+                <th scope="col">Ends On</th>
                 <th scope="col">Active/Inactive</th>
                 <th scope="col">Action</th>
               </tr>
             </thead>
-          @if (ClientList.length) {
+          @if (clientList.length) {
             <tbody>
-              <tr *ngFor="let item of ClientList">
+              <tr *ngFor="let item of clientList">
                 <td>{{ item.firstName }} {{ item.lastName }}</td>
                 <td>{{ item.brandName }}</td>
                 <td>{{ item.subscription }}</td>
-                <td>{{ item.expiry }}</td>
+                <td>{{ item.subscription_endDate | date : "MMM dd, yyyy" }}</td>
                 <td>
                   <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
+                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" [(ngModel)]="item.isActive">
                     <!-- <label class="form-check-label" for="flexSwitchCheckChecked">Checked switch checkbox input</label> -->
                     </div>
                 </td>
                 <td>
                   <a class="cursor-pointer" (click)="showClientDetail(item)"
-                  >View</a
+                  >View/Edit</a
                   >
                 </td>
               </tr>
             </tbody>
           }
           </table>
-          @if (ClientList.length) {
+          @if (clientList.length) {
             <mat-paginator
             [length]="paginationConfig.totalRecords"
             [pageSize]="paginationConfig.pageSize"
@@ -49,7 +49,7 @@
             >
             </mat-paginator>
           }
-          @if (!ClientList.length) {
+          @if (!clientList.length) {
           <div class="no-record-wrapper border border-top-0">
             <h6>No Client found.</h6>
           </div>

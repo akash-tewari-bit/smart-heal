@@ -26,8 +26,6 @@ export class Settings {
       (res: any) => {
         if(res?.success) {
           this.utilService.setSpinnerState(false);
-          console.log(res);
-          
           this.configurations = res?.data;
         }
         else {

@@ -14,6 +14,7 @@ export class Modal {
   @Output() closeModal = new EventEmitter<any>();
   @Output() success = new EventEmitter<any>();
   @Input() disablePrimaryButton: any = false;
+  @Input() showActionButtons = true;
 
   close() {
     this.closeModal.emit(false);

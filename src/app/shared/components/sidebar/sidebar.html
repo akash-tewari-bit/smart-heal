@@ -72,32 +72,38 @@
             Appointments
           </a>
         </li>
+        @if (userDetails?.role == 'admin' || userDetails?.role == 'owner') {
+          <li class="nav-item">
+            <a routerLink="/staff-management"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: false }" [attr.data-bs-toggle]="isMobile ? 'offcanvas' : null"
+            data-bs-target="#sidebar" class="nav-link text-white p-3"> Staff Management </a>
+          </li>
+          <li class="nav-item">
+            <a routerLink="/medicine-management"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: false }" [attr.data-bs-toggle]="isMobile ? 'offcanvas' : null"
+            data-bs-target="#sidebar" class="nav-link text-white p-3"> Medicine Management </a>
+          </li>
+          <li class="nav-item">
+            <a routerLink="/billing"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: false }" [attr.data-bs-toggle]="isMobile ? 'offcanvas' : null"
+            data-bs-target="#sidebar"  class="nav-link text-white p-3"> Billing </a>
+          </li>
+          <li class="nav-item">
+            <a routerLink="/subscriptions"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: false }" [attr.data-bs-toggle]="isMobile ? 'offcanvas' : null"
+            data-bs-target="#sidebar" class="nav-link text-white p-3"> Subscriptions </a>
+          </li>
+        }
         <li class="nav-item">
           <a routerLink="/notifications"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: false }" [attr.data-bs-toggle]="isMobile ? 'offcanvas' : null"
           data-bs-target="#sidebar" class="nav-link text-white p-3"> Notifications </a>
         </li>
-      @if (userDetails?.role == 'admin' || userDetails?.role == 'owner') {
-        <li class="nav-item">
-          <a routerLink="/staff-management"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: false }" [attr.data-bs-toggle]="isMobile ? 'offcanvas' : null"
-          data-bs-target="#sidebar" class="nav-link text-white p-3"> Staff Management </a>
-        </li>
-        <li class="nav-item">
-          <a routerLink="/billing"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: false }" [attr.data-bs-toggle]="isMobile ? 'offcanvas' : null"
-          data-bs-target="#sidebar"  class="nav-link text-white p-3"> Billing </a>
-        </li>
-        <li class="nav-item">
-          <a routerLink="/subscriptions"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: false }" [attr.data-bs-toggle]="isMobile ? 'offcanvas' : null"
-          data-bs-target="#sidebar" class="nav-link text-white p-3"> Subscriptions </a>
-        </li>
-      }
       }
       <li class="nav-item">
         <a routerLink="/settings"
@@ -105,14 +111,14 @@
           [routerLinkActiveOptions]="{ exact: false }" [attr.data-bs-toggle]="isMobile ? 'offcanvas' : null"
         data-bs-target="#sidebar" class="nav-link text-white p-3"> Settings </a>
       </li>
-    <!-- @if (userDetails?.role == 'owner') {
+    @if (userDetails?.role == 'owner') {
       <li class="nav-item">
         <a routerLink="/developers"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: false }" [attr.data-bs-toggle]="isMobile ? 'offcanvas' : null"
         data-bs-target="#sidebar" class="nav-link text-white p-3"> Developers </a>
       </li>
-    } -->
+    }
     </ul>
   </div>
 </div>

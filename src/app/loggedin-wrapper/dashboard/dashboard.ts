@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { PatientsService } from '../patients/patients.service';
 import { catchError, forkJoin, Observable, of } from 'rxjs';
 import { NotificationsService } from '../notification/notifications.service';
+import { BillingService } from '../billing/billing.service';
+import { DashboardService } from './dashboard.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -29,14 +31,15 @@ export class Dashboard {
   startDate: any = new Date();
   endDate: any = new Date();
   notificationsList: any = [];
+  billingSummaryData: any;
+  summaryData: any;
+  isMobile = window.innerWidth < 768;
 
-  constructor(public appointmentService: AppointmentService, public utilService: UtilityService, public datePipe: DatePipe, public router: Router, public patientService: PatientsService, public notificationsService: NotificationsService) {}
+  constructor(public appointmentService: AppointmentService, public utilService: UtilityService, public datePipe: DatePipe, public router: Router, public patientService: PatientsService, public notificationsService: NotificationsService, public billingService: BillingService, public dashboardService: DashboardService) {}
 
   ngOnInit() {
-    setTimeout(() => { 
-      // this.getInitialData();
-      // this.getAppointmentsList();
-      this.getInitialData(true, true, true);
+    setTimeout(() => {
+      this.getInitialData(true, true, true, true);
     });
   }
 
@@ -44,7 +47,7 @@ export class Dashboard {
     this.configurations= JSON.parse(localStorage.getItem('configurations')!);
   }
 
-  getInitialData(appointmentCall: boolean, patientCall: boolean, notificationCall: boolean) {
+  getInitialData(summaryData: boolean, notificationCall: boolean, billingCall: boolean, appointmentCall: boolean) {
     // const startDate = new Date();
     this.startDate.setHours(0);
     this.startDate.setMinutes(0);
@@ -69,22 +72,22 @@ export class Dashboard {
     
     
     const apis: { [key: string]: Observable<any> } = {};
-    if(appointmentCall) {
+    if(summaryData) {
       const obj = {
-        startDate: this.datePipe.transform(this.startDate, 'yyy-MM-dd'),
-        endDate: this.datePipe.transform(this.endDate, 'yyyy-MM-dd'),
-        status: 'Upcoming'
-      }
-      apis['appointmentList'] = this.handleError(this.appointmentService.getAppointmentsList(this.paginationConfig, obj), null)
-    }
-    if(patientCall) {
-      const data = {
         startDate: this.datePipe.transform(this.startDate, 'yyyy-MM-dd'),
         endDate: this.datePipe.transform(this.endDate, 'yyyy-MM-dd'),
-        type: 0
+        // status: 'Upcoming'
       }
-      apis['patientsList'] = this.handleError(this.patientService.getPatientsList(this.paginationConfig, data), null)
+      apis['summaryDataList'] = this.handleError(this.dashboardService.getDashboardSummaryCounts(obj), null)
     }
+    // if(patientCall) {
+    //   const data = {
+    //     startDate: this.datePipe.transform(this.startDate, 'yyyy-MM-dd'),
+    //     endDate: this.datePipe.transform(this.endDate, 'yyyy-MM-dd'),
+    //     type: 0
+    //   }
+    //   apis['patientsList'] = this.handleError(this.patientService.getPatientsList(this.paginationConfig, data), null)
+    // }
     if(notificationCall) {
       const obj = {
         startDate: this.datePipe.transform(this.startDate, 'yyyy-MM-dd'),
@@ -93,21 +96,45 @@ export class Dashboard {
       };
       apis['notificationList'] = this.handleError(this.notificationsService.getNotificationsList(obj), null)
     }
+    if(billingCall) {
+      const obj = {
+        startDate: this.datePipe.transform(this.startDate, 'yyyy-MM-dd'),
+        endDate: this.datePipe.transform(this.endDate, 'yyyy-MM-dd'),
+        status: 'unread',
+      };
+      apis['billingList'] = this.handleError(this.billingService.getBillingSummary(obj), null)
+    }
+    if(appointmentCall) {
+      const obj = {
+        startDate: this.datePipe.transform(this.startDate, 'yyyy-MM-dd'),
+        endDate: this.datePipe.transform(this.endDate, 'yyyy-MM-dd'),
+        status: 'Upcoming'
+      }
+      apis['appointmentList'] = this.handleError(this.appointmentService.getAppointmentsList(this.paginationConfig, obj), null)
+    }
     this.utilService.setSpinnerState(true);
     forkJoin(apis).subscribe({
       next: (results: any) => {
         this.utilService.setSpinnerState(false);
-        if(appointmentCall) {
-          const appointmentList = results.appointmentList;
-          this.updateAppointmentsList(appointmentList);
+        if(summaryData) {
+          const summaryDataList = results.summaryDataList;
+          this.updateSummaryData(summaryDataList);
         }
-        if(patientCall) {
-          const patientsList = results.patientsList;
-          this.updatePatientsList(patientsList);
-        }
+        // if(patientCall) {
+        //   const patientsList = results.patientsList;
+        //   this.updatePatientsList(patientsList);
+        // }
         if(notificationCall) {
           const notificationList = results.notificationList;
           this.updateNotifications(notificationList); 
+        }
+        if(billingCall) {
+          const billingList = results.billingList;
+          this.updateBilling(billingList);
+        }
+        if(appointmentCall) {
+          const appointmentList = results.appointmentList;
+          this.updateAppointmentsList(appointmentList);
         }
       },
       error: (err) => {
@@ -137,6 +164,15 @@ export class Dashboard {
     }
   }
 
+  updateSummaryData(data: any) {
+    if(data) {
+      this.summaryData = data?.data;
+      // this.paginationConfig.page = list?.data?.page;
+      // this.paginationConfig.pageSize = list?.data?.page_size;
+      // this.paginationConfig.totalRecords = list?.data?.total_records;
+    }
+  }
+
   updatePatientsList(list: any) {
     if(list) {
       this.patientsList = list?.data?.patient_list;
@@ -149,9 +185,13 @@ export class Dashboard {
     }
   }
 
+  updateBilling(data: any) {
+    this.billingSummaryData = data?.data;
+  }
+
   handlePageEvent(event: any) {
     this.paginationConfig.page = event.pageIndex + 1;
-    this.getInitialData(true, false, false);
+    this.getInitialData(false, false, false, true);
   }
 
   appointmentAction(item: any) {
@@ -160,7 +200,7 @@ export class Dashboard {
 
   addEvent(event: any) {
     if(this.startDate && this.endDate) {
-      this.getInitialData(true, true, true);
+      this.getInitialData(true, true, true, true);
     }
   }
 

@@ -20,10 +20,10 @@ export class ForgotPassword {
   isMobile = window.innerWidth < 768;
   forgotPasswordToken: any = '';
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event?: any) {
-    this.isMobile = window.innerWidth < 768; // Consider 768px as the breakpoint for mobile
-  }
+  // @HostListener('window:resize', ['$event'])
+  // onResize(event?: any) {
+  //   this.isMobile = window.innerWidth < 768; // Consider 768px as the breakpoint for mobile
+  // }
 
   constructor(
     public router: Router,

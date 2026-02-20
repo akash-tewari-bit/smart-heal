@@ -3,12 +3,24 @@
     <div class="col-12">
       <h3>Appointments</h3>
     </div>
-    <div class="col-12 d-flex justify-content-end align-items-center mb-4">
-      <button class="btn btn-primary" routerLink="/appointments/schedule">
+    <div class="col-12 d-flex align-items-center mb-4" [ngClass]="{'justify-content-end': !isMobile}">
+      <button class="btn btn-primary" [disabled]="noAppointmentSchedulingText1 && noAppointmentSchedulingText2" routerLink="/appointments/schedule">
         <i class="bi bi-plus-square me-2"></i>Schedule Appointment
       </button>
     </div>
     <div class="col-12">
+      @if (userDetails?.role !== 'doctor' && userDetails?.role !== 'admin' && userDetails?.role !== 'owner' && noAppointmentSchedulingText1) {
+        <div class="alert alert-info" role="alert">
+        <strong>Note</strong>: Please contact admin to schedule appointments.
+      </div>
+      }
+      @else {
+        @if (noAppointmentSchedulingText1 && noAppointmentSchedulingText2) {
+          <div class="alert alert-info" role="alert">
+            <strong>Note</strong>: {{noAppointmentSchedulingText1}} {{noAppointmentSchedulingText2}}
+          </div>
+        }
+      }
       <app-filter (filterData)="updateRecords($event)"></app-filter>
       <div class="card border-0">
         <div

@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
@@ -32,11 +33,24 @@ export class Filter {
   month: any = ''
   age: any = ''
   @Output() filterData = new EventEmitter<any>();
+  startDate: any = new Date();
+  endDate: any = new Date();
+  isMobile = window.innerWidth < 768;
+
+  constructor(public datePipe: DatePipe) { }
+
+  ngOnInit() {
+    setTimeout(() => {
+     this.updateRecords();
+    });
+  }
 
   updateRecords() {
     const obj = {
       text: this.text,
-      month: this.month,
+      startDate: this.datePipe.transform(this.startDate, 'yyyy-MM-dd'),
+      endDate: this.datePipe.transform(this.endDate, 'yyyy-MM-dd'),
+      // month: this.month,
       ...this.getAgeValue()
     }
     this.filterData.emit(obj);
@@ -44,8 +58,10 @@ export class Filter {
 
   resetRecords() {
     this.text = '';
-    this.month = '';
+    // this.month = '';
     this.age = '';
+    this.startDate = new Date();
+    this.endDate = new Date();
     this.updateRecords();
   }
 
@@ -78,5 +94,11 @@ export class Filter {
         return obj
     }
     return {}
+  }
+
+  addEvent(event: any) {
+    if(this.startDate && this.endDate) {
+      // this.updateRecords();
+    }
   }
 }

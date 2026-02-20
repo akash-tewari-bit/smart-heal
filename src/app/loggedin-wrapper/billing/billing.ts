@@ -14,32 +14,7 @@ import { catchError, forkJoin, Observable, of } from 'rxjs';
 export class Billing {
   upi = 30;
   cash = 70;
-  billingList: any = [
-    // {
-    //   firstName: 'Akash',
-    //   lastName: 'Tewari',
-    //   date: '12/30/2025',
-    //   staffName: 'Sam',
-    //   paymentType: 'UPI',
-    //   amount: 500,
-    // },
-    // {
-    //   firstName: 'Sam',
-    //   lastName: 'Paul',
-    //   date: '12/30/2025',
-    //   staffName: 'Sam',
-    //   paymentType: 'Cash',
-    //   amount: 500,
-    // },
-    // {
-    //   firstName: 'Stone',
-    //   lastName: 'Cold',
-    //   date: '12/30/2025',
-    //   staffName: 'Sam',
-    //   paymentType: 'UPI',
-    //   amount: 500,
-    // },
-  ];
+  billingList: any = [];
   paginationConfig = {
     page: 1,
     pageSize: 5,
@@ -51,14 +26,16 @@ export class Billing {
   endDate: any;
   summaryData: any;
   chartInstance: Chart | undefined;
+  hasSelectedBilling: any[] = [];
+  exportList: any = [];
 
-  constructor(public billingService: BillingService, public utilService: UtilityService, public datePipe: DatePipe) {}
+  constructor(public billingService: BillingService, public utilService: UtilityService, public datePipe: DatePipe) { }
 
   ngOnInit() {
     const today = new Date();
     this.startDate = new Date(today.getFullYear(), today.getMonth(), 1);
-    this.endDate = new Date(today.getFullYear(), today.getMonth()+1, 0);
-    setTimeout(() => { 
+    this.endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    setTimeout(() => {
       this.getInitialData(true, true);
     });
   }
@@ -94,6 +71,10 @@ export class Billing {
   }
 
   updateRecords(data: any) {
+    if(data?.action === 'delete') {
+      this.deleteBilling();
+      return;
+    }
     this.paginationConfig.page = 1;
     this.paginationConfig.pageSize = 10;
     this.billingList = [];
@@ -108,57 +89,165 @@ export class Billing {
   }
 
   getInitialData(summary: boolean, list: boolean, event?: any) {
-      const obj = {
+    const obj = {
       startDate: this.datePipe.transform(this.startDate, 'yyyy-MM-dd'),
       endDate: this.datePipe.transform(this.endDate, 'yyyy-MM-dd'),
       type: event?.paymentType ?? null
     }
-      const apis: { [key: string]: Observable<any> } = {};
-      if(summary) {
-        apis['summary'] = this.handleError(this.billingService.getBillingSummary(obj), null)
-      }
-      if(list) {
-        apis['list'] = this.handleError(this.billingService.getBillingDetails(this.paginationConfig, obj), null)
-      }
-      this.utilService.setSpinnerState(true);
-      forkJoin(apis).subscribe({
-        next: (results: any) => {
-          this.utilService.setSpinnerState(false);
-          if(summary) {
-            const summaryData = results.summary;
-            this.updateSummaryData(summaryData);
-          }
-          if(list) {
-            const billingList = results.list;
-            this.updateBillingDetails(billingList);
-          }
-        },
-        error: (err) => {
-          this.utilService.setSpinnerState(false);
-          // This won't usually get triggered due to catchError inside each call,
-          // but include it just in case.
-          // console.error('Unexpected error in forkJoin:', err);
+    const apis: { [key: string]: Observable<any> } = {};
+    if (summary) {
+      apis['summary'] = this.handleError(this.billingService.getBillingSummary(obj), null)
+    }
+    if (list) {
+      apis['list'] = this.handleError(this.billingService.getBillingDetails(this.paginationConfig, obj), null)
+    }
+    this.utilService.setSpinnerState(true);
+    forkJoin(apis).subscribe({
+      next: (results: any) => {
+        this.utilService.setSpinnerState(false);
+        if (summary) {
+          const summaryData = results.summary;
+          this.updateSummaryData(summaryData);
         }
+        if (list) {
+          const billingList = results.list;
+          this.updateBillingDetails(billingList);
+        }
+      },
+      error: (err) => {
+        this.utilService.setSpinnerState(false);
+      }
+    });
+  }
+
+  private handleError<T>(obs$: Observable<T>, fallback: T): Observable<T> {
+    return obs$.pipe(
+      catchError(error => {
+        // console.error(`${label} API failed:`, error);
+        return of(fallback);
+      })
+    );
+  }
+
+  updateSummaryData(summaryData: any) {
+    this.summaryData = summaryData?.data;
+    this.initializeChart();
+  }
+
+  addEvent(event: any) {
+    if (this.startDate && this.endDate) {
+      this.getInitialData(true, true);
+    }
+  }
+
+  updateSelectedBilling(event: any, item: any) {
+    if (event?.target?.checked) {
+      if (!this.hasSelectedBilling.some((selected: any) => selected.billing_id === item.billing_id)) {
+        this.hasSelectedBilling.push(item);
+      }
+    } else {
+      this.hasSelectedBilling = this.hasSelectedBilling.filter((selected: any) => selected.billing_id !== item.billing_id);
+    }
+  }
+
+  downloadReport() {
+    this.utilService.setSpinnerState(true);
+    const obj = {
+      startDate: this.datePipe.transform(this.startDate, 'yyyy-MM-dd'),
+      endDate: this.datePipe.transform(this.endDate, 'yyyy-MM-dd'),
+      type: null
+    }
+    this.billingService.getBillingDetails(null, obj).subscribe((res: any) => {
+      if (res?.success) {
+        this.utilService.setSpinnerState(false);
+        this.exportList = res?.data?.billing_list;
+        this.exportToCSV();
+      } else {
+        this.utilService.setSpinnerState(false);
+        this.utilService.showToastMessage({
+          message: 'Failed to fetch billing data for export',
+          success: false
+        });
+      }
+    }, err => {
+      this.utilService.setSpinnerState(false);
+      this.utilService.showToastMessage({
+        message: 'Failed to fetch billing data for export',
+        success: false
       });
+    });
+  }
+
+  private exportToCSV() {
+    if (this.exportList.length === 0) {
+      this.utilService.showToastMessage({
+        message: 'No data to download',
+        success: false
+      });
+      return;
     }
 
-    private handleError<T>(obs$: Observable<T>, fallback: T): Observable<T> {
-        return obs$.pipe(
-          catchError(error => {
-            // console.error(`${label} API failed:`, error);
-            return of(fallback);
-          })
-        );
-      }
+    // Convert data to CSV
+    const csvContent = this.convertToCSV(this.exportList);
+    
+    // Create blob and download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    const fileName = `Billing_Report_${this.datePipe.transform(this.startDate, 'yyyy-MM-dd')}_${this.datePipe.transform(this.endDate, 'yyyy-MM-dd')}.csv`;
+    
+    link.setAttribute('href', url);
+    link.setAttribute('download', fileName);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
 
-      updateSummaryData(summaryData: any) {
-        this.summaryData = summaryData?.data;
-        this.initializeChart();
-      }
+  private convertToCSV(data: any[]): string {
+    if (data.length === 0) return '';
 
-      addEvent(event: any) {
-        if(this.startDate && this.endDate) {
-          this.getInitialData(true, true);
+    // Define custom headers
+    const headerLabels = ['Patient Name', 'Date', 'Type', 'Amount'];
+    
+    // Create header row
+    const csvHeader = headerLabels.join(',');
+    
+    // Create data rows
+    const csvRows = data.map((item: any) => {
+      const values = [
+        `${item.firstName || ''} ${item.lastName || ''}`.trim(),
+        item.billingDate || '',
+        item.billingType || '',
+        item.amount || ''
+      ];
+
+      return values.map((value: string) => {
+        if (value === null || value === undefined || value === '') return '';
+        const stringValue = String(value);
+        if (stringValue.includes(',') || stringValue.includes('"')) {
+          return `"${stringValue.replace(/"/g, '""')}"`;
         }
-      }
+        return stringValue;
+      }).join(',');
+    });
+
+    return [csvHeader, ...csvRows].join('\n');
+  }
+
+  deleteBilling() {
+    this.billingService.deletePaymentBilling({ ids_to_delete: this.hasSelectedBilling.map(item => item.billing_id) }).subscribe((res: any) => {
+      this.utilService.showToastMessage({
+        message: 'Selected billing records deleted successfully',
+        success: true
+      });
+      this.hasSelectedBilling = [];
+      this.getInitialData(true, true);
+    }, err => {
+      this.utilService.showToastMessage({
+        message: 'Failed to delete selected billing records',
+        success: false
+      });
+    })
+  }
 }

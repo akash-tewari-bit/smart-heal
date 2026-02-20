@@ -85,7 +85,6 @@ export class Subscription {
     this.settingsService.getPlans().subscribe((res: any) => {
       if(res?.success) {
         this.utilService.setSpinnerState(false);
-        console.log(res);
         this.plans = res?.data;
       }
       else {
@@ -111,8 +110,6 @@ export class Subscription {
         this.utilService.setSpinnerState(false);
         this.planDetails = res?.data;
         if(this.planDetails?.length) this.activeplan = (this.planDetails.filter((e: any) => e.is_active))[0];
-        console.log(this.activeplan);
-        
       }
       else {
         this.utilService.setSpinnerState(false);

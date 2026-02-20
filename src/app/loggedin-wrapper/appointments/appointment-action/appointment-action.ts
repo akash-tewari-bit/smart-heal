@@ -5,6 +5,7 @@ import { UtilityService } from '../../../shared/services/utility.service';
 import { AppointmentService } from '../appointment.service';
 import { SettingsService } from '../../settings/settings.service';
 import { DatePipe } from '@angular/common';
+import { MedicineManagementService } from '../../medicine-management/medicine-management.service';
 
 
 @Component({
@@ -16,24 +17,6 @@ import { DatePipe } from '@angular/common';
 export class AppointmentAction {
   appointmentForm!: FormGroup;
   patientAppointmentData: any = '';
-  // patientAppointmentData = {
-  //   firstName: 'Akash',
-  //   lastName: 'Tewari',
-  //   age: '30',
-  //   mobile: '9899273448',
-  //   gender: 'male',
-  //   address: 'Kashipur',
-  //   bloodGroup: 'B+',
-  //   weight: '84',
-  //   bloodPressureUpper: '120',
-  //   bloodPressureLower: '80',
-  //   temperature: '98.3',
-  //   date: "2025-08-25T18:30:00.000Z",
-  //   time: "2025-08-23T08:30:00.000Z",
-  //   lastVisit: 'Nov 10, 2024',
-  //   followUpVisit: '',
-  //   currentVisit: 'Aug 23, 2025'
-  // };
   editAppointmentDetails = false;
   upiId = '';
   name = '';
@@ -52,8 +35,14 @@ export class AppointmentAction {
   interval = 15;
   bookedSlots: any = [];
   todayDate = new Date();
+  autoCompleteData: any = [];
+  selectedInputIndex = -1;
+  medicineList: any = [];
+  appointmentsLeft: any = 0;
+  noAppointmentSchedulingText1: any;
+  noAppointmentSchedulingText2: any;
 
-  constructor(public fb: FormBuilder, public router: Router, public utilService: UtilityService, public appointmentService: AppointmentService, public activatedRoute: ActivatedRoute, public settingsService: SettingsService, public datePipe: DatePipe) {
+  constructor(public fb: FormBuilder, public router: Router, public utilService: UtilityService, public appointmentService: AppointmentService, public activatedRoute: ActivatedRoute, public settingsService: SettingsService, public datePipe: DatePipe, public medicineManagementService: MedicineManagementService) {
     this.initiateForm();
   }
 
@@ -63,7 +52,23 @@ export class AppointmentAction {
     if(this.appointmentId) {
       setTimeout(() => { 
         this.getAppointmentDetails();
+        this.getMedicineList();
       });
+    }
+  }
+
+  ngAfterContentChecked() {
+    this.appointmentsLeft = this.utilService.configurations?.subscription?.appointment_left ?? 0;
+    const todayDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd')
+    if(todayDate !== null && todayDate > this.utilService.configurations?.subscription?.end_date) {
+      this.noAppointmentSchedulingText1 = this.utilService.subscriptionExpiredText;
+      this.noAppointmentSchedulingText2 = this.utilService.renewPlanText;
+    }
+    if(todayDate !== null && todayDate <= this.utilService.configurations?.subscription?.end_date) {
+      if(!this.appointmentsLeft) {
+        this.noAppointmentSchedulingText1 = this.utilService.appointmentLimitReachedText;
+        this.noAppointmentSchedulingText2 = this.utilService.upgradePlanText;
+      }
     }
   }
 
@@ -74,8 +79,9 @@ export class AppointmentAction {
   createElements(): FormGroup {
     return this.fb.group({
       medicine: [''],
+      composition: [''],
       type: ['tablet'],
-      count: [1],
+      count: ['1'],
       morning: [false],
       afternoon: [false],
       night: [false],
@@ -100,8 +106,6 @@ export class AppointmentAction {
     this.utilService.setSpinnerState(true);
     this.appointmentService.getAppointmentsData(this.appointmentId).subscribe(
       (res: any) => {
-        console.log(res);
-        
         this.utilService.setSpinnerState(false);
         if(res?.success) {
           this.patientAppointmentData = res?.data;
@@ -122,32 +126,6 @@ export class AppointmentAction {
                 })
               );
             }
-          // this.patientAppointmentData['status'] = 2; //Mock status - to be removed after implementing from backend
-          // this.patientAppointmentData['medicationDetails'] = [
-          //   {
-          //     medicine: 'Dolo 500',
-          //     type: 'tablet',
-          //     count: 1,
-          //     morning: true,
-          //     afternoon: false,
-          //     night: true,
-          //     beforeMeal: false,
-          //     duration: '1 Week',
-          //     notes: 'SOS'
-          //   },
-          //   {
-          //     medicine: 'Dolo 500',
-          //     type: 'syrup',
-          //     count: '10 ML',
-          //     morning: true,
-          //     afternoon: true,
-          //     night: true,
-          //     beforeMeal: true,
-          //     duration: '1 Week',
-          //     notes: 'SOS'
-          //   }
-          // ]
-
           this.initiateForm(this.patientAppointmentData);
         }
         else {
@@ -178,12 +156,13 @@ export class AppointmentAction {
         analysis: form.analysis,
         advice: form.advice,
         tests: form.tests,
-        followUpVisit: form.followUpVisit,
+        followUpVisit: this.datePipe.transform(form.followUpVisit, 'yyyy-MM-dd'),
         medicationDetails: []
       }
       form.medicationDetails.forEach((e: any) => {
         let obj = {
           medicine: e.medicine,
+          composition: e.composition,
           type: e.type,
           count: e.count,
             morning: e.morning,
@@ -196,7 +175,6 @@ export class AppointmentAction {
           }
           payload.medicationDetails.push(obj)
         })
-        console.log(payload);
       this.utilService.setSpinnerState(true);
       this.appointmentService.submitAppointment(this.utilService.transformObj(payload)).subscribe(
         (res: any) => {
@@ -209,7 +187,6 @@ export class AppointmentAction {
               success: true,
             });
             this.getAppointmentDetails();
-            // this.router.navigate(['/appointments']);
           } else {
             this.formSubmitted = false;
             this.utilService.setSpinnerState(false);
@@ -248,7 +225,8 @@ export class AppointmentAction {
     this.formSubmitted = true;
     if (this.appointmentForm.valid) {
       const form = this.appointmentForm.getRawValue();
-      const [hours, minutes] = form.time.split(':').map(Number);
+      const convertedTime = this.utilService.convertTimeFormat(true, form.time);
+      const [hours, minutes] = convertedTime.split(':').map(Number);
       const date = this.datePipe.transform(form.date, 'MM/dd/yyyy')
       const time = this.datePipe.transform((new Date()).setHours(hours, minutes, 0, 0), 'HH:mm:ss')
       const payload: any = {
@@ -265,12 +243,12 @@ export class AppointmentAction {
           bloodPressureLower: form.bloodPressureLower,
           temperature: form.temperature,
           temperatureType: form.temperatureType,
+          pulseRate: form.pulseRate,
           patient_id: this.patientAppointmentData?.patient_id ?? null
         },
         scheduled_date: date,
         scheduled_time: time
       }
-      console.log(payload);
       this.utilService.setSpinnerState(true);
       this.appointmentService.updateAppointment(this.appointmentId, this.utilService.transformObj(payload)).subscribe(
         (res: any) => {
@@ -369,14 +347,15 @@ export class AppointmentAction {
       bloodPressureUpper: [data?.bloodPressureUpper ?? null],
       bloodPressureLower: [data?.bloodPressureLower ?? null],
       temperature: [data?.temperature ?? null],
-      temperatureType: [data?.temperatureType ?? 'celsius'],
+      temperatureType: [{ value: data?.temperatureType ?? 'fahrenheit', disabled: true }],
+      pulseRate: [data?.pulseRate ?? null],
       analysis: [''],
       advice: [''],
       tests: [''],
       followUpVisit: [data?.followUpVisit ?? null],
       medicationDetails: this.fb.array([this.createElements()]),
       date: [{ value: data?.scheduled_date ?? '', disabled: false }, [Validators.required]],
-      time: [{ value: data?.scheduled_time ?? '', disabled: false }, [Validators.required]],
+      time: [{ value: data?.scheduled_time ? this.utilService.convertTimeFormat(false, data?.scheduled_time) : '', disabled: false }, [Validators.required]],
     })
     if(data) {
       this.checkBookedSlots(data);
@@ -439,15 +418,19 @@ export class AppointmentAction {
     );
   }
 
-  addEvent(data: any) {
-    this.checkBookedSlots();
+  addEvent(data: any, type?: any) {
+    if(type === 'follow-up') {
+      this.appointmentForm?.get('followUpVisit')?.setValue(data?.value);
+    }
+    else {
+      this.checkBookedSlots();
+    }
   }
 
   checkBookedSlots(data?: any) {
     const form = this.appointmentForm.getRawValue();
     const date = this.datePipe.transform(form.date, 'yyyy-MM-dd')
     this.appointmentService.getBookedSlots(date).subscribe((res: any) => {
-      console.log(res);
       this.bookedSlots = res?.data;
       this.generateTimeOptions(data);
     },
@@ -462,16 +445,44 @@ export class AppointmentAction {
       for (let minute = 0; minute < 60; minute += this.interval) {
         const time = this.formatTime(hour, minute);
         const disabled = this.bookedSlots.includes(time);
-        this.timeOptions.push({ time, disabled });
+        this.timeOptions.push({ time: this.utilService.convertTimeFormat(false, time), disabled });
       }
     }
-    if(data) this.appointmentForm?.get('time')?.setValue(data?.scheduled_time.split(':').slice(0, 2).join(':'));
+    if(data && data?.scheduled_time) this.appointmentForm?.get('time')?.setValue(this.utilService.convertTimeFormat(false, data?.scheduled_time));
   }
 
   formatTime(hour: number, minute: number): string {
     const hh = hour.toString().padStart(2, '0');
     const mm = minute.toString().padStart(2, '0');
     return `${hh}:${mm}`;
+  }
+
+  autoComplete(event: any, index: any) {
+    this.medicationDetails.controls[index].get('composition')?.setValue('');
+    this.selectedInputIndex = index;
+    this.autoCompleteData = this.appointmentService.getFilteredMedicineList(event?.target?.value, this.medicineList);
+  }
+  
+  selectMedicine(medicine: any, index: number) {
+    this.medicationDetails.controls[index].get('medicine')?.setValue(medicine['medicine_name']);
+    this.medicationDetails.controls[index].get('composition')?.setValue(medicine['composition']);
+    this.autoCompleteData = [];
+    this.selectedInputIndex = -1;
+  }
+
+  getMedicineList() {
+    this.medicineList = [];
+    this.medicineManagementService.getMedicinesList({}).subscribe(
+      (res: any) => {
+        if (res?.success) {
+          this.medicineList = res?.data?.medicines_list;
+        }
+      }
+    );
+  }
+
+  upgradePlan() {
+    this.router.navigate(['/subscriptions']);
   }
 
 }

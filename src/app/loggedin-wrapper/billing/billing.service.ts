@@ -11,24 +11,24 @@ export class BillingService {
   constructor(public http: HttpClient) {}
 
   getBillingDetails(config: any, data: any) {
-    let queryString = '';
+    let params = new HttpParams();
     if (config?.page) {
-      queryString += `?page=${config?.page}`;
+      params = params.set('page', config?.page);
     }
     if (config?.pageSize) {
-      queryString += `&page_size=${config?.pageSize}`;
+      params = params.set('page_size', config?.pageSize);
     }
     if (data?.startDate) {
-      queryString += `&startDate=${data?.startDate}`;
+      params = params.set('startDate', data?.startDate);
     }
     if (data?.endDate) {
-      queryString += `&endDate=${data?.endDate}`;
+      params = params.set('endDate', data?.endDate);
     }
     if (data?.type) {
-      queryString += `&type=${data?.type}`;
+      params = params.set('type', data?.type);
     }
-    let url = `${environment.baseUrl}billings/billing_details${queryString}`;
-    return this.http.get<any>(url);
+    let url = `${environment.baseUrl}billings/billing_details`;
+    return this.http.get<any>(url, { params });
   }
 
   getBillingSummary(data: any) {
@@ -41,5 +41,10 @@ export class BillingService {
     }
     let url = `${environment.baseUrl}billings/billing_summary`;
     return this.http.get<any>(url, { params });
+  }
+
+  deletePaymentBilling(payload: any) {
+    let url = `${environment.baseUrl}billings/delete_billing`;
+    return this.http.post<any>(url, payload);
   }
 }

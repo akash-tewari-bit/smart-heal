@@ -13,11 +13,11 @@ export class UPI {
   upiForm!: FormGroup;
   @Input() configurations: any;
   currencies = [
-  { code: 'USD', name: 'United States Dollar' },
+  // { code: 'USD', name: 'United States Dollar' },
   { code: 'INR', name: 'Indian Rupee' },
-  { code: 'EUR', name: 'Euro' },
-  { code: 'GBP', name: 'British Pound' },
-  { code: 'JPY', name: 'Japanese Yen' },
+  // { code: 'EUR', name: 'Euro' },
+  // { code: 'GBP', name: 'British Pound' },
+  // { code: 'JPY', name: 'Japanese Yen' },
 ];
 formSubmitted = false;
 
@@ -25,7 +25,7 @@ constructor(public fb: FormBuilder, public utilService: UtilityService, public s
   this.upiForm = this.fb.group({
     upi_id: ['', Validators.required],
     name: ['', Validators.required],
-    currency: ['', Validators.required]
+    currency: ['INR', Validators.required]
   })
 }
 
@@ -73,6 +73,9 @@ upiConfiguration() {
   this.upiForm.get('upi_id')?.setValue(this.configurations?.upi?.upi_id);
   this.upiForm.get('name')?.setValue(this.configurations?.upi?.name);
   this.upiForm.get('currency')?.setValue(this.configurations?.upi?.currency);
+  if(!this.configurations || !this.configurations?.upi?.currency) {
+    this.upiForm.get('currency')?.setValue('INR')
   }
+}
 
 }

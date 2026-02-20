@@ -1,0 +1,70 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 mb-4">
+            <h3>{{medicineId ? 'Edit' : 'Add'}} Medicine</h3>
+        </div>
+    </div>
+    <form [formGroup]="medicineForm">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Medicine Name</label>
+                <input type="text" [ngClass]="{
+            'error-control': formSubmitted && medicineForm.get('medicineName')?.errors
+          }" formControlName="medicineName" placeholder="Medicine Name" class="form-control" />
+                @if (formSubmitted && medicineForm.invalid && medicineForm.touched) { @if
+                (medicineForm.get('medicineName')?.errors?.['required']) {
+                <p class="error-text">required</p>
+                }
+                <!-- @if (medicineForm.get('medicineName')?.errors?.['minlength']) {
+        <p class="error-text">required minimum length is 3</p>
+        } @if (medicineForm.get('medicineName')?.errors?.['maxlength']) {
+        <p class="error-text">required maximum length is 15</p>
+        }  -->
+                }
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Composition</label>
+                <input type="text" [ngClass]="{
+            'error-control': formSubmitted && medicineForm.get('composition')?.errors
+          }" formControlName="composition" placeholder="Composition" class="form-control" />
+                @if (formSubmitted && medicineForm.invalid && medicineForm.touched) { @if
+                (medicineForm.get('composition')?.errors?.['required']) {
+                <p class="error-text">required</p>
+                }
+                <!-- @if (medicineForm.get('composition')?.errors?.['minlength']) {
+        <p class="error-text">required minimum length is 3</p>
+        } @if (medicineForm.get('composition')?.errors?.['maxlength']) {
+        <p class="error-text">required maximum length is 15</p>
+        }  -->
+                }
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Manufacturer</label>
+                <input type="text" [ngClass]="{
+            'error-control': formSubmitted && medicineForm.get('manufacturer')?.errors
+          }" formControlName="manufacturer" placeholder="Manufacturer" class="form-control" />
+                @if (formSubmitted && medicineForm.invalid && medicineForm.touched) { @if
+                (medicineForm.get('manufacturer')?.errors?.['required']) {
+                <p class="error-text">required</p>
+                }
+                <!-- @if (medicineForm.get('manufacturer')?.errors?.['minlength']) {
+        <p class="error-text">required minimum length is 3</p>
+        } @if (medicineForm.get('manufacturer')?.errors?.['maxlength']) {
+        <p class="error-text">required maximum length is 15</p>
+        }  -->
+                }
+            </div>
+
+            <div class="col-12">
+                <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-primary" (click)="createUpdateMedicine()">
+                        Submit
+                    </button>
+                    <button type="button" class="btn btn-outline-primary" (click)="cancel()">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

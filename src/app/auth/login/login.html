@@ -32,17 +32,92 @@
                             }
                         }
                     </div>
-                    <div class="col-md-12 text-end">
+                    <div class="col-md-12 text-end mb-3">
                         <div class="d-grid gap-3">
                             <a class="cursor-pointer" (click)="forgot()">Forgot your password?</a>
                             <button class="btn btn-primary" (click)="login()">Sign in</button>
-                            <!-- <button class="btn btn-outline-secondary" (click)="signUp()">Signup</button> -->
                         </div>
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <div class="d-flex gap-2 terms-condition">
+                            <label class="form-check-label" for="inlineCheckbox1"
+                            >
+                            By clicking on 'Sign In', you acknowledge the <a class="cursor-pointer" href="docs/Terms_of_Service_Smart_Heal_App_1.0.pdf" target="_blank">Terms of Services</a> and <a class="cursor-pointer" href="docs/Privacy_Policy_Smart_Heal_App_1.0.pdf" target="_blank">Privacy Policy</a>
+                            </label
+                            >
+                      </div>
                     </div>
                 </div>
             </div>
-                <p class="create-account-wrapper">New to SmartHeal? <a class="cursor-pointer" (click)="signUp()">Create Account</a></p>
+                <p class="create-account-wrapper">New to SmartHeal App? <a class="cursor-pointer" (click)="signUp()">Create Account</a></p>
             </form>
         </div>
     </div>
 </div>
+
+
+
+
+
+
+
+
+<!-- <div class="login-page login-wrapper">
+    <img src="assets/images/login-wrapper-img.png" alt="EMR Background" class="background-image" />
+
+    <div class="overlay">
+        <div class="login-card">
+            <form [formGroup]="loginForm">
+                <div class="login-form p-4">
+                    <div class="app-logo mt-3 mb-3 text-center">
+                        <img src="assets/images/logo_mobile.png" alt="Logo">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-3 text-center">
+                            <h4>Sign in to your account</h4>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <input type="text"
+                                [ngClass]="{'error-control': formSubmitted && loginForm.get('username')?.errors}"
+                                formControlName="username" placeholder="Username" class="form-control">
+                            @if (formSubmitted && loginForm.invalid && loginForm.touched) {
+                            @if (loginForm.get('username')?.errors?.['required']) {
+                            <p class="error-text">required</p>
+                            }
+                            }
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <input type="password"
+                                [ngClass]="{'error-control': formSubmitted && loginForm.get('password')?.errors}"
+                                formControlName="password" placeholder="Password" class="form-control">
+                            @if (formSubmitted && loginForm.invalid && loginForm.touched) {
+                            @if (loginForm.get('password')?.errors?.['required']) {
+                            <p class="error-text">required</p>
+                            }
+                            }
+                        </div>
+                        <div class="col-md-12 text-end mb-3">
+                            <div class="d-grid gap-3">
+                                <a class="cursor-pointer" (click)="forgot()">Forgot your password?</a>
+                                <button class="btn btn-primary" (click)="login()">Sign in</button>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-2">
+                            <div class="d-flex gap-2 terms-condition">
+                                <label class="form-check-label" for="inlineCheckbox1">
+                                    By clicking on 'Sign In', you acknowledge the <a class="cursor-pointer"
+                                        href="docs/Terms_of_Service_Smart_Heal_App_1.0.pdf" target="_blank">Terms of
+                                        Services</a> and <a class="cursor-pointer"
+                                        href="docs/Privacy_Policy_Smart_Heal_App_1.0.pdf" target="_blank">Privacy
+                                        Policy</a>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="create-account-wrapper">New to SmartHeal App? <a class="cursor-pointer"
+                        (click)="signUp()">Create Account</a></p>
+            </form>
+        </div>
+    </div>
+</div> -->

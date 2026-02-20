@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
+import medicinesData from '../../shared/mock-json/medicines.json';
 
 @Injectable({
   providedIn: 'root'
@@ -72,6 +73,27 @@ export class AppointmentService {
   updateAppointment(id: any, payload: any) {
     const url = `${environment.baseUrl}appointments/update_appointment/${id}`
     return this.http.post<any>(url, payload);
+  }
+
+  /**
+   * Filter medicines by name (case-insensitive)
+   * @param query Search query
+   * @returns Filtered medicines array
+   */
+  getFilteredMedicineList(query: any, list: any[]) {
+    // Return empty array if query is empty or not provided
+    if (!query || query.trim() === '') {
+      return [];
+    }
+
+    // Convert query to lowercase for case-insensitive search
+    const lowerCaseQuery = query.toLowerCase().trim();
+    // Filter medicines by Medicine Name
+    const filtered = list.filter((medicine: any) =>
+      medicine['medicine_name']?.toLowerCase().includes(lowerCaseQuery)
+  );
+
+    return filtered;
   }
   
 }

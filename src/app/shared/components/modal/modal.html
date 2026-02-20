@@ -11,9 +11,11 @@
                     <div class="modal-body">
                         <ng-content></ng-content>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" [disabled]="disablePrimaryButton" class="btn btn-primary" (click)="successEvent()">{{buttonText}}</button>
-                    </div>
+                    @if (showActionButtons) {
+                        <div class="modal-footer">
+                            <button type="button" [disabled]="disablePrimaryButton" class="btn btn-primary" (click)="successEvent()">{{buttonText}}</button>
+                        </div>
+                    }
                 </div>
             </div>
         </div>

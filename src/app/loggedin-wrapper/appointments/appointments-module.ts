@@ -15,6 +15,7 @@ import { QRCodeComponent } from 'angularx-qrcode';
 import { SharedModule } from '../../shared/shared-module';
 import { Filter } from './filter/filter';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatTimepickerModule,
     QRCodeComponent,
     SharedModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatSelectModule
   ],
   providers: [DatePipe]
 })

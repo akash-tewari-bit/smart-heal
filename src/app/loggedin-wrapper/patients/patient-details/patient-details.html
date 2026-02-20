@@ -50,6 +50,10 @@
                             <td class="fw-bold">Blood Pressure</td>
                             <td>{{patientDetail?.bloodPressure}}</td>
                         </tr>
+                        <tr>
+                            <td class="fw-bold">Pulse Rate</td>
+                            <td>{{patientDetail?.pulseRate}}</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -157,6 +161,10 @@
                             N/A
                           }
                         </td>
+                      </tr>
+                      <tr>
+                        <td class="fw-bold">Pulse Rate</td>
+                        <td>{{ selectedAppointmentData.pulseRate ?? 'N/A' }}</td>
                       </tr>
                       @if (selectedAppointmentData.status == 1) {
                         <tr>

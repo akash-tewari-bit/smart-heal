@@ -24,11 +24,11 @@ export class Signup {
     this.signUpForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]],
       lastName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]],
-      email: ['', [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
-      entityName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9]+[a-zA-Z0-9._%+-]*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}$/)]],
+      // entityName: ['', Validators.required],
       country: ['', Validators.required],
       mobile: ['', [Validators.required, Validators.minLength(5)]],
-      username: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(18), Validators.pattern(/^(?=[a-zA-Z])(?=.*[._-])(?!.*[._-]{2})[a-zA-Z][a-zA-Z0-9._-]{1,18}[a-zA-Z0-9]$/)]],
+      username: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(18), Validators.pattern(/^[a-zA-Z][a-zA-Z0-9._-]{2,19}$/)]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     })
   }

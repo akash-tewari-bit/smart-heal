@@ -57,6 +57,11 @@ const routes: Routes = [
         loadChildren: () => import('./developers/developers-module').then(m => m.DevelopersModule)
       },
       {
+        path: 'medicine-management',
+        canActivate: [subscriptionGuard, adminGuard],
+        loadChildren: () => import('./medicine-management/medicine-management-module').then(m => m.MedicineManagementModule)
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'

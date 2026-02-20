@@ -11,11 +11,18 @@
 }
 .plan-wrapper {
     padding: 40px 20px;
-    min-height: 400px;
+    height: 100%;
     display: flex;
-    justify-content: space-between;
 }
 .plan-confirmation i {
     font-size: 92px;
     color: var(--bs-secondary);
+}
+.plan-body .check-icon {
+    color: var(--bs-success);
+    margin-right: 8px;
+}
+.plan-body ul {
+    list-style-type: none;
+    padding-left: 1em;
 }

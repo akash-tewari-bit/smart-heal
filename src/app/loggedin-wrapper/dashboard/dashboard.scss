@@ -15,3 +15,14 @@
     justify-content: center;
     align-items: center;
 }
+.dashboard-tile-wrapper .card-body .card-text {
+    font-size: 1rem;
+}
+.dashboard-tile-wrapper .card {
+    height: 100%;
+}
+@media (min-width: 1024px) and (max-width: 1365px) {
+    .dashboard-tile-wrapper .card-body .card-text {
+      font-size: 0.875rem;
+    }
+}

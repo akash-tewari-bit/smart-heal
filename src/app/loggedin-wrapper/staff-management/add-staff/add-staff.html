@@ -176,7 +176,7 @@
 
       <div class="col-12">
         <div class="d-flex gap-2">
-          <button type="button" class="btn btn-primary" (click)="createStaff()">
+          <button type="button" class="btn btn-primary" [disabled]="staffLeft === 0 && !this.staffId" (click)="createStaff()">
             Submit
           </button>
           <button

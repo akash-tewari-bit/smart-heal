@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 export class StaffList {
   staffList: any = [];
 
-  constructor(public utilService: UtilityService, public StaffManagementService: StaffManagementService, public router: Router) {}
+  constructor(public utilService: UtilityService, public staffManagementService: StaffManagementService, public router: Router) {}
 
   ngOnInit() {
     setTimeout(() => { 
@@ -22,7 +22,7 @@ export class StaffList {
 
   getStaff() {
     this.utilService.setSpinnerState(true);
-    this.StaffManagementService.getStaffList().subscribe(
+    this.staffManagementService.getStaffList().subscribe(
       (res: any) => {
         this.utilService.setSpinnerState(false);
         if(res?.success) {
@@ -54,7 +54,7 @@ export class StaffList {
       id: data.id
     };
     this.utilService.setSpinnerState(true);
-    this.StaffManagementService.deleteStaff(this.utilService.transformObj(payload)).subscribe((res: any) => {
+    this.staffManagementService.deleteStaff(this.utilService.transformObj(payload)).subscribe((res: any) => {
       if(res?.success) {
         this.utilService.setSpinnerState(false);
         this.utilService.showToastMessage({
@@ -62,6 +62,7 @@ export class StaffList {
           success: true,
         });
         this.getStaff();
+        this.staffManagementService.notifyStaffCountUpdate(true);
       }
       else {
         this.utilService.setSpinnerState(false);
