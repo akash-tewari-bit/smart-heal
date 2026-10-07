@@ -13,7 +13,6 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatTimepickerModule } from '@angular/material/timepicker';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-
 @NgModule({
   declarations: [
     LoggedinWrapper,
@@ -32,6 +31,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [DatePipe]
+  providers: [
+    DatePipe
+  ]
 })
 export class LoggedinWrapperModule { }

@@ -47,3 +47,21 @@
     color: #585c5e;
     pointer-events: none;
 }
+.speech-wrapper {
+    position: absolute;
+    right: 6px;
+    bottom: 6px;
+    border: 1px solid var(--bs-primary);
+    border-radius: 50%;
+    width: 26px;
+    text-align: center;
+    cursor: pointer;
+}
+.speech-wrapper i {
+    color: var(--bs-primary);
+    font-size: 14px;
+}
+.disable-voice {
+    pointer-events: none;
+    opacity: 0.4;
+}

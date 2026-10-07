@@ -32,7 +32,7 @@ export class Filter {
   status: any = ''
   @Output() filterData = new EventEmitter<any>();
   startDate: any = new Date();
-  endDate: any = new Date();
+  endDate: any = new Date(new Date().setDate(new Date().getDate() + 7));
   isMobile = window.innerWidth < 768;
 
   constructor(public datePipe: DatePipe) { }

@@ -8,9 +8,19 @@
         <div class="row">
             <div class="col-md-6 mb-3">
                 <label class="form-label">Medicine Name</label>
+                <div class="position-relative">
                 <input type="text" [ngClass]="{
             'error-control': formSubmitted && medicineForm.get('medicineName')?.errors
           }" formControlName="medicineName" placeholder="Medicine Name" class="form-control" />
+                            <div class="speech-wrapper">
+                                @if (!medicineForm.get('isListening')?.value) {
+                                  <i class="bi bi-mic-fill" (click)="startVoiceRecognition('medicineName')"></i>
+                                }
+                                @if (medicineForm.get('isListening')?.value) {
+                                  <i class="bi bi-stop-fill" (click)="startVoiceRecognition('medicineName')"></i>
+                                }
+                              </div>
+                          </div>
                 @if (formSubmitted && medicineForm.invalid && medicineForm.touched) { @if
                 (medicineForm.get('medicineName')?.errors?.['required']) {
                 <p class="error-text">required</p>
@@ -53,6 +63,97 @@
         <p class="error-text">required maximum length is 15</p>
         }  -->
                 }
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Type</label>
+            <div class="appointment-date-wrapper time-wrapper rounded position-relative">
+            <mat-form-field class="material-calendar">
+                <mat-select formControlName="type">
+                <mat-option value="tablet">Tablet</mat-option>
+                <mat-option value="capsule">Capsule</mat-option>
+                <mat-option value="syrup">Syrup</mat-option>
+                <mat-option value="oral">Oral</mat-option>
+                <mat-option value="drops">Drops</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <i class="bi bi-chevron-down"></i>
+            </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Count</label>
+                            @if(medicineForm.get('type')?.value === 'tablet' || medicineForm.get('type')?.value === 'capsule') {
+                          <div class="appointment-date-wrapper time-wrapper rounded position-relative">
+                            <mat-form-field class="material-calendar">
+                              <mat-select formControlName="count">
+                                <mat-option [value]="1">1</mat-option>
+                                <mat-option [value]="2">2</mat-option>
+                                <mat-option [value]="3">3</mat-option>
+                                <mat-option [value]="4">4</mat-option>
+                                <mat-option [value]="5">5</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                            <i class="bi bi-chevron-down"></i>
+                          </div>
+                          } @if(medicineForm.get('type')?.value === 'syrup' || medicineForm.get('type')?.value === 'oral' || medicineForm.get('type')?.value === 'drops') {
+                          <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Quantity"
+                            formControlName="count"
+                          />
+                          }
+                          </div>
+
+                          <div class="col-md-6 mb-3">
+                <label class="form-label">Dosage</label>
+            <div class="appointment-date-wrapper time-wrapper rounded position-relative">
+            <mat-form-field class="material-calendar">
+                <mat-select formControlName="dosage" multiple>
+                    <mat-option [value]="'morning'">Morning</mat-option>
+                    <mat-option [value]="'afternoon'">Afternoon</mat-option>
+                    <mat-option [value]="'night'">Night</mat-option>
+                </mat-select>
+                </mat-form-field>
+            <i class="bi bi-chevron-down"></i>
+            </div>
+            @if (formSubmitted && medicineForm.invalid && medicineForm.touched) { @if
+                (medicineForm.get('dosage')?.errors?.['required']) {
+                <p class="error-text">required</p>
+                }
+                }
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Timing</label>
+            <div class="appointment-date-wrapper time-wrapper rounded position-relative">
+            <mat-form-field class="material-calendar">
+                <mat-select formControlName="beforeMeal">
+                    <mat-option [value]="false">After meal</mat-option>
+                    <mat-option [value]="true">Before meal</mat-option>
+                </mat-select>
+                </mat-form-field>
+            <i class="bi bi-chevron-down"></i>
+            </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Duration</label>
+            <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Duration"
+                          formControlName="duration"
+                        />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Notes</label>
+            <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Notes"
+                          formControlName="notes"
+                        />
             </div>
 
             <div class="col-12">

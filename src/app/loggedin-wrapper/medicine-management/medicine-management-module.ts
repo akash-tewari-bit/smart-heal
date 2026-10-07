@@ -6,6 +6,7 @@ import { MedicineManagement } from './medicine-management';
 import { AddMedicine } from './add-medicine/add-medicine';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MedicineManagementRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatSelectModule
   ]
 })
 export class MedicineManagementModule { }

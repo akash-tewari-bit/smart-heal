@@ -15,16 +15,26 @@ export class AddStaff {
   formSubmitted = false;
   staffId: any = '';
   staffDetail: any = '';
-  staffLeft: any = 0;
+  staffLeft = 0;
+  staffLeft_Doctor: any = 0;
+  staffLeft_NonDoctor: any = 0;
+  configurations: any = JSON.parse(localStorage.getItem('configurations')!);
   
   constructor(public fb: FormBuilder, public router: Router, public staffManagementService: StaffManagementService, public utilService: UtilityService, public activatedRoute: ActivatedRoute) {
   }
   
   ngAfterContentChecked() {
-    this.staffLeft = this.utilService.configurations?.staff_left ?? 0;
+    // this.staffLeft = this.utilService.configurations?.staff_left ?? 0;
   }
 
+  // get staffLeft() {
+  //   return this.staffLeft_Doctor + this.staffLeft_NonDoctor;
+  // }
+  
   ngOnInit() {
+    this.getStaff();
+    // this.staffLeft_Doctor = JSON.parse(localStorage.getItem('staffLeft_Doctor')!) ?? 0;
+    // this.staffLeft_NonDoctor = JSON.parse(localStorage.getItem('staffLeft_NonDoctor')!) ?? 0;
     this.initiateForm();
     this.activatedRoute.paramMap.subscribe(params => {
       this.staffId = params.get('id');
@@ -96,7 +106,7 @@ export class AddStaff {
           this.staffForm.disable();
           this.staffForm.get('country')?.enable();
           this.staffForm.get('mobile')?.enable();
-          this.staffForm.get('role')?.enable();
+          // this.staffForm.get('role')?.enable();
         }
         else {
           this.utilService.showToastMessage({
@@ -131,6 +141,26 @@ export class AddStaff {
       password: [this.staffDetail?.password ?? '', [Validators.required, Validators.minLength(6)]],
       sendToEmail: [this.staffDetail?.sendToEmail ?? true, [Validators.required]],
     })
+  }
+
+  getStaff() {
+    // this.utilService.setSpinnerState(true);
+    this.staffManagementService.getStaffList().subscribe(
+      (res: any) => {
+        // this.utilService.setSpinnerState(false);
+        if(res?.success) {
+          this.utilService.setStaffCounts(res?.data);
+          this.staffLeft_Doctor = JSON.parse(localStorage.getItem('staffLeft_Doctor')!) ?? 0;
+          this.staffLeft_NonDoctor = JSON.parse(localStorage.getItem('staffLeft_NonDoctor')!) ?? 0;
+          this.staffLeft = this.staffLeft_Doctor + this.staffLeft_NonDoctor;
+        }
+        // else {
+        //   this.utilService.showToastMessage({
+        //     message: res?.message,
+        //     success: false,
+        //   });
+        // }
+      });
   }
 
 }

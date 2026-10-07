@@ -19,7 +19,8 @@ export class EditDeveloper {
   clientForm!: FormGroup;
   plans = [
     "Basic",
-    "Professional"
+    "Professional",
+    "Custom"
   ]
 
   constructor(public activatedRoute: ActivatedRoute, public utilService: UtilityService, public developersService: DevelopersService, public router: Router, public fb: FormBuilder, public datePipe: DatePipe ) {
@@ -106,6 +107,8 @@ export class EditDeveloper {
       mobile: this.clientForm?.get('mobile')?.value,
       email: this.clientForm?.get('email')?.value,
       country: this.clientForm?.get('country')?.value,
+      staff_left_doctor: this.clientForm?.get('staff_left_doctor')?.value,
+      staff_left_nondoctor: this.clientForm?.get('staff_left_nondoctor')?.value,
       subscription: {
         plan_name: activeSubscriptions?.length ? activeSubscriptions[0].plan_name : null,
         start_date: activeSubscriptions?.length ? this.datePipe.transform(activeSubscriptions[0].subscription_startDate, 'yyyy-MM-dd') : null,
@@ -155,7 +158,8 @@ export class EditDeveloper {
       country: [data?.country || ''],
       role: [{value: data?.role || '', disabled: true}],
       brandName: [data?.brandName || ''],
-      appointment_left: [data?.appointment_left || 0],
+      staff_left_doctor: [0],
+      staff_left_nondoctor: [0],
       subscriptions: this.fb.array([]),
     });
     if(data?.subscription && data?.subscription.length) {
@@ -171,7 +175,7 @@ export class EditDeveloper {
 
   createElements(data: any): FormGroup {
     return this.fb.group({
-      plan_name: [data?.plan_name || ''],
+      plan_name: [data?.plan_name ? data?.plan_name.charAt(0).toUpperCase() + data?.plan_name.slice(1) : ''],
       plan_price: [data?.plan_price || ''],
       subscription_startDate: [data?.subscription_startDate || ''],
       subscription_endDate: [data?.subscription_endDate || 1],
@@ -186,6 +190,16 @@ export class EditDeveloper {
   removeSubscription(index: number) {
     if (this.subscriptions.length > 1) {
       this.subscriptions.removeAt(index);
+    }
+  }
+
+  updateStaffLeft(type: string, staffType: string) {
+    const currentValue = this.clientForm.get(staffType === 'doctor' ? 'staff_left_doctor' : 'staff_left_nondoctor')?.value || 0;
+    if(type === 'plus') {
+      this.clientForm.get(staffType === 'doctor' ? 'staff_left_doctor' : 'staff_left_nondoctor')?.setValue(currentValue + 1);
+    }
+    else if(type === 'minus' && currentValue > 0) {
+      this.clientForm.get(staffType === 'doctor' ? 'staff_left_doctor' : 'staff_left_nondoctor')?.setValue(currentValue - 1);
     }
   }
 

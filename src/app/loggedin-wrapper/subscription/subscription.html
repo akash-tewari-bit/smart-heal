@@ -133,6 +133,13 @@
       <div class="plan-body">
         <h6>What's included:</h6>
         <ul>
+          @if(item?.name === 'Professional') {
+            <li><i class="bi bi-check2-square check-icon"></i> All features in Basic, plus</li>
+          }
+          @if(item?.name === 'custom') {
+            <li><i class="bi bi-check2-square check-icon"></i> All features in professional, plus</li>
+          }
+          <li></li>
           <li *ngFor="let desc of item?.description"><i class="bi bi-check2-square check-icon"></i> {{desc}}</li>
         </ul>
       </div>

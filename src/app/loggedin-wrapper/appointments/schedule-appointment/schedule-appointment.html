@@ -151,6 +151,9 @@
             <input type="text" class="form-control" placeholder="Pulse Rate" formControlName="pulseRate" />
           </div>
           <div class="col-md-6 mb-4">
+            <input type="text" class="form-control" placeholder="Blood Sugar" formControlName="bloodSugar" />
+          </div>
+          <div class="col-md-6 mb-4">
             <div class="appointment-date-wrapper rounded" [ngClass]="{'error-control': formSubmitted && appointmentForm.get('date')?.errors}">
               <mat-form-field class="material-calendar">
                 <input matInput formControlName="date" (dateChange)="addEvent($event)" [min]="todayDate" [matDatepicker]="dp3" readonly placeholder="Select Date" (click)="dp3.open()">

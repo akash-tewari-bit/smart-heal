@@ -57,7 +57,13 @@ export class Header {
     public notificationsService: NotificationsService,
     public datePipe: DatePipe,
     public settingsService: SettingsService
-  ) {}
+  ) {
+    this.utilService.updateConfig.subscribe((data: any) => {
+      if(data) {
+        this.upiConfiguration();
+      }
+    });
+  }
 
   ngOnInit() {
     setTimeout(() => { 

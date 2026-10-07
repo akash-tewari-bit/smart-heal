@@ -74,6 +74,7 @@ export class PatientDetails {
       bloodPressureLower: [data?.bloodPressureLower ?? null],
       temperature: [data?.temperature ?? null],
       pulseRate: [data?.pulseRate ?? null],
+      bloodSugar: [data?.bloodSugar ?? null],
       gender: [data?.gender ?? null],
       address: [data?.address ?? null],
     })

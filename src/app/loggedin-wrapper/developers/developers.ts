@@ -18,22 +18,22 @@ export class Developers {
     totalRecords: 0
   }
   clientList: any = [
-    {
-      id: "256a3a63-a0f3-4e7b-b89d-a423df05c0de",
-      firstName: 'Stone',
-      lastName: 'Cold',
-      email: "madhur.munjal@yahoo.in",
-      country: "india",
-      mobile: "09654501184",
-      username: "madhur_04",
-      role: "owner",
-      brandName: 'S Dental Clinic',
-      subscription: 'Basic',
-      subscription_startDate: '2026-01-20',
-      subscription_endDate: '2026-12-30',
-      isActive: true,
-      appointment_left: 110,
-    }
+    // {
+    //   id: "256a3a63-a0f3-4e7b-b89d-a423df05c0de",
+    //   firstName: 'Stone',
+    //   lastName: 'Cold',
+    //   email: "madhur.munjal@yahoo.in",
+    //   country: "india",
+    //   mobile: "09654501184",
+    //   username: "madhur_04",
+    //   role: "owner",
+    //   brandName: 'S Dental Clinic',
+    //   subscription: 'Basic',
+    //   subscription_startDate: '2026-01-20',
+    //   subscription_endDate: '2026-12-30',
+    //   isActive: true,
+    //   appointment_left: 110,
+    // }
   ];
 
   constructor(public router: Router, public developersService: DevelopersService, public utilService: UtilityService) {}

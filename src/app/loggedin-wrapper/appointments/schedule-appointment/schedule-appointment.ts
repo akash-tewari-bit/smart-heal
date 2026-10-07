@@ -50,6 +50,7 @@ export class ScheduleAppointment {
       temperature: [''],
       temperatureType: [{ value: 'fahrenheit', disabled: true }],
       pulseRate: [''],
+      bloodSugar: [''],
       date: [{ value: '', disabled: false }, [Validators.required]],
       time: [{ value: '', disabled: false }, [Validators.required]],
     });
@@ -91,15 +92,16 @@ export class ScheduleAppointment {
           mobile: form.mobile,
           gender: form.gender,
           address: form.address,
-          bloodGroup: form.bloodGroup,
-          weight: form.weight,
-          bloodPressureUpper: form.bloodPressureUpper,
-          bloodPressureLower: form.bloodPressureLower,
-          temperature: form.temperature,
-          temperatureType: form.temperatureType,
-          pulseRate: form.pulseRate,
           patient_id: this.validateExistingPatientForm.value.patient == 'new' ? null : this.validateExistingPatientForm.value.patient
         },
+        bloodGroup: form.bloodGroup,
+        weight: form.weight,
+        bloodPressureUpper: form.bloodPressureUpper,
+        bloodPressureLower: form.bloodPressureLower,
+        temperature: form.temperature,
+        temperatureType: form.temperatureType,
+        pulseRate: form.pulseRate,
+        bloodSugar: form.bloodSugar,
         scheduled_date: date,
         scheduled_time: time
       };

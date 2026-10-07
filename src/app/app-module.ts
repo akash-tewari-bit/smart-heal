@@ -7,6 +7,19 @@ import { HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient } from '@angular
 import { CustomLoader } from './shared/components/custom-loader/custom-loader';
 import { Toast } from './shared/components/toast/toast';
 import { AuthInterceptor } from './shared/interceptor/auth-interceptor';
+import { MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+
+export const CUSTOM_DATE_FORMATS = {
+  parse: {
+    dateInput: 'MM/DD/YYYY',
+  },
+  display: {
+    dateInput: 'MMM d, y',
+    monthYearLabel: 'MMM y',
+    dateA11yLabel: 'MMMM d, y',
+    monthYearA11yLabel: 'MMMM y',
+  },
+};
 
 @NgModule({
   declarations: [
@@ -26,7 +39,9 @@ import { AuthInterceptor } from './shared/interceptor/auth-interceptor';
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
-    }
+    },
+    { provide: MAT_DATE_LOCALE, useValue: 'en-US' },
+    { provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS }
   ],
   bootstrap: [App]
 })

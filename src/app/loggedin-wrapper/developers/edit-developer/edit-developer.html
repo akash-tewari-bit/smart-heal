@@ -41,10 +41,10 @@
                 <td><strong>Country</strong></td>
                 <td><input type="text" class="form-control" formControlName="country"></td>
               </tr>
-              <tr>
+              <!-- <tr>
                 <td><strong>Brand Name</strong></td>
                 <td><input type="text" class="form-control" formControlName="brandName"></td>
-              </tr>
+              </tr> -->
               <tr>
                 <td><strong>Role</strong></td>
                 <td><input type="text" class="form-control" formControlName="role"></td>
@@ -80,8 +80,23 @@
                 <td><input type="text" class="form-control" formControlName="isActive"></td>
               </tr> -->
               <tr>
-                <td><strong>Appointment Left</strong></td>
-                <td><input type="text" class="form-control" formControlName="appointment_left"></td>
+                <td><strong>Staff Left(Doctor) - {{clientDetail?.staff_left_doctor ?? 0}}</strong></td>
+                <td>
+                  <div class="plus-minus-icon-wrapper d-flex gap-2 align-items-center">
+                    <i class="bi bi-patch-minus-fill" [ngClass]="{'pe-none': !clientForm.get('staff_left_doctor')?.value}" (click)="updateStaffLeft('minus', 'doctor')"></i>
+                    <input type="text" class="form-control" formControlName="staff_left_doctor">
+                    <i class="bi bi-patch-plus-fill" (click)="updateStaffLeft('plus', 'doctor')"></i>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Staff Left(Non-Doctor) - {{clientDetail?.staff_left_nondoctor ?? 0}}</strong></td>
+                <td>
+                  <div class="plus-minus-icon-wrapper d-flex gap-2 align-items-center">
+                    <i class="bi bi-patch-minus-fill" [ngClass]="{'pe-none': !clientForm.get('staff_left_nondoctor')?.value}" (click)="updateStaffLeft('minus', 'non_doctor')"></i>
+                    <input type="text" class="form-control" formControlName="staff_left_nondoctor">
+                    <i class="bi bi-patch-plus-fill" (click)="updateStaffLeft('plus', 'non_doctor')"></i>
+                  </div>
               </tr>
             </tbody>
           </table>

@@ -6,3 +6,15 @@
     padding: .375rem .75rem;
     pointer-events: none;
 }
+.plus-minus-icon-wrapper i {
+    font-size: 24px;
+    color: var(--bs-primary);
+    cursor: pointer;
+}
+.plus-minus-icon-wrapper input {
+    max-width: 64px;
+    text-align: center;
+}
+.plus-minus-icon-wrapper i.pe-none {
+    opacity: 0.4;
+}

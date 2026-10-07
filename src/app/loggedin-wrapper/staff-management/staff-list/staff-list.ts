@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { UtilityService } from '../../../shared/services/utility.service';
 import { StaffManagementService } from '../staff-management.service';
 import { Router } from '@angular/router';
@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 })
 export class StaffList {
   staffList: any = [];
+  configurations: any = JSON.parse(localStorage.getItem('configurations')!);
 
   constructor(public utilService: UtilityService, public staffManagementService: StaffManagementService, public router: Router) {}
 
@@ -27,6 +28,7 @@ export class StaffList {
         this.utilService.setSpinnerState(false);
         if(res?.success) {
           this.staffList = res?.data;
+          this.utilService.setStaffCounts(this.staffList);
         }
         else {
           this.utilService.showToastMessage({

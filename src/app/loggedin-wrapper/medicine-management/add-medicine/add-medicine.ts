@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UtilityService } from '../../../shared/services/utility.service';
 import { MedicineManagementService } from '../medicine-management.service';
+import { VoiceService } from '../../../shared/services/voice.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-add-medicine',
@@ -15,8 +17,9 @@ export class AddMedicine {
   formSubmitted = false;
   medicineId: any = '';
   medicineDetail: any = '';
+  private subscription: Subscription = new Subscription();
 
-  constructor(public fb: FormBuilder, public router: Router, public medicineManagementService: MedicineManagementService, public utilService: UtilityService, public activatedRoute: ActivatedRoute) {
+  constructor(public fb: FormBuilder, public router: Router, public medicineManagementService: MedicineManagementService, public utilService: UtilityService, public activatedRoute: ActivatedRoute, public voiceService: VoiceService) {
   }
 
   ngOnInit() {
@@ -29,6 +32,10 @@ export class AddMedicine {
         });
       }
     });
+    this.voiceService.init();
+    this.subscription = this.voiceService.recognizedText$.subscribe(text => {
+      this.medicineForm?.get('medicineName')?.setValue(text);
+    });
   }
 
   createUpdateMedicine() {
@@ -40,7 +47,13 @@ export class AddMedicine {
         medicine_name: form.medicineName,
         composition: form.composition,
         manufacturer: form.manufacturer,
-        medicine_id: this.medicineId ?? null
+        medicine_id: this.medicineId ?? null,
+        type: form.type,
+        count: form.count,
+        dosage: form.dosage,
+        before_meal: form.beforeMeal,
+        duration: form.duration,
+        notes: form.notes
       };
       if(!this.medicineId) delete payload.medicine_id;
       this.utilService.setSpinnerState(true);
@@ -107,9 +120,31 @@ export class AddMedicine {
     this.medicineForm = this.fb.group({
       medicineName: [this.medicineDetail?.medicine_name ?? '', [Validators.required]],
       composition: [this.medicineDetail?.composition ?? '', [Validators.required]],
-      manufacturer: [this.medicineDetail?.manufacturer ?? '', [Validators.required]]
+      manufacturer: [this.medicineDetail?.manufacturer ?? '', [Validators.required]],
+      type: [this.medicineDetail?.type ?? 'tablet', [Validators.required]],
+      count: [this.medicineDetail?.count ?? 1, [Validators.required]],
+      dosage: [this.medicineDetail?.dosage ?? ['morning', 'afternoon', 'night'], [Validators.required]],
+      beforeMeal: [this.medicineDetail?.before_meal ?? false, [Validators.required]],
+      duration: [this.medicineDetail?.duration ?? ''],
+      notes: [this.medicineDetail?.notes ?? ''],
+      isListening: [false]
     })
   }
+
+  startVoiceRecognition(formControl: any) {
+    if (this.medicineForm?.get('isListening')?.value) {
+      this.voiceService.stop();
+    } else {
+      this.medicineForm?.get(formControl)?.setValue('');
+      this.voiceService.start();
+    }
+    this.medicineForm?.get('isListening')?.setValue(!this.medicineForm?.get('isListening')?.value);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+    this.voiceService.stop();
+  } 
 
 }
 

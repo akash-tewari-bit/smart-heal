@@ -32,6 +32,10 @@ export class Appointments {
     public datePipe: DatePipe
   ) {}
 
+  ngOnInit() {
+    this.utilService.updateConfigurations(true);
+  }
+
   ngAfterContentChecked() {
     this.appointmentsLeft = this.utilService.configurations?.subscription?.appointment_left ?? 0;
     const todayDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd')

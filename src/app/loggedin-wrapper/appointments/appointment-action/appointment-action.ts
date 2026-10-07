@@ -6,6 +6,8 @@ import { AppointmentService } from '../appointment.service';
 import { SettingsService } from '../../settings/settings.service';
 import { DatePipe } from '@angular/common';
 import { MedicineManagementService } from '../../medicine-management/medicine-management.service';
+import { VoiceService } from '../../../shared/services/voice.service';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -41,12 +43,21 @@ export class AppointmentAction {
   appointmentsLeft: any = 0;
   noAppointmentSchedulingText1: any;
   noAppointmentSchedulingText2: any;
+  isListening = false;
+  private subscription: Subscription = new Subscription();
+  transcript = '';
+  selectedMedicineFieldIndex = -1;
 
-  constructor(public fb: FormBuilder, public router: Router, public utilService: UtilityService, public appointmentService: AppointmentService, public activatedRoute: ActivatedRoute, public settingsService: SettingsService, public datePipe: DatePipe, public medicineManagementService: MedicineManagementService) {
+  constructor(public fb: FormBuilder, public router: Router, public utilService: UtilityService, public appointmentService: AppointmentService, public activatedRoute: ActivatedRoute, public settingsService: SettingsService, public datePipe: DatePipe, public medicineManagementService: MedicineManagementService, public voiceService: VoiceService) {
     this.initiateForm();
   }
 
   ngOnInit() {
+    this.voiceService.init();
+    this.subscription = this.voiceService.recognizedText$.subscribe(text => {
+      // this.transcript = text;
+      this.medicationDetails.controls[this.selectedMedicineFieldIndex]?.get('medicine')?.setValue(text);
+    });
     this.todayDate.setHours(0, 0, 0, 0);
     this.appointmentId = this.activatedRoute.snapshot.paramMap.get('id');
     if(this.appointmentId) {
@@ -81,13 +92,14 @@ export class AppointmentAction {
       medicine: [''],
       composition: [''],
       type: ['tablet'],
-      count: ['1'],
+      count: [1],
       morning: [false],
       afternoon: [false],
       night: [false],
       beforeMeal: [false],
       duration: [''],
-      notes: ['']
+      notes: [''],
+      isListening: [false]
     })
   }
 
@@ -237,15 +249,16 @@ export class AppointmentAction {
           mobile: form.mobile,
           gender: form.gender,
           address: form.address,
-          bloodGroup: form.bloodGroup,
-          weight: form.weight,
-          bloodPressureUpper: form.bloodPressureUpper,
-          bloodPressureLower: form.bloodPressureLower,
-          temperature: form.temperature,
-          temperatureType: form.temperatureType,
-          pulseRate: form.pulseRate,
           patient_id: this.patientAppointmentData?.patient_id ?? null
         },
+        bloodGroup: form.bloodGroup,
+        weight: form.weight,
+        bloodPressureUpper: form.bloodPressureUpper,
+        bloodPressureLower: form.bloodPressureLower,
+        temperature: form.temperature,
+        temperatureType: form.temperatureType,
+        pulseRate: form.pulseRate,
+        bloodSugar: form.bloodSugar,
         scheduled_date: date,
         scheduled_time: time
       }
@@ -349,6 +362,7 @@ export class AppointmentAction {
       temperature: [data?.temperature ?? null],
       temperatureType: [{ value: data?.temperatureType ?? 'fahrenheit', disabled: true }],
       pulseRate: [data?.pulseRate ?? null],
+      bloodSugar: [data?.bloodSugar ?? null],
       analysis: [''],
       advice: [''],
       tests: [''],
@@ -464,8 +478,18 @@ export class AppointmentAction {
   }
   
   selectMedicine(medicine: any, index: number) {
+    console.log(medicine, this.medicationDetails, index);
+    
     this.medicationDetails.controls[index].get('medicine')?.setValue(medicine['medicine_name']);
     this.medicationDetails.controls[index].get('composition')?.setValue(medicine['composition']);
+    this.medicationDetails.controls[index].get('type')?.setValue(medicine['type']);
+    this.medicationDetails.controls[index].get('morning')?.setValue((medicine['dosage'] || []).some((e: any) => e === 'morning') ? true : false);
+    this.medicationDetails.controls[index].get('afternoon')?.setValue((medicine['dosage'] || []).some((e: any) => e === 'afternoon') ? true : false);
+    this.medicationDetails.controls[index].get('night')?.setValue((medicine['dosage'] || []).some((e: any) => e === 'night') ? true : false);
+    this.medicationDetails.controls[index].get('beforeMeal')?.setValue(medicine['before_meal'] ? true : false);
+    this.medicationDetails.controls[index].get('duration')?.setValue(medicine['duration']);
+    this.medicationDetails.controls[index].get('notes')?.setValue(medicine['notes']);
+    this.medicationDetails.controls[index].get('count')?.setValue(medicine['count']);
     this.autoCompleteData = [];
     this.selectedInputIndex = -1;
   }
@@ -483,6 +507,31 @@ export class AppointmentAction {
 
   upgradePlan() {
     this.router.navigate(['/subscriptions']);
+  }
+
+ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+    this.voiceService.stop();
+  } 
+
+
+  startVoiceRecognition(index: any) {
+    this.selectedMedicineFieldIndex = index;
+    if (this.medicationDetails.controls[this.selectedMedicineFieldIndex]?.get('isListening')?.value) {
+      this.voiceService.stop();
+      setTimeout(() => {
+        this.selectedMedicineFieldIndex = -1;
+      }, 500);
+    } else {
+      this.medicationDetails.controls.forEach((e: any) => {
+        if(e.get('isListening')?.value) {
+          e.get('isListening')?.setValue(false);
+        }
+      })
+      this.medicationDetails.controls[this.selectedMedicineFieldIndex]?.get('medicine')?.setValue('');
+      this.voiceService.start();
+    }
+    this.medicationDetails.controls[this.selectedMedicineFieldIndex]?.get('isListening')?.setValue(!this.medicationDetails.controls[this.selectedMedicineFieldIndex]?.get('isListening')?.value);
   }
 
 }

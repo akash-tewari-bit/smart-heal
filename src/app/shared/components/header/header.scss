@@ -85,8 +85,16 @@
   font-size: 12px;
   color: var(--bs-secondary);
 }
+
+.contact-phone i {
+  font-size: 18px;
+  color: var(--bs-primary);
+}
 @media (max-width: 767px) {
   .header-profile-with-image {
     border-color: #fff;
+  }
+  .contact-phone i, .contact-phone span {
+    color: #fff;
   }
 }

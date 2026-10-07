@@ -16,6 +16,7 @@ export class UtilityService {
   upgradePlanText = 'Please upgrade or purchase a new plan to continue scheduling and taking appointments.';
   subscriptionExpiredText = 'Your subscription plan has expired.';
   renewPlanText = 'Please renew or upgrade your plan to continue scheduling and taking appointments.';
+  updateConfig = new BehaviorSubject<any>(false);
 
   constructor(public http: HttpClient, public settingsService: SettingsService) { }
 
@@ -77,5 +78,39 @@ export class UtilityService {
       const mm = minutes.toString().padStart(2, '0');
       return `${hh}:${mm} ${period}`;
     }
+  }
+
+  updateConfigurations(data: any) {
+    this.updateConfig.next(data);
+  }
+
+  setStaffCounts(list: any) {
+    let staffLeft_NonDoctor = 0;
+    let staffLeft_Doctor = 0;
+    const configurations = JSON.parse(localStorage.getItem('configurations')!);
+    if(!list || !list.length) {
+      if(configurations?.subscription?.plan_name === 'Basic') {
+        staffLeft_NonDoctor = 2;
+        staffLeft_Doctor = 0;
+      }
+      if(configurations?.subscription?.plan_name === 'Professional') {
+        staffLeft_NonDoctor = 2;
+        staffLeft_Doctor = 2;
+      }
+    }
+    else {
+      const doctorCount = list.filter((e: any) => e.role === 'doctor').length;
+      const nonDoctorCount = list.filter((e: any) => e.role !== 'doctor').length;
+      if(configurations?.subscription?.plan_name === 'Basic') {
+        staffLeft_NonDoctor = nonDoctorCount === 1 ? 1 : (nonDoctorCount === 2 ? 0 : 2);
+        staffLeft_Doctor = 0;
+      }
+      if(configurations?.subscription?.plan_name === 'Professional') {
+        staffLeft_NonDoctor = nonDoctorCount === 1 ? 1 : (nonDoctorCount === 2 ? 0 : 2);
+        staffLeft_Doctor = doctorCount === 1 ? 1 : (doctorCount === 2 ? 0 : 2);
+      }
+    }
+    localStorage.setItem('staffLeft_Doctor', JSON.stringify(staffLeft_Doctor));
+    localStorage.setItem('staffLeft_NonDoctor', JSON.stringify(staffLeft_NonDoctor));
   }
 }

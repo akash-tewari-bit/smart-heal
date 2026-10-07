@@ -34,6 +34,12 @@
             <div class="table-responsive">
               <table class="table">
                 <tbody>
+                  <tr>
+                      <td class="fw-bold">Patient ID</td>
+                      <td>
+                        <strong>{{ patientAppointmentData.patient_code }}</strong>
+                      </td>
+                    </tr>
                   @if (patientAppointmentData.firstName || patientAppointmentData.lastName) {
                     <tr>
                       <td class="fw-bold">Patient Name</td>
@@ -166,6 +172,16 @@
                       </td>
                     </tr>
                   }
+                  @if (patientAppointmentData.bloodSugar) {
+                    <tr>
+                      <td class="fw-bold">Blood Sugar</td>
+                      <td>
+                        @if(patientAppointmentData.bloodSugar) {
+                          {{ patientAppointmentData.bloodSugar }}
+                        } @else { N/A }
+                      </td>
+                    </tr>
+                  }
                   @if (patientAppointmentData.status == 1) {
                   <tr>
                     <td class="fw-bold">Analysis/Disease/Problem</td>
@@ -273,13 +289,34 @@
                     >
                       <td>
                         <div class="mb-3">
-                          Medicine Name
-                          <input
-                          type="text"
-                          class="form-control"
-                          placeholder="Medicine/Syrup"
-                          formControlName="medicine" (input)="autoComplete($event, i)"
-                          />
+                          <!-- <div class="d-flex gap-2"> -->
+                            Medicine Name
+                            <!-- <div>
+                              @if (!isListening) {
+                                <i class="bi bi-mic-fill" (click)="startVoiceRecognition(i)"></i>
+                              }
+                              @if (isListening) {
+                                Listening...
+                                <i class="bi bi-stop-circle" (click)="startVoiceRecognition(i)"></i>
+                              }
+                            </div>
+                          </div> -->
+                          <div class="position-relative">
+                            <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Medicine/Syrup"
+                            formControlName="medicine" (input)="autoComplete($event, i)"
+                            />
+                            <div class="speech-wrapper" [ngClass]="{'disable-voice': selectedMedicineFieldIndex !== i && selectedMedicineFieldIndex !== -1}">
+                                @if (!item?.get('isListening')?.value) {
+                                  <i class="bi bi-mic-fill" (click)="startVoiceRecognition(i)"></i>
+                                }
+                                @if (item?.get('isListening')?.value) {
+                                  <i class="bi bi-stop-fill" (click)="startVoiceRecognition(i)"></i>
+                                }
+                              </div>
+                          </div>
                           @if (item?.get('composition')?.value) {
                             <div>
                               <span class="medicine-composition">Composition - {{item?.get('composition')?.value}}</span>
@@ -324,11 +361,11 @@
                             <div class="appointment-date-wrapper time-wrapper rounded position-relative">
                             <mat-form-field class="material-calendar">
                               <mat-select formControlName="type">
-                                <mat-option value="tablet">Tablet</mat-option>
-                                <mat-option value="capsule">Capsule</mat-option>
-                                <mat-option value="syrup">Syrup</mat-option>
-                                <mat-option value="oral">Oral</mat-option>
-                                <mat-option value="drops">Drops</mat-option>
+                                <mat-option [value]="'tablet'">Tablet</mat-option>
+                                <mat-option [value]="'capsule'">Capsule</mat-option>
+                                <mat-option [value]="'syrup'">Syrup</mat-option>
+                                <mat-option [value]="'oral'">Oral</mat-option>
+                                <mat-option [value]="'drops'">Drops</mat-option>
                               </mat-select>
                             </mat-form-field>
                             <i class="bi bi-chevron-down"></i>
@@ -347,11 +384,11 @@
                           <div class="appointment-date-wrapper time-wrapper rounded position-relative">
                             <mat-form-field class="material-calendar">
                               <mat-select formControlName="count">
-                                <mat-option value="1">1</mat-option>
-                                <mat-option value="2">2</mat-option>
-                                <mat-option value="3">3</mat-option>
-                                <mat-option value="4">4</mat-option>
-                                <mat-option value="5">5</mat-option>
+                                <mat-option [value]="1">1</mat-option>
+                                <mat-option [value]="2">2</mat-option>
+                                <mat-option [value]="3">3</mat-option>
+                                <mat-option [value]="4">4</mat-option>
+                                <mat-option [value]="5">5</mat-option>
                               </mat-select>
                             </mat-form-field>
                             <i class="bi bi-chevron-down"></i>
@@ -468,9 +505,11 @@
                   >
                     <td>
                       {{ item.medicine }}
-                      <div>
-                        <span class="medicine-composition">Composition - {{item?.composition}}</span>
-                      </div>
+                      @if (item?.composition) {
+                        <div>
+                          <span class="medicine-composition">Composition - {{item?.composition}}</span>
+                        </div>
+                      }
                     </td>
                     <td>{{ item.type }}</td>
                     <td>{{ item.count }}</td>
@@ -528,8 +567,9 @@
               >
                 Submit
               </button>
-              } @if (showPrintAndPaymentOption || patientAppointmentData.status ==
-              1) {
+              } 
+              <!-- @if (showPrintAndPaymentOption || patientAppointmentData.status ==
+              1) { -->
               <button
                 type="button"
                 class="btn btn-primary"
@@ -537,7 +577,7 @@
               >
                 Complete Payment
               </button>
-              }
+              <!-- } -->
               <button
                 type="button"
                 class="btn btn-outline-primary"
@@ -703,6 +743,14 @@
             class="form-control"
             placeholder="Pulse Rate"
             formControlName="pulseRate"
+          />
+        </div>
+        <div class="col-md-6 mb-4">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Blood Sugar"
+            formControlName="bloodSugar"
           />
         </div>
   
@@ -980,6 +1028,15 @@
           </td>
         </tr>
         }
+        @if (patientAppointmentData?.bloodSugar) {
+        <tr>
+          <td>Blood Sugar</td>
+          <TD>:</TD>
+          <td>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ patientAppointmentData.bloodSugar }}
+          </td>
+        </tr>
+        }
       </tbody>
     </table>
   </div>
@@ -1004,11 +1061,13 @@
         <tr *ngFor="let item of patientAppointmentData.medicationDetails">
           <td style="border: 1px solid black; padding: 8px; max-width: 30%;">
             {{ item.medicine }}
-            <div>
-              <span style="font-size: 8px;"
-                >Composition - {{ item?.composition }}</span
-              >
-            </div>
+            @if (item?.composition) {
+              <div>
+                <span style="font-size: 8px;"
+                  >Composition - {{ item?.composition }}</span
+                >
+              </div>
+            }
           </td>
           <td style="border: 1px solid black; padding: 8px">{{ item.type }}</td>
           <td style="border: 1px solid black; padding: 8px">
